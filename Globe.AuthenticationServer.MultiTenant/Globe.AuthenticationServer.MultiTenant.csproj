@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Globe.Identity.Authentication.MultiTenant\Globe.Identity.Authentication.MultiTenant.csproj" />
+    <ProjectReference Include="..\Globe.Identity.Authentication\Globe.Identity.Authentication.csproj" />
+    <ProjectReference Include="..\Globe.Identity.Shared\Globe.Identity.Shared.csproj" />
+  </ItemGroup>
+
+</Project>
