@@ -49,6 +49,11 @@ namespace Globe.Infrastructure.EFCore.Repositories
         {
             this.DbSet.Update(entity);
         }
+
+        virtual public void Delete(T entity)
+        {
+            this.DbSet.Remove(entity);
+        }
     }
 
     public class AsyncGenericRepository<T> : IAsyncRepository<T>
@@ -91,6 +96,11 @@ namespace Globe.Infrastructure.EFCore.Repositories
         async virtual public Task UpdateAsync(T entity)
         {
             await Task.Run(() => this.DbSet.Update(entity));
+        }
+
+        async virtual public Task DeleteAsync(T entity)
+        {
+            await Task.Run(() => this.DbSet.Remove(entity));
         }
     }
 }

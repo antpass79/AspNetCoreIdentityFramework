@@ -8,6 +8,7 @@ namespace Globe.BusinessLogic.Repositories
     {
         void Insert(T entity);
         void Update(T entity);
+        void Delete(T entity);
     }
 
     public interface IAsyncWriteRepository<T>
@@ -15,5 +16,6 @@ namespace Globe.BusinessLogic.Repositories
     {
         Task InsertAsync(T entity);
         Task UpdateAsync(T entity);
+        Task DeleteAsync(T entity);
     }
 }

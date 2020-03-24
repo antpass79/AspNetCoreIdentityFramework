@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <DisableImplicitComponentsAnalyzers>true</DisableImplicitComponentsAnalyzers>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.0-preview2.20160.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Globe.BusinessLogic\Globe.BusinessLogic.csproj" />
+    <ProjectReference Include="..\..\Globe.Infrastructure.EFCore\Globe.Infrastructure.EFCore.csproj" />
+    <ProjectReference Include="..\Client\Globe.Identity.AdministrativeDashboard.Client.csproj" />
+    <ProjectReference Include="..\Shared\Globe.Identity.AdministrativeDashboard.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+
+
+</Project>

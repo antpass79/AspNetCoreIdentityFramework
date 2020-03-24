@@ -1,0 +1,43 @@
+﻿@page "/user/add"
+@page "/user/edit/{userId}"
+@inherits AddEditUserDataModel
+
+
+<h1>@Title User</h1>
+<hr />
+
+<EditForm Model="@user" OnValidSubmit="SaveUser">
+    <DataAnnotationsValidator />
+    <div class="form-group row">
+        <label class="control-label col-md-12">Last Name</label>
+        <div class="col-md-4">
+            <input class="form-control" @bind="user.LastName" />
+        </div>
+        <ValidationMessage For="@(() => user.LastName)" />
+    </div>
+    <div class="form-group row">
+        <label class="control-label col-md-12">First Name</label>
+        <div class="col-md-4">
+            <input class="form-control" @bind="user.FirstName" />
+        </div>
+        <ValidationMessage For="@(() => user.FirstName)" />
+    </div>
+    <div class="form-group row">
+        <label class="control-label col-md-12">User Name</label>
+        <div class="col-md-4">
+            <input class="form-control" @bind="user.UserName" />
+        </div>
+        <ValidationMessage For="@(() => user.UserName)" />
+    </div>
+    <div class="form-group row">
+        <label class="control-label col-md-12">Email</label>
+        <div class="col-md-4">
+            <input class="form-control" @bind="user.Email" />
+        </div>
+        <ValidationMessage For="@(() => user.Email)" />
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button class="btn btn-light" @onclick="Cancel">Cancel</button>
+    </div>
+</EditForm>

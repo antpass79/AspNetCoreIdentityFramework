@@ -1,0 +1,94 @@
+﻿@page "/users"
+@inherits UsersDataModel
+
+@using Globe.Identity.AdministrativeDashboard.Client.Components
+
+<h1>Users</h1>
+
+<p>All users registered in the Globe System.</p>
+
+<div class="row">
+    <div class="col-md-4">
+        <a href='/user/add' class="btn btn-primary" role="button"><i class="fa fa-user-plus"></i> Add User</a>
+    </div>
+    <div class="input-group col-md-4 offset-md-4">
+        <input type="text" class="form-control" placeholder="Search users by name" @bind="SearchString" />
+        <div class="input-group-append">
+            <button class="btn btn-info" @onclick="SearchUsers">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+    </div>
+</div>
+<br />
+
+@if (users == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Last Name</th>
+                <th>First Name</th>
+                <th>User Name</th>
+                <th>Email</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in users)
+            {
+                <tr>
+                    <td>@user.LastName</td>
+                    <td>@user.FirstName</td>
+                    <td>@user.UserName</td>
+                    <td>@user.Email</td>
+                    <td>
+                        <a href='/user/edit/@user.Id' class="btn btn-outline-dark" role="button">
+                            <i class="fa fa-pencil-square-o"></i>
+                            Edit
+                        </a>
+                    </td>
+                    <td>
+                        <button class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteUserModal" @onclick="@(() => DeleteUserConfirm(user))">
+                            <i class="oi oi-trash"></i>
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (ShowConfirmation)
+    {
+        <div class="modal-open">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Warning</h4>
+                        <button type="button" class="close" @onclick="(() => ShowConfirmation = false)">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        Are you sure to delete the selected user?
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button class="btn btn-danger" @onclick="(() => DeleteUser(selectedUser))">Yes</button>
+                        <button class="btn btn-dark" @onclick="(() => ShowConfirmation = false)">No</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }
+}
