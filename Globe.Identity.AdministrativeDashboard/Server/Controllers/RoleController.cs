@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Globe.BusinessLogic.Repositories;
 using Globe.Identity.AdministrativeDashboard.Server.Models;
+using Globe.Identity.AdministrativeDashboard.Server.Services;
 using Globe.Identity.AdministrativeDashboard.Shared.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -12,45 +13,43 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Controllers
     public class RoleController : Controller
     {
         IMapper _mapper;
-        private readonly IRepository<ApplicationRole, string> _roleRepository;
+        private readonly IRoleService _roleService;
 
-        public RoleController(IMapper mapper, IRepository<ApplicationRole, string> roleRepository)
+        public RoleController(IRoleService roleService)
         {
-            _mapper = mapper;
-            _roleRepository = roleRepository;
+            _roleService = roleService;
         }
 
         [HttpGet]
         async public Task<IEnumerable<ApplicationRoleDTO>> Get()
         {
-            return await Task.FromResult(_mapper.Map<IEnumerable<ApplicationRoleDTO>>(_roleRepository.Get()));
+            return await Task.FromResult(_roleService.Get());
         }
 
         [HttpGet("{roleId}")]
         async public Task<ApplicationRoleDTO> Get(string roleId)
         {
-            return await Task.FromResult(_mapper.Map<ApplicationRoleDTO>(_roleRepository.FindById(roleId)));
+            return await Task.FromResult(_roleService.FindById(roleId));
         }
 
         [HttpPost]
         async public Task Post([FromBody] ApplicationRoleDTO role)
         {
-            _roleRepository.Insert(_mapper.Map<ApplicationRole>(role));
+            _roleService.Insert(role);
             await Task.CompletedTask;
         }
 
         [HttpPut]
         async public Task Put([FromBody] ApplicationRoleDTO role)
         {
-            _roleRepository.Update(_mapper.Map<ApplicationRole>(role));
+            _roleService.Update(role);
             await Task.CompletedTask;
         }
 
         [HttpDelete("{roleId}")]
         async public Task Delete(string roleId)
         {
-            var user = _roleRepository.FindById(roleId);
-            _roleRepository.Delete(user);
+            _roleService.Delete(roleId);
             await Task.CompletedTask;
         }
     }

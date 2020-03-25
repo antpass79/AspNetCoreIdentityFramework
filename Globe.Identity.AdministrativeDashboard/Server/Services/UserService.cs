@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Globe.BusinessLogic.Repositories;
 using Globe.Identity.AdministrativeDashboard.Server.Models;
+using Globe.Identity.AdministrativeDashboard.Server.UnitOfWorks;
 using Globe.Identity.AdministrativeDashboard.Shared.DTOs;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -13,13 +14,13 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Services
     public class UserService : IUserService
     {
         private readonly IMapper _mapper;
-        private readonly IRepository<ApplicationUser, string> _userRepository;
+        private readonly IUserUnitOfWork _userUnitOfWork;
         private readonly IRepository<ApplicationRole, string> _roleRepository;
 
-        public UserService(IMapper mapper, IRepository<ApplicationUser, string> userRepository, IRepository<ApplicationRole, string> roleRepository)
+        public UserService(IMapper mapper, IUserUnitOfWork userUnitOfWork, IRepository<ApplicationRole, string> roleRepository)
         {
             _mapper = mapper;
-            _userRepository = userRepository;
+            _userUnitOfWork = userUnitOfWork;
             _roleRepository = roleRepository;
         }
 
@@ -27,19 +28,22 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Services
         {
             var mappedUser = _mapper.Map<ApplicationUser>(entity);
 
-            _userRepository.Delete(mappedUser);
+            _userUnitOfWork.UserRepository.Delete(mappedUser);
+            _userUnitOfWork.Save();
         }
 
         public void Delete(string id)
         {
-            var user = _userRepository.FindById(id);
+            var user = _userUnitOfWork.UserRepository.FindById(id);
             var mappedUser = _mapper.Map<ApplicationUser>(user);
-            _userRepository.Delete(mappedUser);
+
+            _userUnitOfWork.UserRepository.Delete(mappedUser);
+            _userUnitOfWork.Save();
         }
 
         public UserWithRoles FindById(string id)
         {
-            var user =_userRepository.FindById(id);
+            var user = _userUnitOfWork.UserRepository.FindById(id);
             var userRoles = user.Roles.Select(role => role.RoleId);
 
             return new UserWithRoles
@@ -51,7 +55,7 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Services
 
         public IEnumerable<ApplicationUserDTO> Get(Expression<Func<ApplicationUserDTO, bool>> filter = null, Func<IQueryable<ApplicationUserDTO>, IOrderedQueryable<ApplicationUserDTO>> orderBy = null)
         {
-            return _mapper.Map<IEnumerable<ApplicationUserDTO>>(_userRepository.Get());
+            return _mapper.Map<IEnumerable<ApplicationUserDTO>>(_userUnitOfWork.UserRepository.Get());
         }
 
         public void Insert(UserWithRoles entity)
@@ -69,7 +73,8 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Services
                 });
             }
 
-            _userRepository.Insert(mappedUser);
+            _userUnitOfWork.UserRepository.Insert(mappedUser);
+            _userUnitOfWork.Save();
         }
 
         public void Update(UserWithRoles entity)
@@ -95,7 +100,8 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Services
                 });
             }
 
-            _userRepository.Update(mappedUser);
+            _userUnitOfWork.UserRepository.Update(mappedUser);
+            _userUnitOfWork.Save();
         }
     }
 }
