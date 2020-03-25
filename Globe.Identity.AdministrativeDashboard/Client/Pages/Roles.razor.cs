@@ -1,4 +1,4 @@
-﻿using Globe.Identity.AdministrativeDashboard.Shared.Models;
+﻿using Globe.Identity.AdministrativeDashboard.Shared.DTOs;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Linq;
@@ -13,8 +13,8 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Pages
         protected HttpClient Http { get; set; }
         protected string SearchString { get; set; }
 
-        protected ApplicationRole[] roles;
-        protected ApplicationRole selectedRole;
+        protected ApplicationRoleDTO[] roles;
+        protected ApplicationRoleDTO selectedRole;
 
 
         protected override async Task OnInitializedAsync()
@@ -22,17 +22,17 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Pages
             await GetRoles();
         }
 
-        async protected Task EditRole(ApplicationRole role)
+        async protected Task EditRole(ApplicationRoleDTO role)
         {
             await Http.SendJsonAsync(HttpMethod.Put, "/api/Role", role);
         }
 
-        protected void DeleteRoleConfirm(ApplicationRole role)
+        protected void DeleteRoleConfirm(ApplicationRoleDTO role)
         {
             this.selectedRole = roles.FirstOrDefault(item => item.Id == role.Id);
         }
 
-        async protected Task DeleteRole(ApplicationRole role)
+        async protected Task DeleteRole(ApplicationRoleDTO role)
         {
             await Http.DeleteAsync($"api/Role/{role.Id}");
         }
@@ -48,7 +48,7 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Pages
 
         async private Task GetRoles()
         {
-            roles = await Http.GetJsonAsync<ApplicationRole[]>("api/Role");
+            roles = await Http.GetJsonAsync<ApplicationRoleDTO[]>("api/Role");
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Globe.Identity.AdministrativeDashboard.Shared.Models;
+﻿using Globe.Identity.AdministrativeDashboard.Shared.DTOs;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Linq;
@@ -13,8 +13,8 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Pages
         protected HttpClient Http { get; set; }
         protected string SearchString { get; set; }
 
-        protected ApplicationUser[] users;
-        protected ApplicationUser selectedUser;
+        protected ApplicationUserDTO[] users;
+        protected ApplicationUserDTO selectedUser;
 
         protected bool ShowConfirmation { get; set; } = false;
 
@@ -23,20 +23,21 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Pages
             await GetUsers();
         }
 
-        async protected Task EditUser(ApplicationUser user)
+        async protected Task EditUser(ApplicationUserDTO user)
         {
             await Http.SendJsonAsync(HttpMethod.Put, "/api/User", user);
         }
 
-        protected void DeleteUserConfirm(ApplicationUser user)
+        protected void DeleteUserConfirm(ApplicationUserDTO user)
         {
             this.selectedUser = users.FirstOrDefault(item => item.Id == user.Id);
             this.ShowConfirmation = true;
         }
 
-        async protected Task DeleteUser(ApplicationUser user)
+        async protected Task DeleteUser(ApplicationUserDTO user)
         {
             await Http.DeleteAsync($"api/User/{user.Id}");
+            await GetUsers();
             ShowConfirmation = false;
         }
 
@@ -51,7 +52,7 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Pages
 
         async private Task GetUsers()
         {
-            users = await Http.GetJsonAsync<ApplicationUser[]>("api/User");
+            users = await Http.GetJsonAsync<ApplicationUserDTO[]>("api/User");
         }
     }
 }

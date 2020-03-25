@@ -1,5 +1,5 @@
 ﻿using Globe.BusinessLogic.Repositories;
-using Globe.Identity.AdministrativeDashboard.Shared.Models;
+using Globe.Identity.AdministrativeDashboard.Server.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,7 +52,7 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Repositories
         {
             var role = FindById(entity.Id);
             if (role == null)
-                Insert(entity);
+                throw new ArgumentException("Role doesn't exist for updating", nameof(entity));
             else
             {
                 roles.Remove(role);

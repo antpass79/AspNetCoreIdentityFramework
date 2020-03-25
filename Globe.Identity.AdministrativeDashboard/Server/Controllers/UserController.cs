@@ -1,9 +1,7 @@
-﻿using Globe.BusinessLogic.Repositories;
-using Globe.Identity.AdministrativeDashboard.Shared.Models;
+﻿using Globe.Identity.AdministrativeDashboard.Server.Services;
+using Globe.Identity.AdministrativeDashboard.Shared.DTOs;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Globe.Identity.AdministrativeDashboard.Server.Controllers
@@ -11,44 +9,43 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Controllers
     [Route("api/[controller]")]
     public class UserController : Controller
     {
-        private readonly IRepository<ApplicationUser, string> _userRepository;
+        private readonly IUserService _userService;
 
-        public UserController(IRepository<ApplicationUser, string> userRepository)
+        public UserController(IUserService userService)
         {
-            _userRepository = userRepository;
+            _userService = userService;
         }
 
         [HttpGet]
-        async public Task<IEnumerable<ApplicationUser>> Get()
+        async public Task<IEnumerable<ApplicationUserDTO>> Get()
         {
-            return await Task.FromResult(_userRepository.Get());
+            return await Task.FromResult(_userService.Get());
         }
 
         [HttpGet("{userId}")]
-        async public Task<ApplicationUser> Get(string userId)
+        async public Task<UserWithRoles> Get(string userId)
         {
-            return await Task.FromResult(_userRepository.FindById(userId));
+            return await Task.FromResult(_userService.FindById(userId));
         }
 
         [HttpPost]
-        async public Task Post([FromBody] ApplicationUser user)
+        async public Task Post([FromBody] UserWithRoles userWithRoles)
         {
-            _userRepository.Insert(user);
+            _userService.Insert(userWithRoles);
             await Task.CompletedTask;
         }
 
         [HttpPut]
-        async public Task Put([FromBody] ApplicationUser user)
+        async public Task Put([FromBody] UserWithRoles userWithRoles)
         {
-            _userRepository.Update(user);
+            _userService.Update(userWithRoles);
             await Task.CompletedTask;
         }
 
         [HttpDelete("{userId}")]
         async public Task Delete(string userId)
         {
-            var user = _userRepository.FindById(userId);
-            _userRepository.Delete(user);
+            _userService.Delete(userId);
             await Task.CompletedTask;
         }
     }

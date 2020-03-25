@@ -1,6 +1,7 @@
-﻿using Globe.Identity.AdministrativeDashboard.Shared.Models;
+﻿using Globe.Identity.AdministrativeDashboard.Client.Models;
+using Globe.Identity.AdministrativeDashboard.Shared.DTOs;
 using Microsoft.AspNetCore.Components;
-using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -17,43 +18,56 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Pages
         public string userId { get; set; }
 
         protected string Title = "Add";
-        public ApplicationUser user = new ApplicationUser();
-        //protected List<Cities> cityList = new List<Cities>();
-
-        protected override async Task OnInitializedAsync()
-        {
-            await GetCityList();
-        }
+        protected UserWithRoles userWithRoles = new UserWithRoles();
+        protected IList<ApplicationEditableRole> editableRoles = new List<ApplicationEditableRole>();
 
         protected override async Task OnParametersSetAsync()
         {
             if (!string.IsNullOrEmpty(userId))
             {
                 Title = "Edit";
-                user = await Http.GetJsonAsync<ApplicationUser>("/api/User/" + userId);
+                userWithRoles = await Http.GetJsonAsync<UserWithRoles>("/api/User/" + userId);
             }
+
+            await GetRoles();
         }
 
-        protected async Task GetCityList()
+        protected async Task GetRoles()
         {
-            //cityList = await Http.GetJsonAsync<List<Cities>>("api/Employee/GetCities");
+            var roles = await Http.GetJsonAsync<ApplicationRoleDTO[]>("api/Role");
+            editableRoles = roles.Select(role =>
+            {
+                return new ApplicationEditableRole
+                {
+                    Id = role.Id,
+                    Name = role.Name,
+                    Description = role.Description,
+                    Selected = userWithRoles.Roles.ToList().Find(item => item.Id == role.Id) != null
+                };
+            }).ToList();
         }
 
         protected async Task SaveUser()
         {
-            if (!string.IsNullOrWhiteSpace(user.Id))
+            var userWithRolesToSave = new UserWithRoles
             {
-                await Http.SendJsonAsync(HttpMethod.Put, "api/User/", user);
+                User = this.userWithRoles.User,
+                Roles = editableRoles.Where(role => role.Selected)
+            };
+
+            if (!string.IsNullOrWhiteSpace(this.userWithRoles.User.Id))
+            {
+                await Http.SendJsonAsync(HttpMethod.Put, "api/User/", userWithRolesToSave);
             }
             else
             {
-                await Http.SendJsonAsync(HttpMethod.Post, "/api/User/", user);
+                await Http.SendJsonAsync(HttpMethod.Post, "/api/User/", userWithRolesToSave);
             }
 
             Cancel();
         }
 
-        public void Cancel()
+        protected void Cancel()
         {
             UrlNavigationManager.NavigateTo("/users");
         }

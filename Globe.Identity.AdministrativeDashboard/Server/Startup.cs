@@ -1,15 +1,13 @@
+using AutoMapper;
+using Globe.BusinessLogic.Repositories;
+using Globe.Identity.AdministrativeDashboard.Server.Models;
+using Globe.Identity.AdministrativeDashboard.Server.Repositories;
+using Globe.Identity.AdministrativeDashboard.Server.Services;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Linq;
-using Globe.BusinessLogic.Repositories;
-using Globe.Identity.AdministrativeDashboard.Shared.Models;
-using Globe.Infrastructure.EFCore.Repositories;
-using Globe.Identity.AdministrativeDashboard.Server.Repositories;
 
 namespace Globe.Identity.AdministrativeDashboard.Server
 {
@@ -26,7 +24,10 @@ namespace Globe.Identity.AdministrativeDashboard.Server
         {
             services
                 .AddSingleton<IRepository<ApplicationUser, string>, MockUserRepository>()
-                .AddSingleton<IRepository<ApplicationRole, string>, MockRoleRepository>();
+                .AddSingleton<IRepository<ApplicationRole, string>, MockRoleRepository>()
+                .AddSingleton<IUserService, UserService>();
+
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddControllersWithViews();
         }

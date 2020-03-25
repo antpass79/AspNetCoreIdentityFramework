@@ -1,5 +1,5 @@
 ﻿using Globe.BusinessLogic.Repositories;
-using Globe.Identity.AdministrativeDashboard.Shared.Models;
+using Globe.Identity.AdministrativeDashboard.Server.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,7 +54,7 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Repositories
         {
             var user = FindById(entity.Id);
             if (user == null)
-                Insert(entity);
+                throw new ArgumentException("User doesn't exist for updating", nameof(entity));
             else
             {
                 users.Remove(user);
