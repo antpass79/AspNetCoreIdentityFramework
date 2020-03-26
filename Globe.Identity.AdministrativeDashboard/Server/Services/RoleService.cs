@@ -1,69 +1,72 @@
 ﻿using AutoMapper;
 using Globe.BusinessLogic.Repositories;
 using Globe.Identity.AdministrativeDashboard.Server.Models;
+using Globe.Identity.AdministrativeDashboard.Server.Repositories;
 using Globe.Identity.AdministrativeDashboard.Server.UnitOfWorks;
 using Globe.Identity.AdministrativeDashboard.Shared.DTOs;
-using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Globe.Identity.AdministrativeDashboard.Server.Services
 {
-    public class RoleService : IRoleService
+    public class RoleService : IAsyncRoleService
     {
         private readonly IMapper _mapper;
-        private readonly IRoleUnitOfWork _roleUnitOfWork;
+        private readonly IAsyncRoleUnitOfWork _roleUnitOfWork;
 
-        public RoleService(IMapper mapper, IRoleUnitOfWork roleUnitOfWork)
+        public RoleService(IMapper mapper, IAsyncRoleUnitOfWork roleUnitOfWork)
         {
             _mapper = mapper;
             _roleUnitOfWork = roleUnitOfWork;
         }
 
-        public void Delete(ApplicationRoleDTO entity)
+        async public Task DeleteAsync(ApplicationRoleDTO entity)
         {
             var mappedRole = _mapper.Map<ApplicationRole>(entity);
 
-            _roleUnitOfWork.RoleRepository.Delete(mappedRole);
-            _roleUnitOfWork.Save();
+            await _roleUnitOfWork.RoleRepository.DeleteAsync(mappedRole);
+            await _roleUnitOfWork.SaveAsync();
         }
 
-        public void Delete(string id)
+        async public Task DeleteAsync(string id)
         {
-            var role = _roleUnitOfWork.RoleRepository.FindById(id);
+            var role = await _roleUnitOfWork.RoleRepository.FindByIdAsync(id);
             var mappedRole = _mapper.Map<ApplicationRole>(role);
 
-            _roleUnitOfWork.RoleRepository.Delete(mappedRole);
-            _roleUnitOfWork.Save();
+            await _roleUnitOfWork.RoleRepository.DeleteAsync(mappedRole);
+            await _roleUnitOfWork.SaveAsync();
         }
 
-        public ApplicationRoleDTO FindById(string id)
+        async public Task<ApplicationRoleDTO> FindByIdAsync(string id)
         {
-            var role = _roleUnitOfWork.RoleRepository.FindById(id);
+            var role = await _roleUnitOfWork.RoleRepository.FindByIdAsync(id);
             return _mapper.Map<ApplicationRoleDTO>(role);
         }
 
-        public IEnumerable<ApplicationRoleDTO> Get(Expression<Func<ApplicationRoleDTO, bool>> filter = null, Func<IQueryable<ApplicationRoleDTO>, IOrderedQueryable<ApplicationUserDTO>> orderBy = null)
+        async public Task<IEnumerable<ApplicationRoleDTO>> GetAsync(Expression<Func<ApplicationRoleDTO, bool>> filter = null, Func<IQueryable<ApplicationRoleDTO>, IOrderedQueryable<ApplicationUserDTO>> orderBy = null)
         {
-            return _mapper.Map<IEnumerable<ApplicationRoleDTO>>(_roleUnitOfWork.RoleRepository.Get());
+            var result = await _roleUnitOfWork.RoleRepository.GetAsync();
+            return _mapper.Map<IEnumerable<ApplicationRoleDTO>>(result);
         }
 
-        public void Insert(ApplicationRoleDTO entity)
+        async public Task InsertAsync(ApplicationRoleDTO entity)
+        {
+            entity.Id = Guid.NewGuid().ToString();
+            var mappedRole = _mapper.Map<ApplicationRole>(entity);
+
+            await _roleUnitOfWork.RoleRepository.InsertAsync(mappedRole);
+            await _roleUnitOfWork.SaveAsync();
+        }
+
+        async public Task UpdateAsync(ApplicationRoleDTO entity)
         {
             var mappedRole = _mapper.Map<ApplicationRole>(entity);
 
-            _roleUnitOfWork.RoleRepository.Insert(mappedRole);
-            _roleUnitOfWork.Save();
-        }
-
-        public void Update(ApplicationRoleDTO entity)
-        {
-            var mappedRole = _mapper.Map<ApplicationRole>(entity);
-
-            _roleUnitOfWork.RoleRepository.Update(mappedRole);
-            _roleUnitOfWork.Save();
+            await _roleUnitOfWork.RoleRepository.UpdateAsync(mappedRole);
+            await _roleUnitOfWork.SaveAsync();
         }
     }
 }

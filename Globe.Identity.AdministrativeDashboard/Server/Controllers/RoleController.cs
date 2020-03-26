@@ -12,45 +12,41 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Controllers
     [Route("api/[controller]")]
     public class RoleController : Controller
     {
-        IMapper _mapper;
-        private readonly IRoleService _roleService;
+        private readonly IAsyncRoleService _asyncRoleManager;
 
-        public RoleController(IRoleService roleService)
+        public RoleController(IAsyncRoleService asyncRoleManager)
         {
-            _roleService = roleService;
+            _asyncRoleManager = asyncRoleManager;
         }
 
         [HttpGet]
         async public Task<IEnumerable<ApplicationRoleDTO>> Get()
         {
-            return await Task.FromResult(_roleService.Get());
+            return await _asyncRoleManager.GetAsync();
         }
 
         [HttpGet("{roleId}")]
         async public Task<ApplicationRoleDTO> Get(string roleId)
         {
-            return await Task.FromResult(_roleService.FindById(roleId));
+            return await _asyncRoleManager.FindByIdAsync(roleId);
         }
 
         [HttpPost]
         async public Task Post([FromBody] ApplicationRoleDTO role)
         {
-            _roleService.Insert(role);
-            await Task.CompletedTask;
+            await _asyncRoleManager.InsertAsync(role);
         }
 
         [HttpPut]
         async public Task Put([FromBody] ApplicationRoleDTO role)
         {
-            _roleService.Update(role);
-            await Task.CompletedTask;
+            await _asyncRoleManager.UpdateAsync(role);
         }
 
         [HttpDelete("{roleId}")]
         async public Task Delete(string roleId)
         {
-            _roleService.Delete(roleId);
-            await Task.CompletedTask;
+            await _asyncRoleManager.DeleteAsync(roleId);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Globe.BusinessLogic.Repositories;
 using Globe.Identity.AdministrativeDashboard.Server.Models;
+using Globe.Identity.AdministrativeDashboard.Server.Repositories;
 using Globe.Identity.AdministrativeDashboard.Server.UnitOfWorks;
 using Globe.Identity.AdministrativeDashboard.Shared.DTOs;
 using Microsoft.AspNetCore.Identity;
@@ -8,58 +9,63 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Globe.Identity.AdministrativeDashboard.Server.Services
 {
-    public class UserService : IUserService
+    public class UserService : IAsyncUserService
     {
         private readonly IMapper _mapper;
-        private readonly IUserUnitOfWork _userUnitOfWork;
-        private readonly IRepository<ApplicationRole, string> _roleRepository;
+        private readonly IAsyncUserUnitOfWork _userUnitOfWork;
+        private readonly IAsyncRoleRepository _roleRepository;
 
-        public UserService(IMapper mapper, IUserUnitOfWork userUnitOfWork, IRepository<ApplicationRole, string> roleRepository)
+        public UserService(IMapper mapper, IAsyncUserUnitOfWork userUnitOfWork, IAsyncRoleRepository roleRepository)
         {
             _mapper = mapper;
             _userUnitOfWork = userUnitOfWork;
             _roleRepository = roleRepository;
         }
 
-        public void Delete(ApplicationUserDTO entity)
+        async public Task DeleteAsync(ApplicationUserDTO entity)
         {
             var mappedUser = _mapper.Map<ApplicationUser>(entity);
 
-            _userUnitOfWork.UserRepository.Delete(mappedUser);
-            _userUnitOfWork.Save();
+            await _userUnitOfWork.UserRepository.DeleteAsync(mappedUser);
+            await _userUnitOfWork.SaveAsync();
         }
 
-        public void Delete(string id)
+        async public Task DeleteAsync(string id)
         {
-            var user = _userUnitOfWork.UserRepository.FindById(id);
+            var user = await _userUnitOfWork.UserRepository.FindByIdAsync(id);
             var mappedUser = _mapper.Map<ApplicationUser>(user);
 
-            _userUnitOfWork.UserRepository.Delete(mappedUser);
-            _userUnitOfWork.Save();
+            await _userUnitOfWork.UserRepository.DeleteAsync(mappedUser);
+            await _userUnitOfWork.SaveAsync();
         }
 
-        public UserWithRoles FindById(string id)
+        async public Task<UserWithRoles> FindByIdAsync(string id)
         {
-            var user = _userUnitOfWork.UserRepository.FindById(id);
+            var user = await _userUnitOfWork.UserRepository.FindByIdAsync(id);
             var userRoles = user.Roles.Select(role => role.RoleId);
+
+            var allRoles = await _roleRepository.GetAsync();
 
             return new UserWithRoles
             {
                 User = _mapper.Map<ApplicationUserDTO>(user),
-                Roles = _mapper.Map<IEnumerable<ApplicationRoleDTO>>(_roleRepository.Get().Where(role => userRoles.Contains(role.Id)))
+                Roles = _mapper.Map<IEnumerable<ApplicationRoleDTO>>(allRoles.Where(role => userRoles.Contains(role.Id)))
             };
         }
 
-        public IEnumerable<ApplicationUserDTO> Get(Expression<Func<ApplicationUserDTO, bool>> filter = null, Func<IQueryable<ApplicationUserDTO>, IOrderedQueryable<ApplicationUserDTO>> orderBy = null)
+        async public Task<IEnumerable<ApplicationUserDTO>> GetAsync(Expression<Func<ApplicationUserDTO, bool>> filter = null, Func<IQueryable<ApplicationUserDTO>, IOrderedQueryable<ApplicationUserDTO>> orderBy = null)
         {
-            return _mapper.Map<IEnumerable<ApplicationUserDTO>>(_userUnitOfWork.UserRepository.Get());
+            return _mapper.Map<IEnumerable<ApplicationUserDTO>>(await _userUnitOfWork.UserRepository.GetAsync());
         }
 
-        public void Insert(UserWithRoles entity)
+        async public Task InsertAsync(UserWithRoles entity)
         {
+            entity.User.Id = Guid.NewGuid().ToString();
+
             var mappedUser = _mapper.Map<ApplicationUser>(entity.User);
             var mappedRoles = _mapper.Map<IEnumerable<ApplicationRole>>(entity.Roles);
 
@@ -73,11 +79,11 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Services
                 });
             }
 
-            _userUnitOfWork.UserRepository.Insert(mappedUser);
-            _userUnitOfWork.Save();
+            await _userUnitOfWork.UserRepository.InsertAsync(mappedUser);
+            await _userUnitOfWork.SaveAsync();
         }
 
-        public void Update(UserWithRoles entity)
+        async public Task UpdateAsync(UserWithRoles entity)
         {
             var mappedUser = _mapper.Map<ApplicationUser>(entity.User);
             var mappedRoles = _mapper.Map<IEnumerable<ApplicationRole>>(entity.Roles);
@@ -100,8 +106,8 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Services
                 });
             }
 
-            _userUnitOfWork.UserRepository.Update(mappedUser);
-            _userUnitOfWork.Save();
+            await _userUnitOfWork.UserRepository.UpdateAsync(mappedUser);
+            await _userUnitOfWork.SaveAsync();
         }
     }
 }

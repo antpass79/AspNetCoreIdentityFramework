@@ -4,10 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Globe.Identity.AdministrativeDashboard.Server.Repositories
 {
-    public class MockRoleRepository : IRepository<ApplicationRole, string>
+    public class MockRoleRepository : IAsyncRoleRepository
     {
         List<ApplicationRole> roles = new List<ApplicationRole>();
 
@@ -24,12 +25,12 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Repositories
             }
         }
 
-        public ApplicationRole FindById(string id)
+        async public Task<ApplicationRole> FindByIdAsync(string id)
         {
-            return roles.SingleOrDefault(user => user.Id == id);
+            return await Task.FromResult(roles.SingleOrDefault(user => user.Id == id));
         }
 
-        public IEnumerable<ApplicationRole> Get(Expression<Func<ApplicationRole, bool>> filter = null, Func<IQueryable<ApplicationRole>, IOrderedQueryable<ApplicationRole>> orderBy = null)
+        async public Task<IEnumerable<ApplicationRole>> GetAsync(Expression<Func<ApplicationRole, bool>> filter = null, Func<IQueryable<ApplicationRole>, IOrderedQueryable<ApplicationRole>> orderBy = null)
         {
             var selectedRoles = new List<ApplicationRole>(roles);
 
@@ -39,18 +40,19 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Repositories
             if (orderBy != null)
                 selectedRoles = orderBy(roles.AsQueryable()).ToList();
 
-            return selectedRoles;
+            return await Task.FromResult(selectedRoles);
         }
 
-        public void Insert(ApplicationRole entity)
+        async public Task InsertAsync(ApplicationRole entity)
         {
             entity.Id = Guid.NewGuid().ToString() + "-" + roles.Count.ToString();
             roles.Add(entity);
+            await Task.CompletedTask;
         }
 
-        public void Update(ApplicationRole entity)
+        async public Task UpdateAsync(ApplicationRole entity)
         {
-            var role = FindById(entity.Id);
+            var role = await FindByIdAsync(entity.Id);
             if (role == null)
                 throw new ArgumentException("Role doesn't exist for updating", nameof(entity));
             else
@@ -58,12 +60,15 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Repositories
                 roles.Remove(role);
                 roles.Add(entity);
             }
+
+            await Task.CompletedTask;
         }
 
-        public void Delete(ApplicationRole entity)
+        async public Task DeleteAsync(ApplicationRole entity)
         {
-            var role = FindById(entity.Id);
+            var role = await FindByIdAsync(entity.Id);
             roles.Remove(role);
+            await Task.CompletedTask;
         }
     }
 }

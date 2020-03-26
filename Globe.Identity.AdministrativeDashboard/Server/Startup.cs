@@ -26,7 +26,7 @@ namespace Globe.Identity.AdministrativeDashboard.Server
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<GlobeDbContext, ApplicationDbContext>(
+            services.AddDbContext<ApplicationDbContext, ApplicationDbContext>(
                 ServiceLifetime.Singleton,
                 ServiceLifetime.Singleton);
 
@@ -38,16 +38,28 @@ namespace Globe.Identity.AdministrativeDashboard.Server
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 3;
             })
-                .AddEntityFrameworkStores<GlobeDbContext>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            // Repositories
             services
-                .AddSingleton<IRepository<ApplicationUser, string>, MockUserRepository>()
-                .AddSingleton<IRepository<ApplicationRole, string>, MockRoleRepository>()
-                .AddSingleton<IUserService, UserService>()
-                .AddSingleton<IRoleService, RoleService>()
-                .AddSingleton<IUserUnitOfWork, MockUserUnitOfWork>()
-                .AddSingleton<IRoleUnitOfWork, MockRoleUnitOfWork>();
+                .AddSingleton<IAsyncUserRepository, UserContextRepository>()
+                .AddSingleton<IAsyncRoleRepository, RoleContextRepository>();
+            //.AddSingleton<IAsyncUserRepository, MockUserRepository>()
+            //.AddSingleton<IAsyncRoleRepository, MockRoleRepository>();
+
+            // Unit of Works
+            services
+                .AddSingleton<IAsyncUserUnitOfWork, UserContextUnitOfWork>()
+                .AddSingleton<IAsyncRoleUnitOfWork, RoleContextUnitOfWork>();
+            //.AddSingleton<IAsyncUserUnitOfWork, UserUnitOfWork>()
+            //.AddSingleton<IAsyncRoleUnitOfWork, RoleUnitOfWork>();
+
+            // Services
+            services
+                .AddSingleton<IAsyncUserService, UserService>()
+                .AddSingleton<IAsyncRoleService, RoleService>();
+
 
             services.AddAutoMapper(typeof(Startup));
 

@@ -9,9 +9,9 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Controllers
     [Route("api/[controller]")]
     public class UserController : Controller
     {
-        private readonly IUserService _userService;
+        private readonly IAsyncUserService _userService;
 
-        public UserController(IUserService userService)
+        public UserController(IAsyncUserService userService)
         {
             _userService = userService;
         }
@@ -19,34 +19,31 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Controllers
         [HttpGet]
         async public Task<IEnumerable<ApplicationUserDTO>> Get()
         {
-            return await Task.FromResult(_userService.Get());
+            return await _userService.GetAsync();
         }
 
         [HttpGet("{userId}")]
         async public Task<UserWithRoles> Get(string userId)
         {
-            return await Task.FromResult(_userService.FindById(userId));
+            return await _userService.FindByIdAsync(userId);
         }
 
         [HttpPost]
         async public Task Post([FromBody] UserWithRoles userWithRoles)
         {
-            _userService.Insert(userWithRoles);
-            await Task.CompletedTask;
+            await _userService.InsertAsync(userWithRoles);
         }
 
         [HttpPut]
         async public Task Put([FromBody] UserWithRoles userWithRoles)
         {
-            _userService.Update(userWithRoles);
-            await Task.CompletedTask;
+            await _userService.UpdateAsync(userWithRoles);
         }
 
         [HttpDelete("{userId}")]
         async public Task Delete(string userId)
         {
-            _userService.Delete(userId);
-            await Task.CompletedTask;
+            await _userService.DeleteAsync(userId);
         }
     }
 }

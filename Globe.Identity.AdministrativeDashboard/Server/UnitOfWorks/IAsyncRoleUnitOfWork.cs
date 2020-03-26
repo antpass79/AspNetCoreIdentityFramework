@@ -1,11 +1,12 @@
 ﻿using Globe.BusinessLogic;
 using Globe.BusinessLogic.Repositories;
 using Globe.Identity.AdministrativeDashboard.Server.Models;
+using Globe.Identity.AdministrativeDashboard.Server.Repositories;
 
 namespace Globe.Identity.AdministrativeDashboard.Server.UnitOfWorks
 {
-    public interface IRoleUnitOfWork : ISaveable
+    public interface IAsyncRoleUnitOfWork : IAsyncSaveable
     {
-        IRepository<ApplicationRole, string> RoleRepository { get; }
+        IAsyncRoleRepository RoleRepository { get; }
     }
 }
