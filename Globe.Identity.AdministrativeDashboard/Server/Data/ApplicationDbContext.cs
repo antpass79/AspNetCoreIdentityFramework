@@ -1,25 +1,23 @@
 ﻿using Globe.Identity.AdministrativeDashboard.Server.Models;
-using Globe.Identity.Authentication.Data;
-using Globe.Identity.Authentication.Options;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace Globe.Identity.AdministrativeDashboard.Server.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
-        protected IOptions<DatabaseOptions> Options { get; }
-        public ApplicationDbContext(IOptions<DatabaseOptions> options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
         {
-            Options = options;
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            optionsBuilder
-                .UseInMemoryDatabase(this.Options.Value.DefaultInMemoryConnection)
-                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            base.OnModelCreating(builder);
+
+            //builder.Entity<ApplicationUser>().HasMany(p => p.Roles).WithOne().HasForeignKey(p => p.UserId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+            //builder.Entity<ApplicationUser>().HasMany(e => e.Claims).WithOne().HasForeignKey(e => e.UserId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+            //builder.Entity<ApplicationRole>().HasMany(r => r.Claims).WithOne().HasForeignKey(r => r.RoleId).IsRequired().OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

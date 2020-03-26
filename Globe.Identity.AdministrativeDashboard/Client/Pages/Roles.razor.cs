@@ -15,7 +15,7 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Pages
 
         protected ApplicationRoleDTO[] roles;
         protected ApplicationRoleDTO selectedRole;
-
+        protected bool ShowConfirmation { get; set; } = false;
 
         protected override async Task OnInitializedAsync()
         {
@@ -30,11 +30,14 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Pages
         protected void DeleteRoleConfirm(ApplicationRoleDTO role)
         {
             this.selectedRole = roles.FirstOrDefault(item => item.Id == role.Id);
+            this.ShowConfirmation = true;
         }
 
         async protected Task DeleteRole(ApplicationRoleDTO role)
         {
             await Http.DeleteAsync($"api/Role/{role.Id}");
+            await GetRoles();
+            ShowConfirmation = false;
         }
 
         async protected Task SearchRoles()

@@ -1,8 +1,4 @@
-﻿using Globe.BusinessLogic;
-using Globe.BusinessLogic.Repositories;
-using Globe.Identity.AdministrativeDashboard.Server.Data;
-using Globe.Identity.AdministrativeDashboard.Server.Models;
-using Globe.Identity.Authentication.Data;
+﻿using Globe.Identity.AdministrativeDashboard.Server.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -34,17 +30,36 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Repositories
 
         async public Task InsertAsync(ApplicationRole entity)
         {
-            await _roleManager.CreateAsync(entity);
+            var result = await _roleManager.CreateAsync(entity);
+            if (!result.Succeeded)
+                throw new ArgumentException("Impossible to create the role", nameof(entity));
+
+            await Task.CompletedTask;
         }
 
         async public Task UpdateAsync(ApplicationRole entity)
         {
-            await _roleManager.UpdateAsync(entity);
+            var role = await _roleManager.FindByIdAsync(entity.Id);
+            if (role == null)
+                throw new ArgumentNullException("Role doesn't exist for updating", nameof(role));
+
+            role.Name = entity.Name;
+            role.Description = entity.Description;
+
+            var result = await _roleManager.UpdateAsync(role);
+            if (!result.Succeeded)
+                throw new ArgumentException("Impossible to update the role", nameof(entity));
+
+            await Task.CompletedTask; 
         }
 
         async public Task DeleteAsync(ApplicationRole entity)
         {
-            await _roleManager.DeleteAsync(entity);
+            var result = await _roleManager.DeleteAsync(entity);
+            if (!result.Succeeded)
+                throw new ArgumentException("Impossible to delete the role", nameof(entity));
+
+            await Task.CompletedTask;
         }
     }
 }

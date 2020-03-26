@@ -9,9 +9,11 @@ using Globe.Identity.Authentication.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace Globe.Identity.AdministrativeDashboard.Server
 {
@@ -26,11 +28,15 @@ namespace Globe.Identity.AdministrativeDashboard.Server
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext, ApplicationDbContext>(
-                ServiceLifetime.Singleton,
-                ServiceLifetime.Singleton);
+            services.AddDbContext<ApplicationDbContext, ApplicationDbContext>(options =>
+            {
+                options.UseSqlServer(_configuration.GetConnectionString("DefaultSqlServerConnection"));
+                //options.UseInMemoryDatabase(Guid.NewGuid().ToString());
+            },
+            ServiceLifetime.Singleton,
+            ServiceLifetime.Singleton);
 
-            services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+            services.AddDefaultIdentity<ApplicationUser>(options =>
             {
                 options.Password.RequireDigit = false;
                 options.Password.RequireLowercase = false;
@@ -38,27 +44,29 @@ namespace Globe.Identity.AdministrativeDashboard.Server
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 3;
             })
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+                .AddRoles<ApplicationRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             // Repositories
             services
-                .AddSingleton<IAsyncUserRepository, UserContextRepository>()
-                .AddSingleton<IAsyncRoleRepository, RoleContextRepository>();
+            //.AddSingleton<IAsyncUserRepository, UserContextRepository>()
+            //.AddSingleton<IAsyncRoleRepository, RoleContextRepository>();
+            .AddScoped<IAsyncUserRepository, UserManagerRepository>()
+            .AddScoped<IAsyncRoleRepository, RoleManagerRepository>();
             //.AddSingleton<IAsyncUserRepository, MockUserRepository>()
             //.AddSingleton<IAsyncRoleRepository, MockRoleRepository>();
 
             // Unit of Works
             services
-                .AddSingleton<IAsyncUserUnitOfWork, UserContextUnitOfWork>()
-                .AddSingleton<IAsyncRoleUnitOfWork, RoleContextUnitOfWork>();
-            //.AddSingleton<IAsyncUserUnitOfWork, UserUnitOfWork>()
-            //.AddSingleton<IAsyncRoleUnitOfWork, RoleUnitOfWork>();
+            //.AddSingleton<IAsyncUserUnitOfWork, UserContextUnitOfWork>()
+            //.AddSingleton<IAsyncRoleUnitOfWork, RoleContextUnitOfWork>();
+            .AddScoped<IAsyncUserUnitOfWork, UserUnitOfWork>()
+            .AddScoped<IAsyncRoleUnitOfWork, RoleUnitOfWork>();
 
             // Services
             services
-                .AddSingleton<IAsyncUserService, UserService>()
-                .AddSingleton<IAsyncRoleService, RoleService>();
+                .AddScoped<IAsyncUserService, UserService>()
+                .AddScoped<IAsyncRoleService, RoleService>();
 
 
             services.AddAutoMapper(typeof(Startup));
@@ -85,6 +93,8 @@ namespace Globe.Identity.AdministrativeDashboard.Server
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

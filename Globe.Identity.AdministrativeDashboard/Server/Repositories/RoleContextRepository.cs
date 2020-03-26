@@ -42,7 +42,14 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Repositories
 
         async public Task UpdateAsync(ApplicationRole entity)
         {
-            this.DbSet.Update(entity);
+            var role = await this.FindByIdAsync(entity.Id);
+            if (role == null)
+                throw new ArgumentNullException("Role doesn't exist for updating", nameof(role));
+
+            role.Name = entity.Name;
+            role.Description = entity.Description;
+
+            this.DbSet.Update(role);
             await Task.CompletedTask;
         }
 

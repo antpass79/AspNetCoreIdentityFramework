@@ -15,7 +15,6 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Pages
 
         protected ApplicationUserDTO[] users;
         protected ApplicationUserDTO selectedUser;
-
         protected bool ShowConfirmation { get; set; } = false;
 
         protected override async Task OnInitializedAsync()

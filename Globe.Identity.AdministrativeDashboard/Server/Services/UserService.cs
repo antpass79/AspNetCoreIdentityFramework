@@ -46,14 +46,11 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Services
         async public Task<UserWithRoles> FindByIdAsync(string id)
         {
             var user = await _userUnitOfWork.UserRepository.FindByIdAsync(id);
-            var userRoles = user.Roles.Select(role => role.RoleId);
-
-            var allRoles = await _roleRepository.GetAsync();
 
             return new UserWithRoles
             {
                 User = _mapper.Map<ApplicationUserDTO>(user),
-                Roles = _mapper.Map<IEnumerable<ApplicationRoleDTO>>(allRoles.Where(role => userRoles.Contains(role.Id)))
+                Roles = await GetUserRolesAsync(user)
             };
         }
 
@@ -86,18 +83,21 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Services
         async public Task UpdateAsync(UserWithRoles entity)
         {
             var mappedUser = _mapper.Map<ApplicationUser>(entity.User);
+
             var mappedRoles = _mapper.Map<IEnumerable<ApplicationRole>>(entity.Roles);
+            var mappedRoleIds = mappedRoles.Select(role => role.Id);
 
-            var roles = mappedRoles.Select(role => role.Id);
-            var userRoles = mappedUser.Roles.Select(role => role.RoleId);
+            var userRoles = await GetUserRolesAsync(mappedUser);
+            var userRoleIds = userRoles.Select(role => role.Id);
 
-            foreach (string role in userRoles.Except(roles))
+            foreach (string role in userRoleIds.Except(mappedRoleIds))
             {
                 var identityRole = mappedUser.Roles.ToList().Find(item => item.RoleId == role);
                 mappedUser.Roles.Remove(identityRole);
             }
 
-            foreach (var role in roles.Except(userRoles))
+            mappedUser.Roles.Clear();
+            foreach (var role in mappedRoleIds)
             {
                 mappedUser.Roles.Add(new IdentityUserRole<string>
                 {
@@ -108,6 +108,24 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Services
 
             await _userUnitOfWork.UserRepository.UpdateAsync(mappedUser);
             await _userUnitOfWork.SaveAsync();
+        }
+
+        async private Task<IEnumerable<ApplicationRoleDTO>> GetUserRolesAsync(ApplicationUser user)
+        {
+            var userRoleNames = await _userUnitOfWork.UserRepository.GetRolesAsync(user);
+            var allRoles = await _roleRepository.GetAsync();
+
+            var userRoles = allRoles
+                .Where(role => userRoleNames.Contains(role.Name))
+                .Select(role =>
+                new ApplicationRoleDTO
+                {
+                    Id = role.Id,
+                    Name = role.Name,
+                    Description = role.Description
+                });
+
+            return userRoles;
         }
     }
 }

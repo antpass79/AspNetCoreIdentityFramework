@@ -11,9 +11,12 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Repositories
     public class MockUserRepository : IAsyncUserRepository
     {
         List<ApplicationUser> users = new List<ApplicationUser>();
+        private readonly IAsyncRoleRepository _roleRepository;
 
-        public MockUserRepository()
+        public MockUserRepository(IAsyncRoleRepository roleRepository)
         {
+            _roleRepository = roleRepository;
+
             for (int i = 0; i < 3; i++)
             {
                 users.Add(new ApplicationUser
@@ -27,6 +30,14 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Repositories
             }
         }
 
+        async public Task<IEnumerable<string>> GetRolesAsync(ApplicationUser user)
+        {
+            var roles = await _roleRepository.GetAsync();
+            var userRoleIds = user.Roles.Select(role => role.RoleId);
+
+            return await Task.FromResult(roles.Where(role => userRoleIds.Contains(role.Id)).Select(role => role.Name));
+        }
+        
         async public Task<ApplicationUser> FindByIdAsync(string id)
         {
             return await Task.FromResult(users.SingleOrDefault(user => user.Id == id));
