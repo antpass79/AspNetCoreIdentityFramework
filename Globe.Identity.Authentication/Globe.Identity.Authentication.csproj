@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Globe.Identity.Authentication.Core\Globe.Identity.Authentication.Core.csproj" />
     <ProjectReference Include="..\Globe.Identity.Shared\Globe.Identity.Shared.csproj" />
   </ItemGroup>
 

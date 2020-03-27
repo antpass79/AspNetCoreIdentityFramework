@@ -1,4 +1,4 @@
-﻿namespace Globe.Identity.Authentication.Models
+﻿namespace Globe.Identity.Authentication.Core.Models
 {
     public class Registration
     {

@@ -1,6 +1,8 @@
 ﻿using Globe.Identity.Authentication.Jwt;
+using Globe.Identity.Authentication.Models;
 using Globe.Identity.Authentication.Options;
 using Globe.Identity.Authentication.Services;
+using Globe.Identity.Authentication.Core.Services;
 using Globe.Identity.Shared.Jwt;
 using Globe.Identity.Shared.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -32,8 +34,8 @@ namespace Globe.Identity.Authentication.Extensions
             services.AddSingleton<IPostConfigureOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>();
             services.AddSingleton<ISigningCredentialsBuilder, SigningCredentialsBuilder>();
 
-            services.AddSingleton<ILoginService, LoginService>();
-            services.AddSingleton<IAccountsService, AccountsService>();
+            services.AddSingleton<IAsyncLoginService, LoginService>();
+            services.AddSingleton<IAsyncRegisterService, RegisterService<GlobeUser>>();
 
             return services;
         }

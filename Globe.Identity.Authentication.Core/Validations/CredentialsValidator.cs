@@ -1,9 +1,10 @@
 ﻿using FluentValidation;
 using Globe.Identity.Authentication.Core.Models;
 
-namespace Globe.AuthenticationServer
+namespace Globe.Identity.Authentication.Core.Validations
 {
-    public class CredentialsValidator : AbstractValidator<Credentials>
+    public class CredentialsValidator<T> : AbstractValidator<T>
+        where T : Credentials
     {
         public CredentialsValidator()
         {

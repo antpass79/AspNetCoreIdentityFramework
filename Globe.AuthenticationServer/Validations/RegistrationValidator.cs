@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Globe.Identity.Authentication.Models;
+using Globe.Identity.Authentication.Core.Models;
 
 namespace Globe.AuthenticationServer
 {

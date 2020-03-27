@@ -1,8 +1,8 @@
-﻿using Globe.Identity.Authentication.Models;
-using Globe.Identity.Authentication.Services;
-using Microsoft.AspNetCore.Identity;
+﻿using Globe.Identity.Authentication.Core.Models;
+using Globe.Identity.Authentication.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,9 +11,9 @@ namespace Globe.AuthenticationServer.MultiTenant.Controllers
     [Route("/api/{tenant}/accounts")]
     public class AccountsController : Controller
     {
-        private readonly IAccountsService _accountsService;
+        private readonly IAsyncRegisterService _accountsService;
 
-        public AccountsController(IAccountsService accountsService)
+        public AccountsController(IAsyncRegisterService accountsService)
         {
             this._accountsService = accountsService;
         }
@@ -24,20 +24,20 @@ namespace Globe.AuthenticationServer.MultiTenant.Controllers
             if (!ModelState.IsValid)
                 throw new ArgumentException("Invalid Registration", "registration");
 
-            var identityResult = await _accountsService.Register(registration);
-            if (identityResult.Succeeded)
+            var result = await _accountsService.RegisterAsync(registration);
+            if (result.Successful)
                 return Ok();
 
-            this.BuildErrors(identityResult);
+            this.BuildErrors(result.Errors);
 
             return BadRequest();
         }
 
-        protected void BuildErrors(IdentityResult identityResult)
+        protected void BuildErrors(IEnumerable<string> errors)
         {
-            identityResult.Errors.ToList().ForEach(error =>
+            errors.ToList().ForEach(error =>
             {
-                ModelState.AddModelError(string.Empty, error.Description);
+                ModelState.AddModelError(string.Empty, error);
             });
         }
     }

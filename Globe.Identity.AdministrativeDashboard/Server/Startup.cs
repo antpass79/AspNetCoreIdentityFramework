@@ -1,19 +1,19 @@
 using AutoMapper;
-using Globe.BusinessLogic.Repositories;
+using FluentValidation.AspNetCore;
 using Globe.Identity.AdministrativeDashboard.Server.Data;
 using Globe.Identity.AdministrativeDashboard.Server.Models;
 using Globe.Identity.AdministrativeDashboard.Server.Repositories;
 using Globe.Identity.AdministrativeDashboard.Server.Services;
 using Globe.Identity.AdministrativeDashboard.Server.UnitOfWorks;
-using Globe.Identity.Authentication.Data;
+using Globe.Identity.Authentication.Core.Services;
+using Globe.Identity.Authentication.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
+using System.Reflection;
 
 namespace Globe.Identity.AdministrativeDashboard.Server
 {
@@ -66,12 +66,17 @@ namespace Globe.Identity.AdministrativeDashboard.Server
             // Services
             services
                 .AddScoped<IAsyncUserService, UserService>()
-                .AddScoped<IAsyncRoleService, RoleService>();
-
+                .AddScoped<IAsyncRoleService, RoleService>()
+                .AddScoped<IAsyncRegisterService, RegisterService<ApplicationUser>>();
 
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddControllersWithViews();
+            services
+                .AddControllersWithViews()
+                .AddFluentValidation(options =>
+                {
+                    options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+                });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

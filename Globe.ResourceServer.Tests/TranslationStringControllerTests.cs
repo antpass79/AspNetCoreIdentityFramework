@@ -1,4 +1,4 @@
-﻿using Globe.Identity.Authentication.Models;
+﻿using Globe.Identity.Authentication.Core.Models;
 using Globe.ResourceServer.DTOs;
 using Globe.Tests.Web;
 using Globe.Tests.Web.Extensions;

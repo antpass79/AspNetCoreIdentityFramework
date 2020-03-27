@@ -1,7 +1,7 @@
-﻿using Globe.Identity.Authentication.Jwt;
+﻿using Globe.Identity.Authentication.Core.Models;
+using Globe.Identity.Authentication.Jwt;
 using Globe.Identity.Authentication.Models;
-using Globe.Identity.Authentication.Options;
-using Globe.Identity.Shared.Models;
+using Globe.Identity.Authentication.Core.Services;
 using Globe.Identity.Shared.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Globe.Identity.Authentication.Services
 {
-    public class LoginService : ILoginService
+    public class LoginService : IAsyncLoginService
     {
         private readonly UserManager<GlobeUser> _userManager;
         private readonly SignInManager<GlobeUser> _signInManager;
@@ -28,7 +28,7 @@ namespace Globe.Identity.Authentication.Services
         }
 
 
-        async public Task<string> Login(Credentials credentials)
+        async public Task<string> LoginAsync(Credentials credentials)
         {
             var identity = await GenerateClaimsIdentity(credentials.UserName, credentials.Password);
             if (identity == null)
@@ -37,7 +37,7 @@ namespace Globe.Identity.Authentication.Services
             return await JwtSerializer.Serialize(identity, _jwtGenerator, credentials.UserName, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented });
         }
 
-        async public Task Logout(Credentials credentials)
+        async public Task LogoutAsync(Credentials credentials)
         {
             await Task.Run(() => throw new NotImplementedException());
         }

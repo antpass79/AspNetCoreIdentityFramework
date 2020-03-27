@@ -1,4 +1,4 @@
-﻿using Globe.Identity.Authentication.Models;
+﻿using Globe.Identity.Authentication.Core.Models;
 using Globe.Tests.Web;
 using System;
 using Xunit;

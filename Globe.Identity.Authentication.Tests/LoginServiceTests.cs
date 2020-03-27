@@ -1,5 +1,5 @@
-﻿using Globe.Identity.Authentication.Jwt;
-using Globe.Identity.Authentication.Models;
+﻿using Globe.Identity.Authentication.Core.Models;
+using Globe.Identity.Authentication.Jwt;
 using Globe.Identity.Authentication.Services;
 using Globe.Tests.Mocks;
 using System;
@@ -18,7 +18,7 @@ namespace Globe.Identity.Authentication.Tests
             var jwtGenerator = new JwtGenerator(jwtIssuerOptions);
 
             var loginService = new LoginService(userManager, signInManager, jwtGenerator, jwtIssuerOptions);
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => loginService.Login(new Credentials
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => loginService.LoginAsync(new Credentials
             {
                 UserName = "user3",
                 Password = "user3@email.com"
@@ -37,7 +37,7 @@ namespace Globe.Identity.Authentication.Tests
             var jwtGenerator = new JwtGenerator(jwtIssuerOptions);
 
             var loginService = new LoginService(userManager, signInManager, jwtGenerator, jwtIssuerOptions);
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => loginService.Login(new Credentials
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => loginService.LoginAsync(new Credentials
             {
                 UserName = "user2",
                 Password = "user2@passwordNotValid"
@@ -56,7 +56,7 @@ namespace Globe.Identity.Authentication.Tests
             var jwtGenerator = new JwtGenerator(jwtIssuerOptions);
 
             var loginService = new LoginService(userManager, signInManager, jwtGenerator, jwtIssuerOptions);
-            var token = await loginService.Login(new Credentials
+            var token = await loginService.LoginAsync(new Credentials
             {
                 UserName = "user2",
                 Password = "user2@password"
@@ -96,7 +96,7 @@ namespace Globe.Identity.Authentication.Tests
             var jwtGenerator = new JwtGenerator(jwtIssuerOptions);
 
             var loginService = new LoginService(userManager, signInManager, jwtGenerator, jwtIssuerOptions);
-            var exception = Assert.ThrowsAsync<ArgumentException>(() => loginService.Login(new Credentials
+            var exception = Assert.ThrowsAsync<ArgumentException>(() => loginService.LoginAsync(new Credentials
             {
                 UserName = "user2",
                 Password = "user2@passwordNotValid"
