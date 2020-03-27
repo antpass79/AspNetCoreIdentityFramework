@@ -6,7 +6,7 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Services
     public interface IAuthService
     {
         Task<RegistrationResultDTO> Register(RegistrationDTO registration);
-        Task<LoginResultDTO> Login(LoginDTO login);
+        Task<LoginResultDTO> Login(CredentialsDTO credentials);
         Task Logout();
     }
 }

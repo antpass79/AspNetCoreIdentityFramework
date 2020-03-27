@@ -11,6 +11,8 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Pages
     {
         [Inject]
         protected HttpClient Http { get; set; }
+        [Inject]
+        public NavigationManager UrlNavigationManager { get; set; }
         protected string SearchString { get; set; }
 
         protected ApplicationUserDTO[] users;
@@ -51,7 +53,14 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Pages
 
         async private Task GetUsers()
         {
-            users = await Http.GetJsonAsync<ApplicationUserDTO[]>("api/User");
+            try
+            {
+                users = await Http.GetJsonAsync<ApplicationUserDTO[]>("api/User");
+            }
+            catch (Exception)
+            {
+                UrlNavigationManager.NavigateTo("/unauthorized");
+            }
         }
     }
 }

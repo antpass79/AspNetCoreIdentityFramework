@@ -1,14 +1,22 @@
 ﻿using Globe.Identity.AdministrativeDashboard.Server.Models;
+using Globe.Identity.Authentication.Options;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Globe.Identity.AdministrativeDashboard.Server.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
+        protected IOptions<DatabaseOptions> Options { get; }
+        public ApplicationDbContext(IOptions<DatabaseOptions> options)
         {
+            this.Options = options;
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(this.Options.Value.DefaultSqlServerConnection);
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

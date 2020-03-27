@@ -32,10 +32,10 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Services
             return result;
         }
 
-        public async Task<LoginResultDTO> Login(LoginDTO login)
+        public async Task<LoginResultDTO> Login(CredentialsDTO credentials)
         {
-            var loginAsJson = JsonSerializer.Serialize(login);
-            var response = await _httpClient.PostAsync("Login", new StringContent(loginAsJson, Encoding.UTF8, "application/json"));
+            var loginAsJson = JsonSerializer.Serialize(credentials);
+            var response = await _httpClient.PostAsync("api/Login", new StringContent(loginAsJson, Encoding.UTF8, "application/json"));
             var loginResult = JsonSerializer.Deserialize<LoginResultDTO>(await response.Content.ReadAsStringAsync(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             if (!response.IsSuccessStatusCode)
@@ -44,7 +44,7 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Services
             }
 
             await _localStorage.SetItemAsync("authToken", loginResult.Token);
-            ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(login.Email);
+            ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(credentials.UserName);
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", loginResult.Token);
 
             return loginResult;

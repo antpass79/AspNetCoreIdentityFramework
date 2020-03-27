@@ -39,4 +39,12 @@ namespace Globe.Identity.Authentication.Services
             }
         }
     }
+
+    public class RegisterService : RegisterService<GlobeUser>
+    {
+        public RegisterService(UserManager<GlobeUser> userManager)
+            : base(userManager)
+        {
+        }
+    }
 }

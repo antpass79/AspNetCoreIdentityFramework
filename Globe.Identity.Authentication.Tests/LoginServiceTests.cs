@@ -1,5 +1,6 @@
 ﻿using Globe.Identity.Authentication.Core.Models;
 using Globe.Identity.Authentication.Jwt;
+using Globe.Identity.Authentication.Models;
 using Globe.Identity.Authentication.Services;
 using Globe.Tests.Mocks;
 using System;
@@ -16,8 +17,9 @@ namespace Globe.Identity.Authentication.Tests
             var signInManager = FakeSignInManager.Mock(userManager);
             var jwtIssuerOptions = new MockJwtAuthenticationOptions().Mock();
             var jwtGenerator = new JwtGenerator(jwtIssuerOptions);
+            var jwtTokenEncoder = new JwtTokenEncoder<GlobeUser>(userManager, jwtIssuerOptions);
 
-            var loginService = new LoginService(userManager, signInManager, jwtGenerator, jwtIssuerOptions);
+            var loginService = new LoginService(userManager, signInManager, jwtGenerator, jwtIssuerOptions, jwtTokenEncoder);
             var exception = Assert.ThrowsAsync<ArgumentException>(() => loginService.LoginAsync(new Credentials
             {
                 UserName = "user3",
@@ -35,8 +37,9 @@ namespace Globe.Identity.Authentication.Tests
             var signInManager = FakeSignInManager.Mock(userManager);
             var jwtIssuerOptions = new MockJwtAuthenticationOptions().Mock();
             var jwtGenerator = new JwtGenerator(jwtIssuerOptions);
+            var jwtTokenEncoder = new JwtTokenEncoder<GlobeUser>(userManager, jwtIssuerOptions);
 
-            var loginService = new LoginService(userManager, signInManager, jwtGenerator, jwtIssuerOptions);
+            var loginService = new LoginService(userManager, signInManager, jwtGenerator, jwtIssuerOptions, jwtTokenEncoder);
             var exception = Assert.ThrowsAsync<ArgumentException>(() => loginService.LoginAsync(new Credentials
             {
                 UserName = "user2",
@@ -54,16 +57,18 @@ namespace Globe.Identity.Authentication.Tests
             var signInManager = FakeSignInManager.Mock(userManager);
             var jwtIssuerOptions = new MockJwtAuthenticationOptions().Mock();
             var jwtGenerator = new JwtGenerator(jwtIssuerOptions);
+            var jwtTokenEncoder = new JwtTokenEncoder<GlobeUser>(userManager, jwtIssuerOptions);
 
-            var loginService = new LoginService(userManager, signInManager, jwtGenerator, jwtIssuerOptions);
-            var token = await loginService.LoginAsync(new Credentials
+            var loginService = new LoginService(userManager, signInManager, jwtGenerator, jwtIssuerOptions, jwtTokenEncoder);
+            var loginResult = await loginService.LoginAsync(new Credentials
             {
                 UserName = "user2",
                 Password = "user2@password"
             });
 
-            Assert.NotNull(token);
-            Assert.NotEmpty(token);
+            Assert.True(loginResult.Successful);
+            Assert.NotNull(loginResult.Token);
+            Assert.NotEmpty(loginResult.Token);
         }
 
         //[Fact]
@@ -73,8 +78,9 @@ namespace Globe.Identity.Authentication.Tests
             var signInManager = FakeSignInManager.Mock(userManager);
             var jwtIssuerOptions = new MockJwtAuthenticationOptions().Mock();
             var jwtGenerator = new JwtGenerator(jwtIssuerOptions);
+            var jwtTokenEncoder = new JwtTokenEncoder<GlobeUser>(userManager, jwtIssuerOptions);
 
-            var loginService = new LoginService(userManager, signInManager, jwtGenerator, jwtIssuerOptions);
+            var loginService = new LoginService(userManager, signInManager, jwtGenerator, jwtIssuerOptions, jwtTokenEncoder);
             //var exception = Assert.ThrowsAsync<ArgumentException>(() => loginService.Logout(new Credentials
             //{
             //    UserName = "notExists",
@@ -94,8 +100,9 @@ namespace Globe.Identity.Authentication.Tests
             var signInManager = FakeSignInManager.Mock(userManager);
             var jwtIssuerOptions = new MockJwtAuthenticationOptions().Mock();
             var jwtGenerator = new JwtGenerator(jwtIssuerOptions);
+            var jwtTokenEncoder = new JwtTokenEncoder<GlobeUser>(userManager, jwtIssuerOptions);
 
-            var loginService = new LoginService(userManager, signInManager, jwtGenerator, jwtIssuerOptions);
+            var loginService = new LoginService(userManager, signInManager, jwtGenerator, jwtIssuerOptions, jwtTokenEncoder);
             var exception = Assert.ThrowsAsync<ArgumentException>(() => loginService.LoginAsync(new Credentials
             {
                 UserName = "user2",

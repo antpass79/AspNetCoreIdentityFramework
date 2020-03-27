@@ -23,11 +23,16 @@ namespace Globe.Identity.Authentication.Jwt
         {
             var claims = new[]
             {
-                 new Claim(JwtRegisteredClaimNames.Sub, userName),
-                 new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.JtiGenerator()),
-                 new Claim("administrator", "full_access"),
-                 new Claim("guest", "limited_access")
+                new Claim(ClaimTypes.Name, userName)
             };
+
+            //var claims = new[]
+            //{
+            //     new Claim(JwtRegisteredClaimNames.Sub, userName),
+            //     new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.JtiGenerator()),
+            //     new Claim("administrator", "full_access"),
+            //     new Claim("guest", "limited_access")
+            //};
 
             var jwt = new JwtSecurityToken(
                 issuer: _jwtOptions.Issuer,
@@ -39,7 +44,7 @@ namespace Globe.Identity.Authentication.Jwt
 
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
-            return encodedJwt;
+            return await Task.FromResult(encodedJwt);
         }
 
         public ClaimsIdentity GenerateClaimsIdentity(string userName, string id)

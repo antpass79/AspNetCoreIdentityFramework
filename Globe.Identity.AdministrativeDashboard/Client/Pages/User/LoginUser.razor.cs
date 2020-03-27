@@ -15,7 +15,7 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Pages
         [Inject]
         public NavigationManager UrlNavigationManager { get; set; }
 
-        protected LoginDTO login = new LoginDTO();
+        protected CredentialsDTO credentials = new CredentialsDTO();
 
         protected bool ShowErrors;
         protected string Error = string.Empty;
@@ -24,7 +24,7 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Pages
         {
             ShowErrors = false;
 
-            var result = await AuthService.Login(login);
+            var result = await AuthService.Login(credentials);
 
             if (result.Successful)
             {

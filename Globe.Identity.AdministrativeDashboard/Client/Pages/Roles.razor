@@ -6,9 +6,11 @@
 <p>All roles registered in the Globe System.</p>
 
 <div class="row">
-    <div class="col-md-4">
-        <a href='/role/add' class="btn btn-primary" role="button"><i class="fa fa-user-plus"></i> Add Role</a>
-    </div>
+    <AuthorizeView Roles="Admin">
+        <div class="col-md-4">
+            <a href='/role/add' class="btn btn-primary" role="button"><i class="fa fa-user-plus"></i> Add Role</a>
+        </div>
+    </AuthorizeView>
     <div class="input-group col-md-4 offset-md-4">
         <input type="text" class="form-control" placeholder="Search roles by name" @bind="SearchString" />
         <div class="input-group-append">
@@ -31,8 +33,10 @@ else
             <tr>
                 <th>Name</th>
                 <th>Description</th>
-                <th></th>
-                <th></th>
+                <AuthorizeView Roles="Admin">
+                    <th></th>
+                    <th></th>
+                </AuthorizeView>
             </tr>
         </thead>
         <tbody>
@@ -41,18 +45,20 @@ else
                 <tr>
                     <td>@role.Name</td>
                     <td>@role.Description</td>
-                    <td>
-                        <a href='/role/edit/@role.Id' class="btn btn-outline-dark" role="button">
-                            <i class="fa fa-pencil-square-o"></i>
-                            Edit
-                        </a>
-                    </td>
-                    <td>
-                        <button class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteRoleModal" @onclick="@(() => DeleteRoleConfirm(role))">
-                            <i class="oi oi-trash"></i>
-                            Delete
-                        </button>
-                    </td>
+                    <AuthorizeView Roles="Admin">
+                        <td>
+                            <a href='/role/edit/@role.Id' class="btn btn-outline-dark" role="button">
+                                <i class="fa fa-pencil-square-o"></i>
+                                Edit
+                            </a>
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteRoleModal" @onclick="@(() => DeleteRoleConfirm(role))">
+                                <i class="oi oi-trash"></i>
+                                Delete
+                            </button>
+                        </td>
+                    </AuthorizeView>
                 </tr>
             }
         </tbody>
