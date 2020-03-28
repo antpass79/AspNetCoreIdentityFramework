@@ -1,4 +1,5 @@
-﻿using Globe.Identity.AdministrativeDashboard.Shared.DTOs;
+﻿using Globe.Identity.AdministrativeDashboard.Client.Components;
+using Globe.Identity.AdministrativeDashboard.Shared.DTOs;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Linq;
@@ -30,6 +31,17 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Pages
             await Http.SendJsonAsync(HttpMethod.Put, "/api/User", user);
         }
 
+        async protected Task OnDialogButtonClick(ButtonType buttonType)
+        {
+            if (buttonType == ButtonType.Yes)
+            {
+                await DeleteUser(selectedUser);
+            }
+
+            ShowConfirmation = false;
+            await Task.CompletedTask;
+        }
+
         protected void DeleteUserConfirm(ApplicationUserDTO user)
         {
             this.selectedUser = users.FirstOrDefault(item => item.Id == user.Id);
@@ -40,7 +52,6 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Pages
         {
             await Http.DeleteAsync($"api/User/{user.Id}");
             await GetUsers();
-            ShowConfirmation = false;
         }
 
         async protected Task SearchUsers()

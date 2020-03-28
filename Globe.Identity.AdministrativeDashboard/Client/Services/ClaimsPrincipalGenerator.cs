@@ -19,11 +19,8 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Services
 
         private static IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
         {
-            Console.WriteLine("BEFORE");
             var handler = new JwtSecurityTokenHandler();
             var token = handler.ReadJwtToken(jwt);
-            Console.WriteLine("AFTER");
-            Console.WriteLine(token.Claims.Where(claim => claim.Type == ClaimTypes.Role).Count());
             return token.Claims.Where(claim => claim.Type == ClaimTypes.Role);
         }
 

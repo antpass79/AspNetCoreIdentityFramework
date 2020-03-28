@@ -1,4 +1,5 @@
-﻿using Globe.Identity.AdministrativeDashboard.Shared.DTOs;
+﻿using Globe.Identity.AdministrativeDashboard.Client.Components;
+using Globe.Identity.AdministrativeDashboard.Shared.DTOs;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Linq;
@@ -29,6 +30,17 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Pages
             await Http.SendJsonAsync(HttpMethod.Put, "/api/Role", role);
         }
 
+        async protected Task OnDialogButtonClick(ButtonType buttonType)
+        {
+            if (buttonType == ButtonType.Yes)
+            {
+                await DeleteRole(selectedRole);
+            }
+
+            ShowConfirmation = false;
+            await Task.CompletedTask;
+        }
+
         protected void DeleteRoleConfirm(ApplicationRoleDTO role)
         {
             this.selectedRole = roles.FirstOrDefault(item => item.Id == role.Id);
@@ -39,7 +51,6 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Pages
         {
             await Http.DeleteAsync($"api/Role/{role.Id}");
             await GetRoles();
-            ShowConfirmation = false;
         }
 
         async protected Task SearchRoles()

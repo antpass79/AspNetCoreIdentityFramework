@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Globe.Identity.AdministrativeDashboard.Server.Data.Migrations.SqlServer
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200326093204_IdentityAdministrativeDashboard")]
+    [Migration("20200328160113_IdentityAdministrativeDashboard")]
     partial class IdentityAdministrativeDashboard
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -173,12 +173,10 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Data.Migrations.SqlServe
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -220,12 +218,10 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Data.Migrations.SqlServe
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");

@@ -186,8 +186,6 @@ namespace Globe.Identity.AdministrativeDashboard.Server
                         await UserManager.AddToRoleAsync(powerUser, role.Name);
                 }
             }
-
-            var userRoles = await UserManager.GetRolesAsync(user);
         }
     }
 }

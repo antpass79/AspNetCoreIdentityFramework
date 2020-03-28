@@ -13,16 +13,17 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Components
 
     public class ModalDialogDataModel : ComponentBase
     {
-        public event Action<ButtonType> OnButtonClick;
+        [Parameter]
+        public EventCallback<ButtonType> OnButtonClick { get; set; }
 
         [Parameter]
         public string Title { get; set; }
         [Parameter]
         public string Message { get; set; }
         [Parameter]
-        public bool ShowOK { get; set; } = true;
+        public bool ShowOK { get; set; } = false;
         [Parameter]
-        public bool ShowCancel { get; set; } = true;
+        public bool ShowCancel { get; set; } = false;
         [Parameter]
         public bool ShowYes { get; set; } = false;
         [Parameter]
@@ -30,7 +31,7 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Components
 
         protected void HandleButton(ButtonType buttonType)
         {
-            OnButtonClick?.Invoke(buttonType);
+            OnButtonClick.InvokeAsync(buttonType);
         }
     }
 }
