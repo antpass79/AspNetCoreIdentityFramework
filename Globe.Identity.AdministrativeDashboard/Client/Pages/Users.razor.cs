@@ -13,6 +13,7 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Pages
         protected HttpClient Http { get; set; }
         [Inject]
         public NavigationManager UrlNavigationManager { get; set; }
+
         protected string SearchString { get; set; }
 
         protected ApplicationUserDTO[] users;

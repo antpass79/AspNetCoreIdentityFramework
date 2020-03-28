@@ -8,23 +8,12 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Services
 {
     public static class ClaimsPrincipalGenerator
     {
-        public static ClaimsPrincipal BuildClaimsPrincipal(string savedToken)
-        {
-            var claims = ParseClaimsFromJwt(savedToken);
-            return BuildClaimsPrincipal(claims);
-        }
-
         public static ClaimsPrincipal BuildClaimsPrincipal(string savedToken, string userName)
         {
             var roleClaims = ParseClaimsFromJwt(savedToken);
             var userNameClaims = new[] { new Claim(ClaimTypes.Name, userName) };
             var claims = roleClaims.ToList().Concat(userNameClaims);
 
-            return BuildClaimsPrincipal(claims);
-        }
-
-        public static ClaimsPrincipal BuildClaimsPrincipal(IEnumerable<Claim> claims)
-        {
             return new ClaimsPrincipal(new ClaimsIdentity(claims, "principal"));
         }
 

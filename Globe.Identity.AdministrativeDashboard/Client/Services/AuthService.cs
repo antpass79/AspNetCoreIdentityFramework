@@ -43,7 +43,9 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Services
                 return loginResult;
             }
 
-            await _localStorage.SetItemAsync("authToken", loginResult.Token);
+            await _localStorage.SetItemAsync(Constants.GLOBE_ADMIN_TOKEN, loginResult.Token);
+            await _localStorage.SetItemAsync(Constants.GLOBE_ADMIN_USERNAME, credentials.UserName);
+
             await ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(credentials.UserName);
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", loginResult.Token);
 
@@ -52,7 +54,9 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Services
 
         public async Task Logout()
         {
-            await _localStorage.RemoveItemAsync("authToken");
+            await _localStorage.RemoveItemAsync(Constants.GLOBE_ADMIN_TOKEN);
+            await _localStorage.RemoveItemAsync(Constants.GLOBE_ADMIN_USERNAME);
+
             ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
             _httpClient.DefaultRequestHeaders.Authorization = null;
         }

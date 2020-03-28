@@ -25,7 +25,8 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Services
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            var savedToken = await _localStorage.GetItemAsync<string>("authToken");
+            var savedToken = await _localStorage.GetItemAsync<string>(Constants.GLOBE_ADMIN_TOKEN);
+            var savedUserName = await _localStorage.GetItemAsync<string>(Constants.GLOBE_ADMIN_USERNAME);
 
             if (string.IsNullOrWhiteSpace(savedToken))
             {
@@ -34,12 +35,12 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Services
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
 
-            return new AuthenticationState(ClaimsPrincipalGenerator.BuildClaimsPrincipal(savedToken));
+            return new AuthenticationState(ClaimsPrincipalGenerator.BuildClaimsPrincipal(savedToken, savedUserName));
         }
 
         async public Task MarkUserAsAuthenticated(string userName)
         {
-            var savedToken = await _localStorage.GetItemAsync<string>("authToken");
+            var savedToken = await _localStorage.GetItemAsync<string>(Constants.GLOBE_ADMIN_TOKEN);
             var authenticatedUser = ClaimsPrincipalGenerator.BuildClaimsPrincipal(savedToken, userName);
             var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
             NotifyAuthenticationStateChanged(authState);
