@@ -34,12 +34,13 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Services
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
 
-            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(savedToken), "jwt")));
+            return new AuthenticationState(ClaimsPrincipalGenerator.BuildClaimsPrincipal(savedToken));
         }
 
-        public void MarkUserAsAuthenticated(string userName)
+        async public Task MarkUserAsAuthenticated(string userName)
         {
-            var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, userName) }, "apiauth"));
+            var savedToken = await _localStorage.GetItemAsync<string>("authToken");
+            var authenticatedUser = ClaimsPrincipalGenerator.BuildClaimsPrincipal(savedToken, userName);
             var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
             NotifyAuthenticationStateChanged(authState);
         }
@@ -49,16 +50,6 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Services
             var anonymousUser = new ClaimsPrincipal(new ClaimsIdentity());
             var authState = Task.FromResult(new AuthenticationState(anonymousUser));
             NotifyAuthenticationStateChanged(authState);
-        }
-
-        private IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
-        {
-            Console.WriteLine("BEFORE");
-            var handler = new JwtSecurityTokenHandler();
-            var token = handler.ReadJwtToken(jwt);
-            Console.WriteLine("AFTER");
-            Console.WriteLine(token.Claims.Where(claim => claim.Type == ClaimTypes.Role).Count());
-            return token.Claims.Where(claim => claim.Type == ClaimTypes.Role);
         }
     }
 }

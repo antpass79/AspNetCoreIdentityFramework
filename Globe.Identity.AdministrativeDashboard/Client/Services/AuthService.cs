@@ -44,7 +44,7 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Services
             }
 
             await _localStorage.SetItemAsync("authToken", loginResult.Token);
-            ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(credentials.UserName);
+            await ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(credentials.UserName);
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", loginResult.Token);
 
             return loginResult;
