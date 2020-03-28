@@ -14,11 +14,11 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Services
     {
         private readonly HttpClient _httpClient;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
-        private readonly ILocalStorageService _localStorage;
+        private readonly IGlobeDataStorage _localStorage;
 
         public AuthService(HttpClient httpClient,
                            AuthenticationStateProvider authenticationStateProvider,
-                           ILocalStorageService localStorage)
+                           IGlobeDataStorage localStorage)
         {
             _httpClient = httpClient;
             _authenticationStateProvider = authenticationStateProvider;
@@ -43,8 +43,11 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Services
                 return loginResult;
             }
 
-            await _localStorage.SetItemAsync(Constants.GLOBE_ADMIN_TOKEN, loginResult.Token);
-            await _localStorage.SetItemAsync(Constants.GLOBE_ADMIN_USERNAME, credentials.UserName);
+            await _localStorage.StoreAsync(new GlobeLocalStorageData
+            {
+                Token = loginResult.Token,
+                UserName = credentials.UserName
+            });
 
             await ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(credentials.UserName);
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", loginResult.Token);
@@ -54,8 +57,7 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Services
 
         public async Task Logout()
         {
-            await _localStorage.RemoveItemAsync(Constants.GLOBE_ADMIN_TOKEN);
-            await _localStorage.RemoveItemAsync(Constants.GLOBE_ADMIN_USERNAME);
+            await _localStorage.RemoveAsync();
 
             ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
             _httpClient.DefaultRequestHeaders.Authorization = null;

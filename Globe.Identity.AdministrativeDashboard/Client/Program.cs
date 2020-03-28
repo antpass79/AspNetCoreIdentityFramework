@@ -18,6 +18,7 @@ namespace Globe.Identity.AdministrativeDashboard.Client
             builder.Services.AddAuthorizationCore();
             builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IGlobeDataStorage, GlobeInMemoryStorage>();
 
             builder.RootComponents.Add<App>("app");
 
