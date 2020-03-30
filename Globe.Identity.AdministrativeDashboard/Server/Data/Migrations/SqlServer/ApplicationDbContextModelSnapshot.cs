@@ -57,9 +57,18 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Data.Migrations.SqlServe
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("ApplicationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(256)")
@@ -68,17 +77,62 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Data.Migrations.SqlServe
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<int>("FailedPasswordAnswerAttemptCount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FailedPasswordAnswerAttemptWindowStart")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FailedPasswordAttemptCount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FailedPasswordAttemptWindowStart")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsAnonymous")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsLockedOut")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastActivityDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastLockoutDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastLoginDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastPasswordChangedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LoweredEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LoweredUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MobileAlias")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MobilePIN")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasColumnType("nvarchar(256)")
@@ -88,7 +142,13 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Data.Migrations.SqlServe
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
+                    b.Property<string>("PasswordAnswer")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordQuestion")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")

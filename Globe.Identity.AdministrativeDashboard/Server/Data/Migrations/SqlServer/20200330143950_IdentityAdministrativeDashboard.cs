@@ -42,7 +42,27 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Data.Migrations.SqlServe
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true)
+                    LastName = table.Column<string>(nullable: true),
+                    ApplicationId = table.Column<Guid>(nullable: false),
+                    MobileAlias = table.Column<string>(nullable: true),
+                    IsAnonymous = table.Column<bool>(nullable: false),
+                    LastActivityDate = table.Column<DateTime>(nullable: false),
+                    MobilePIN = table.Column<string>(nullable: true),
+                    LoweredEmail = table.Column<string>(nullable: true),
+                    LoweredUserName = table.Column<string>(nullable: true),
+                    PasswordQuestion = table.Column<string>(nullable: true),
+                    PasswordAnswer = table.Column<string>(nullable: true),
+                    IsApproved = table.Column<bool>(nullable: false),
+                    IsLockedOut = table.Column<bool>(nullable: false),
+                    CreateDate = table.Column<DateTime>(nullable: false),
+                    LastLoginDate = table.Column<DateTime>(nullable: false),
+                    LastPasswordChangedDate = table.Column<DateTime>(nullable: false),
+                    LastLockoutDate = table.Column<DateTime>(nullable: false),
+                    FailedPasswordAttemptCount = table.Column<int>(nullable: false),
+                    FailedPasswordAttemptWindowStart = table.Column<DateTime>(nullable: false),
+                    FailedPasswordAnswerAttemptCount = table.Column<int>(nullable: false),
+                    FailedPasswordAnswerAttemptWindowStart = table.Column<DateTime>(nullable: false),
+                    Comment = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

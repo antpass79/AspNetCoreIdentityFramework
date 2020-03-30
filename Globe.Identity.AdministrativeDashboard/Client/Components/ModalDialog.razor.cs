@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
 
 namespace Globe.Identity.AdministrativeDashboard.Client.Components
 {
@@ -16,6 +15,8 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Components
         [Parameter]
         public EventCallback<ButtonType> OnButtonClick { get; set; }
 
+        [Parameter]
+        public bool IsOpen { get; set; } = false;
         [Parameter]
         public string Title { get; set; }
         [Parameter]

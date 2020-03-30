@@ -8,12 +8,12 @@
 <p>All users registered in the Globe System.</p>
 
 <div class="row">
-    <AuthorizeView Roles="Admin, UserManager">
+    @*<AuthorizeView Roles="Admin, UserManager">
         <div class="col-md-4">
             <a href='/user/add' class="btn btn-primary" role="button"><i class="fa fa-user-plus"></i> Add User</a>
         </div>
-    </AuthorizeView>
-    <div class="input-group col-md-4 offset-md-4">
+    </AuthorizeView>*@
+    <div class="input-group col-md-4">
         <input type="text" class="form-control" placeholder="Search users by name" @bind="SearchString" />
         <div class="input-group-append">
             <button class="btn btn-info" @onclick="SearchUsers">
@@ -70,12 +70,10 @@ else
         </tbody>
     </table>
 
-    @if (ShowConfirmation)
-    {
-        <ModalDialog ShowYes="true"
-                     ShowNo="true"
-                     Title="Warning"
-                     Message="Are you sure to delete the selected user?"
-                     OnButtonClick="@(async (ButtonType buttonType) => await OnDialogButtonClick(buttonType))"></ModalDialog>
-    }
+    <ModalDialog ShowYes="true"
+                 ShowNo="true"
+                 Title="Warning"
+                 Message="Are you sure to delete the selected user?"
+                 IsOpen="ShowConfirmation"
+                 OnButtonClick="@(async (ButtonType buttonType) => await OnDialogButtonClick(buttonType))"></ModalDialog>
 }

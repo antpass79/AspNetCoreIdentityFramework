@@ -186,12 +186,3 @@ app {
     display: flex;
     flex-direction: column;
 }
-
-.modal-dialog-overlay {
-    display: flex;
-    flex-direction: column;
-    align-self: center;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-}
