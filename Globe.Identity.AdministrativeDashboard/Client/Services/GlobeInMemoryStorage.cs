@@ -6,12 +6,6 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Services
     public class GlobeInMemoryStorage : IGlobeDataStorage
     {
         GlobeLocalStorageData _data;
-        private readonly ILocalStorageService _localStorage;
-
-        public GlobeInMemoryStorage(ILocalStorageService localStorage)
-        {
-            _localStorage = localStorage;
-        }
 
         async public Task StoreAsync(GlobeLocalStorageData data)
         {

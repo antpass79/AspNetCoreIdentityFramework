@@ -40,6 +40,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Globe.ResourceServer.Tests", "Globe.ResourceServer.Tests\Globe.ResourceServer.Tests.csproj", "{EB8EBF1A-D278-427C-9D95-C93FD60A748F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityAdministrativeDashboard", "IdentityAdministrativeDashboard", "{D9403D38-EC53-4B3C-A16E-821367E232CD}"
+	ProjectSection(SolutionItems) = preProject
+		Globe.Identity.AdministrativeDashboard\MigrationUpdate.sql = Globe.Identity.AdministrativeDashboard\MigrationUpdate.sql
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Globe.Identity.AdministrativeDashboard.Server", "Globe.Identity.AdministrativeDashboard\Server\Globe.Identity.AdministrativeDashboard.Server.csproj", "{AD7E8380-E621-45E3-A18F-E4B74D57A361}"
 EndProject
@@ -47,7 +50,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Globe.Identity.Administrati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Globe.Identity.AdministrativeDashboard.Shared", "Globe.Identity.AdministrativeDashboard\Shared\Globe.Identity.AdministrativeDashboard.Shared.csproj", "{A9F7F994-5D9A-4D50-B34D-D42CA641F188}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Globe.Identity.Authentication.Core", "Globe.Identity.Authentication.Core\Globe.Identity.Authentication.Core.csproj", "{3AECFFA8-A70F-40EF-AA11-2FF9E330430E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Globe.Identity.Authentication.Core", "Globe.Identity.Authentication.Core\Globe.Identity.Authentication.Core.csproj", "{3AECFFA8-A70F-40EF-AA11-2FF9E330430E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

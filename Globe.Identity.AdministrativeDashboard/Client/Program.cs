@@ -1,5 +1,7 @@
 using Blazored.LocalStorage;
 using Globe.Identity.AdministrativeDashboard.Client.Components;
+using Globe.Identity.AdministrativeDashboard.Client.Handlers;
+using Globe.Identity.AdministrativeDashboard.Client.Providers;
 using Globe.Identity.AdministrativeDashboard.Client.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -21,14 +23,15 @@ namespace Globe.Identity.AdministrativeDashboard.Client
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddOptions();
             builder.Services.AddAuthorizationCore();
+            builder.Services.AddScoped<TableSortService, TableSortService>();
             builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IGlobeDataStorage, GlobeLocalStorage>();
             builder.Services.AddScoped<SpinnerService>();
-            builder.Services.AddScoped<SpinnerAutomaticallyHttpMessageHandler>();
+            builder.Services.AddScoped<AutoSpinnerHttpMessageHandler>();
             builder.Services.AddScoped(serviceProvider =>
             {
-                var blazorDisplaySpinnerAutomaticallyHttpMessageHandler = serviceProvider.GetRequiredService<SpinnerAutomaticallyHttpMessageHandler>();
+                var blazorDisplaySpinnerAutomaticallyHttpMessageHandler = serviceProvider.GetRequiredService<AutoSpinnerHttpMessageHandler>();
                 var wasmHttpMessageHandlerType = Assembly.Load("WebAssembly.Net.Http").GetType("WebAssembly.Net.Http.HttpClient.WasmHttpMessageHandler");
                 var wasmHttpMessageHandler = (HttpMessageHandler)Activator.CreateInstance(wasmHttpMessageHandlerType);
 

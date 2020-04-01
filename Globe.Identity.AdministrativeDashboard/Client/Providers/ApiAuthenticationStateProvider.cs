@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using Globe.Identity.AdministrativeDashboard.Client.Services;
+using Microsoft.AspNetCore.Components.Authorization;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Globe.Identity.AdministrativeDashboard.Client.Services
+namespace Globe.Identity.AdministrativeDashboard.Client.Providers
 {
     public class ApiAuthenticationStateProvider : AuthenticationStateProvider
     {

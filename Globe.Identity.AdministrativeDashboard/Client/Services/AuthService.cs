@@ -1,4 +1,4 @@
-﻿using Blazored.LocalStorage;
+﻿using Globe.Identity.AdministrativeDashboard.Client.Providers;
 using Globe.Identity.AdministrativeDashboard.Shared.DTOs;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;

@@ -4,12 +4,12 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Globe.Identity.AdministrativeDashboard.Client.Services
+namespace Globe.Identity.AdministrativeDashboard.Client.Handlers
 {
-    public class SpinnerAutomaticallyHttpMessageHandler : DelegatingHandler
+    public class AutoSpinnerHttpMessageHandler : DelegatingHandler
     {
         private readonly SpinnerService _spinnerService;
-        public SpinnerAutomaticallyHttpMessageHandler(SpinnerService spinnerService)
+        public AutoSpinnerHttpMessageHandler(SpinnerService spinnerService)
         {
             _spinnerService = spinnerService;
         }

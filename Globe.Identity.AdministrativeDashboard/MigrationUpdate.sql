@@ -82,8 +82,8 @@ FROM   aspnet_Users
 WHERE  AspNetUsers.Id IS NULL
 
 -- INSERT ROLES
-INSERT INTO IdentityAdministrativeDashboard.dbo.AspNetRoles(Id, Name)
-SELECT RoleId, RoleName
+INSERT INTO IdentityAdministrativeDashboard.dbo.AspNetRoles(Id, Name, NormalizedName)
+SELECT RoleId, RoleName, UPPER(RoleName)
 FROM aspnet_Roles;
 
 -- INSERT USER ROLES

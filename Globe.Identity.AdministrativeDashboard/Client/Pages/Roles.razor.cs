@@ -1,7 +1,9 @@
 ﻿using Globe.Identity.AdministrativeDashboard.Client.Components;
+using Globe.Identity.AdministrativeDashboard.Client.Services;
 using Globe.Identity.AdministrativeDashboard.Shared.DTOs;
 using Microsoft.AspNetCore.Components;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -15,6 +17,8 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Pages
         [Inject]
         public NavigationManager UrlNavigationManager { get; set; }
         protected string SearchString { get; set; }
+        [Inject]
+        protected TableSortService TableSortService { get; set; }
 
         protected ApplicationRoleDTO[] roles;
         protected ApplicationRoleDTO selectedRole;
@@ -22,6 +26,11 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Pages
 
         protected override async Task OnInitializedAsync()
         {
+            this.TableSortService.Sorted = (IEnumerable<object> items) =>
+            {
+                this.roles = items.Cast<ApplicationRoleDTO>().ToArray();
+            };
+
             await GetRoles();
         }
 
