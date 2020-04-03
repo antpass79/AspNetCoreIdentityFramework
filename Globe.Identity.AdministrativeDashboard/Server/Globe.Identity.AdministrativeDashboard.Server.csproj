@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Globe.BusinessLogic\Globe.BusinessLogic.csproj" />
-    <ProjectReference Include="..\..\Globe.Identity.Authentication\Globe.Identity.Authentication.csproj" />
+    <ProjectReference Include="..\..\Globe.Identity\Globe.Identity.csproj" />
     <ProjectReference Include="..\..\Globe.Infrastructure.EFCore\Globe.Infrastructure.EFCore.csproj" />
     <ProjectReference Include="..\Client\Globe.Identity.AdministrativeDashboard.Client.csproj" />
     <ProjectReference Include="..\Shared\Globe.Identity.AdministrativeDashboard.Shared.csproj" />

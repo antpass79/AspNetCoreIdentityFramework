@@ -14,9 +14,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Globe.AuthenticationServer\Globe.AuthenticationServer.csproj" />
+    <ProjectReference Include="..\Globe.Identity.Server\Globe.Identity.Server.csproj" />
     <ProjectReference Include="..\Globe.ResourceServer\Globe.ResourceServer.csproj" />
     <ProjectReference Include="..\Globe.Tests\Globe.Tests.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.authenticationserver.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="appsettings.resourceserver.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -2,7 +2,7 @@
 using Globe.BusinessLogic.Repositories;
 using Globe.Identity.AdministrativeDashboard.Server.Data;
 using Globe.Identity.AdministrativeDashboard.Server.Models;
-using Globe.Identity.Authentication.Data;
+using Globe.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

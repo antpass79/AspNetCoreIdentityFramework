@@ -1,5 +1,5 @@
 ﻿using Globe.Identity.AdministrativeDashboard.Server.Models;
-using Globe.Identity.Authentication.Options;
+using Globe.Identity.Options;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;

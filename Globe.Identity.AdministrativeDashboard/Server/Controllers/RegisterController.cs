@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using Globe.Identity.AdministrativeDashboard.Shared.DTOs;
-using Globe.Identity.Authentication.Core.Models;
-using Globe.Identity.Authentication.Core.Services;
+using Globe.Identity.Models;
+using Globe.Identity.Servicess;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 
 namespace Globe.Identity.AdministrativeDashboard.Server.Controllers

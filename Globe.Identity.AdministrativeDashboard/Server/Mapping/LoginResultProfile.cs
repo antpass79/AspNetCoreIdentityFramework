@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Globe.Identity.AdministrativeDashboard.Shared.DTOs;
-using Globe.Identity.Authentication.Core.Models;
+using Globe.Identity.Models;
 
 namespace Globe.Identity.AdministrativeDashboard.Server.Mapping
 {

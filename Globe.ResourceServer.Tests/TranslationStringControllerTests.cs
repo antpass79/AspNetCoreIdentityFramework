@@ -1,24 +1,25 @@
-﻿using Globe.Identity.Authentication.Core.Models;
+﻿using Globe.Identity.Models;
+using Globe.Identity.Server;
 using Globe.ResourceServer.DTOs;
 using Globe.Tests.Web;
 using Globe.Tests.Web.Extensions;
 using System.Net;
 using Xunit;
 
-namespace Esaote.ResourceServer.Tests
+namespace Globe.ResourceServer.Tests
 {
     public class TranslationStringControllerTests
     {
-        WebProxyBuilder<Globe.AuthenticationServer.Startup> _webProxyAuthenticationServerBuilder = new WebProxyBuilder<Globe.AuthenticationServer.Startup>();
+        WebProxyBuilder<StartupTest> _webProxyAuthenticationServerBuilder = new WebProxyBuilder<StartupTest>();
         WebProxyBuilder<Globe.ResourceServer.Startup> _webProxyResourceServerBuilder = new WebProxyBuilder<Globe.ResourceServer.Startup>();
 
         public TranslationStringControllerTests()
         {
             _webProxyAuthenticationServerBuilder.JsonFile("appsettings.authenticationserver.json");
-            _webProxyAuthenticationServerBuilder.BaseAddress("http://localhost:7000/api/accounts/");
+            _webProxyAuthenticationServerBuilder.BaseAddress("https://localhost:44349/api/");
 
             _webProxyResourceServerBuilder.JsonFile("appsettings.resourceserver.json");
-            _webProxyResourceServerBuilder.BaseAddress("http://localhost:8000/");
+            _webProxyResourceServerBuilder.BaseAddress("http://localhost:58842/");
         }
 
         [Fact]
@@ -38,7 +39,7 @@ namespace Esaote.ResourceServer.Tests
             using var identityServerClient = _webProxyAuthenticationServerBuilder.Build();
             using var translationServerClient = _webProxyResourceServerBuilder.Build();
 
-            var registerResult = await identityServerClient.PostAsync("register", new Registration
+            var registerResult = await identityServerClient.PostAsync("accounts/register", new Registration
             {
                 UserName = "antopassa79",
                 FirstName = "anto",
@@ -47,17 +48,18 @@ namespace Esaote.ResourceServer.Tests
                 Password = "mypassword"
             });
 
-            var token = await (await identityServerClient.PostAsync("login", new Credentials
+            var loginResult = await (await identityServerClient.PostAsync("access/login", new Credentials
             {
                 UserName = "antopassa79",
                 Password = "mypassword"
-            })).GetValue<Token>();
+            })).GetValue<LoginResult>();
 
-            var translationStringResult = await translationServerClient.GetAsync("TranslationStringTest", token.AccessToken);
+            var translationStringResult = await translationServerClient.GetAsync("TranslationStringTest", loginResult.Token);
             var translationStrings = await translationStringResult.GetValue<TranslationString[]>();
 
+            Assert.True(loginResult.Successful);
             Assert.Equal(HttpStatusCode.OK, translationStringResult.StatusCode);
-            Assert.NotEqual(string.Empty, token.AccessToken);
+            Assert.NotEqual(string.Empty, loginResult.Token);
             Assert.Equal(3, translationStrings.Length);
         }
 
@@ -78,7 +80,7 @@ namespace Esaote.ResourceServer.Tests
             using var identityServerClient = _webProxyAuthenticationServerBuilder.Build();
             using var translationServerClient = _webProxyResourceServerBuilder.Build();
 
-            var registerResult = await identityServerClient.PostAsync("register", new Registration
+            var registerResult = await identityServerClient.PostAsync("accounts/register", new Registration
             {
                 UserName = "antopassa79",
                 FirstName = "anto",
@@ -87,17 +89,17 @@ namespace Esaote.ResourceServer.Tests
                 Password = "mypassword"
             });
 
-            var token = await (await identityServerClient.PostAsync("login", new Credentials
+            var loginResult = await (await identityServerClient.PostAsync("access/login", new Credentials
             {
                 UserName = "antopassa79",
                 Password = "mypassword"
-            })).GetValue<Token>();
+            })).GetValue<LoginResult>();
 
-            var translationStringResult = await translationServerClient.GetAsync("TranslationStringTest/getfirst", token.AccessToken);
+            var translationStringResult = await translationServerClient.GetAsync("TranslationStringTest/getfirst", loginResult.Token);
             var translationString = await translationStringResult.GetValue<TranslationString>();
 
             Assert.Equal(HttpStatusCode.OK, translationStringResult.StatusCode);
-            Assert.NotEqual(string.Empty, token.AccessToken);
+            Assert.NotEqual(string.Empty, loginResult.Token);
             Assert.NotEqual(string.Empty, translationString.Key);
             Assert.NotEqual(string.Empty, translationString.Value);
         }

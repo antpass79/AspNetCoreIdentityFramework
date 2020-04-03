@@ -1,5 +1,5 @@
-﻿using Globe.Identity.Shared.Jwt;
-using Globe.Identity.Shared.Options;
+﻿using Globe.Identity.Options;
+using Globe.Identity.Security;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 

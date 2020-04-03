@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 using System;
 
-namespace Esaote.ResourceServer.Tests
+namespace Globe.ResourceServer.Tests
 {
     public class Token
     {

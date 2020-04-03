@@ -10,8 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Globe.Identity.Resources\Globe.Identity.Resources.csproj" />
-    <ProjectReference Include="..\Globe.Identity.Shared\Globe.Identity.Shared.csproj" />
+    <ProjectReference Include="..\Globe.Identity\Globe.Identity.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,9 +1,10 @@
-﻿using Globe.Identity.Authentication.Core.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Globe.Identity.AdministrativeDashboard.Shared.DTOs
 {
-    public class RegistrationResultDTO : RegistrationResult
+    public class RegistrationResultDTO
     {
+        public bool Successful { get; set; }
+        public IEnumerable<string> Errors { get; set; }
     }
 }

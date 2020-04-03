@@ -1,30 +1,23 @@
 ﻿using AutoMapper;
-using FluentValidation.AspNetCore;
 using Globe.Identity.AdministrativeDashboard.Server.Data;
 using Globe.Identity.AdministrativeDashboard.Server.Models;
 using Globe.Identity.AdministrativeDashboard.Server.Options;
 using Globe.Identity.AdministrativeDashboard.Server.Repositories;
 using Globe.Identity.AdministrativeDashboard.Server.Services;
 using Globe.Identity.AdministrativeDashboard.Server.UnitOfWorks;
-using Globe.Identity.Authentication.Core.Services;
-using Globe.Identity.Authentication.Extensions;
-using Globe.Identity.Authentication.Jwt;
-using Globe.Identity.Authentication.Services;
-using Globe.Identity.Shared.Jwt;
-using Globe.Identity.Shared.Options;
+using Globe.Identity.Options;
+using Globe.Identity.Security;
+using Globe.Identity.Services;
+using Globe.Identity.Servicess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Globe.Identity.AdministrativeDashboard.Server
@@ -42,9 +35,14 @@ namespace Globe.Identity.AdministrativeDashboard.Server
         {
             // Configurations
             services
-                .ConfigureGlobeOptions(_configuration);
-
-            services
+                .AddOptions()
+                .Configure<DatabaseOptions>(options =>
+                {
+                    _configuration.GetSection(nameof(DatabaseOptions)).Bind(options);
+                    options.DefaultSqlServerConnection = _configuration.GetConnectionString("DefaultSqlServerConnection");
+                    options.DefaultSqliteConnection = _configuration.GetConnectionString("DefaultSqliteConnection");
+                })
+                .Configure<JwtAuthenticationOptions>(options => _configuration.GetSection(nameof(JwtAuthenticationOptions)).Bind(options))
                 .Configure<UserSettingsOptions>(options => _configuration.GetSection(nameof(UserSettingsOptions)).Bind(options));
 
             services
@@ -84,8 +82,7 @@ namespace Globe.Identity.AdministrativeDashboard.Server
 
             // Security
             services
-                .AddScoped<IJwtTokenEncoder<ApplicationUser>, UserRolesJwtTokenEncoder>()
-                .AddSingleton<IJwtGenerator, JwtGenerator>()
+                .AddScoped<IJwtTokenEncoder<ApplicationUser>, UserRolesJwtTokenEncoder<ApplicationUser>>()
                 .AddSingleton<IPostConfigureOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>()
                 .AddSingleton<ISigningCredentialsBuilder, SigningCredentialsBuilder>();
 

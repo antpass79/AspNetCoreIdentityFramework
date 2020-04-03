@@ -1,4 +1,4 @@
-﻿using Globe.Identity.Authentication.Models;
+﻿using Globe.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;

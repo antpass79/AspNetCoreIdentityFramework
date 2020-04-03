@@ -1,4 +1,4 @@
-﻿using Globe.Identity.Shared.Models;
+﻿using Globe.Identity.Options;
 using System.Collections.Generic;
 
 namespace Globe.Tests.Mocks
@@ -36,6 +36,12 @@ namespace Globe.Tests.Mocks
                     new GlobeClaim(
                         Constants.Strings.JwtClaimIdentifiers.Rol,
                         new [] { Constants.Strings.JwtClaims.ApiAccess })
+                }).ToArray(),
+                (new List<GlobeRole>
+                {
+                    new GlobeRole(
+                        "Admin",
+                        "Full Access")
                 }).ToArray()));
 
             return policies.ToArray();
