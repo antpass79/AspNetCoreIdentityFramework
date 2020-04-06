@@ -3,6 +3,7 @@ using Globe.Identity.Options;
 using Globe.Identity.Security;
 using Globe.TranslationServer.Data;
 using Globe.TranslationServer.Repositories;
+using Globe.TranslationServer.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -43,6 +44,8 @@ namespace Globe.TranslationServer
                 ServiceLifetime.Singleton);
 
             // Services
+            services
+                .AddSingleton<IAsyncLocalizableStringService, FakeLocalizableStringService>();
             services
                 .AddScoped<LocalizableStringRepository, LocalizableStringRepository>();
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Globe.TranslationServer.Models
+namespace Globe.Client.Localizer.Models
 {
     public class LocalizableString
     {

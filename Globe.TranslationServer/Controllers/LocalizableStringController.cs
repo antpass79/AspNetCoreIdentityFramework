@@ -1,5 +1,6 @@
 ﻿using Globe.TranslationServer.Models;
 using Globe.TranslationServer.Repositories;
+using Globe.TranslationServer.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,45 +10,30 @@ using System.Threading.Tasks;
 namespace Globe.TranslationServer.Controllers
 {
     [Route("api/[controller]")]
-    public class LocalizableStringController
+    public class LocalizableStringController : Controller
     {
+        private readonly IAsyncLocalizableStringService _localizableStringService;
+
         public LocalizableStringRepository LocalizableStringRepository { get; }
 
-        public LocalizableStringController(LocalizableStringRepository localizableStringRepository)
+        public LocalizableStringController(IAsyncLocalizableStringService localizableStringService)
         {
-            LocalizableStringRepository = localizableStringRepository;
+            _localizableStringService = localizableStringService;
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         async public Task<IEnumerable<LocalizableString>> Get()
         {
-            var strings = new List<LocalizableString>
-            {
-                new LocalizableString
-                {
-                    Id = Guid.NewGuid(),
-                    Key = "STRING_0",
-                    Language = "en",
-                    Value = "STRING 0"
-                },
-                new LocalizableString
-                {
-                    Id = Guid.NewGuid(),
-                    Key = "STRING_1",
-                    Language = "en",
-                    Value = "STRING 1"
-                },
-                new LocalizableString
-                {
-                    Id = Guid.NewGuid(),
-                    Key = "STRING_2",
-                    Language = "en",
-                    Value = "STRING 2"
-                }
-            };
+            return await _localizableStringService.GetAllAsync();
+        }
 
-            return await Task.FromResult(strings);
+        [HttpPut]
+        [Authorize(Roles = "Admin")]
+        async public Task<IActionResult> Put([FromBody] IEnumerable<LocalizableString> strings)
+        {
+            await _localizableStringService.SaveAsync(strings);
+            return await Task.FromResult(Ok());
         }
     }
 }
