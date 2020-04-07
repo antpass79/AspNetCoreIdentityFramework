@@ -4,19 +4,18 @@ using Globe.Client.Platform.Services;
 using Globe.Client.Platform.ViewModels;
 using Prism.Commands;
 using Prism.Events;
-using Prism.Mvvm;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 
 namespace Globe.Client.Localizer.ViewModels
 {
-    internal class JobsWindowViewModel : LocalizeWindowViewModel
+    internal class TranslationWindowViewModel : LocalizeWindowViewModel
     {
         private readonly IAsyncLocalizableStringService _proxyLocalizableStringService;
         private readonly IStringMergeService _stringMergeService;
 
-        public JobsWindowViewModel(IEventAggregator eventAggregator, ILocalizationAppService localizationAppService, IProxyLocalizableStringService proxyLocalizableStringService, IStringMergeService stringMergeService)
+        public TranslationWindowViewModel(IEventAggregator eventAggregator, ILocalizationAppService localizationAppService, IProxyLocalizableStringService proxyLocalizableStringService, IStringMergeService stringMergeService)
             : base(eventAggregator, localizationAppService)
         {
             _proxyLocalizableStringService = proxyLocalizableStringService;

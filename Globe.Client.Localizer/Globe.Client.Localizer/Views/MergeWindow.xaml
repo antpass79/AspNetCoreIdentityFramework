@@ -4,11 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Globe.Client.Localizer"
+        xmlns:converters="clr-namespace:Globe.Client.Localizer.Converters"
         xmlns:prism="http://prismlibrary.com/"
         xmlns:core="http://schemas.localizer.com/core"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
+        <converters:IsMergeableToRowBackgroundConverter x:Key="IsMergeableToRowBackgroundConverter" />
+
         <Style TargetType="Button">
             <Style.Resources>
                 <Style TargetType="{x:Type Border}">
@@ -42,6 +45,7 @@
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Height" Value="40"/>
+            <Setter Property="Background" Value="{Binding IsMergeable, Converter={StaticResource IsMergeableToRowBackgroundConverter}}"/>
         </Style>
 
         <Style TargetType="{x:Type DataGridCell}">

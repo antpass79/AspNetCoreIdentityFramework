@@ -34,23 +34,23 @@ namespace Globe.Client.Localizer.ViewModels
             _stringMergeService = stringMergeService;
         }
 
-        IEnumerable<LocalizableString> _fileSystemStrings;
-        public IEnumerable<LocalizableString> FileSystemStrings
+        IEnumerable<MergeableString> _fileSystemStrings;
+        public IEnumerable<MergeableString> FileSystemStrings
         {
             get => _fileSystemStrings;
             set
             {
-                SetProperty<IEnumerable<LocalizableString>>(ref _fileSystemStrings, value);
+                SetProperty<IEnumerable<MergeableString>>(ref _fileSystemStrings, value);
             }
         }
 
-        IEnumerable<LocalizableString> _httpStrings;
-        public IEnumerable<LocalizableString> HttpStrings
+        IEnumerable<MergeableString> _httpStrings;
+        public IEnumerable<MergeableString> HttpStrings
         {
             get => _httpStrings;
             set
             {
-                SetProperty<IEnumerable<LocalizableString>>(ref _httpStrings, value);
+                SetProperty<IEnumerable<MergeableString>>(ref _httpStrings, value);
             }
         }
 
@@ -71,8 +71,9 @@ namespace Globe.Client.Localizer.ViewModels
                 _eventAggregator.GetEvent<BusyChangedEvent>().Publish(true);
                 try
                 {
-                    this.FileSystemStrings = await _fileSystemLocalizableStringService.GetAllAsync();
-                    this.HttpStrings = await _httpLocalizableStringService.GetAllAsync();
+                    var fileSystemStrings = await _fileSystemLocalizableStringService.GetAllAsync();
+                    var httpStrings = await _httpLocalizableStringService.GetAllAsync();
+                    UpdateMergeableStrings(fileSystemStrings.ToList(), httpStrings.ToList());
                     AutoMergeCommand.RaiseCanExecuteChanged();
                 }
                 catch (Exception e)
@@ -88,6 +89,29 @@ namespace Globe.Client.Localizer.ViewModels
                     _eventAggregator.GetEvent<BusyChangedEvent>().Publish(false);
                 }
             }));
+
+        private void UpdateMergeableStrings(List<LocalizableString> fileSystemStrings, List<LocalizableString> httpStrings)
+        {
+            this.FileSystemStrings = fileSystemStrings.Select(fileSystemItem => new MergeableString
+            {
+                Id = fileSystemItem.Id,
+                Key = fileSystemItem.Key,
+                Language = fileSystemItem.Language,
+                SavedOn = fileSystemItem.SavedOn,
+                Value = fileSystemItem.Value,
+                IsMergeable = !httpStrings.Exists(item => item.Key == fileSystemItem.Key) || httpStrings.Exists(httpItem => httpItem.Key == fileSystemItem.Key && httpItem.Value != fileSystemItem.Value)
+            });
+
+            this.HttpStrings = httpStrings.Select(httpItem => new MergeableString
+            {
+                Id = httpItem.Id,
+                Key = httpItem.Key,
+                Language = httpItem.Language,
+                SavedOn = httpItem.SavedOn,
+                Value = httpItem.Value,
+                IsMergeable = !fileSystemStrings.Exists(item => item.Key == httpItem.Key) || fileSystemStrings.Exists(fileSystemItem => fileSystemItem.Key == httpItem.Key && fileSystemItem.Value != httpItem.Value)
+            });
+        }
 
         private DelegateCommand _autoMergeCommand = null;
         public DelegateCommand AutoMergeCommand =>
@@ -138,7 +162,7 @@ namespace Globe.Client.Localizer.ViewModels
         public DelegateCommand<LocalizableString> SelectFromFileSystemCommand =>
             _selectFromFileSystemCommand ?? (_selectFromFileSystemCommand = new DelegateCommand<LocalizableString>((localizableString) =>
             {
-                if (MergedStrings == null)
+                if (localizableString == null || MergedStrings == null)
                     return;
 
                 foreach (var item in MergedStrings)
@@ -159,7 +183,7 @@ namespace Globe.Client.Localizer.ViewModels
         public DelegateCommand<LocalizableString> SelectFromServerCommand =>
             _selectFromServerCommand ?? (_selectFromServerCommand = new DelegateCommand<LocalizableString>((localizableString) =>
             {
-                if (MergedStrings == null)
+                if (localizableString == null || MergedStrings == null)
                     return;
 
                 foreach (var item in MergedStrings)
@@ -180,8 +204,8 @@ namespace Globe.Client.Localizer.ViewModels
         {
             base.OnAuthenticationChanged(principal);
 
-            this.FileSystemStrings = new List<LocalizableString>();
-            this.HttpStrings = new List<LocalizableString>();
+            this.FileSystemStrings = new List<MergeableString>();
+            this.HttpStrings = new List<MergeableString>();
             this.MergedStrings = new List<LocalizableString>();
             AutoMergeCommand.RaiseCanExecuteChanged();
             SaveCommand.RaiseCanExecuteChanged();

@@ -51,8 +51,16 @@ namespace Globe.TranslationServer.Services
             foreach (var @string in strings)
             {
                 var stringToUpdate = _strings.Find(item => item.Key == @string.Key);
-                stringToUpdate.Value = @string.Value;
-                stringToUpdate.SavedOn = DateTime.Now;
+                if (stringToUpdate != null)
+                {
+                    stringToUpdate.Value = @string.Value;
+                    stringToUpdate.SavedOn = DateTime.Now;
+                }
+                else
+                {
+                    @string.SavedOn = DateTime.Now;
+                    _strings.Add(@string);
+                }
             }
 
             await Task.CompletedTask;

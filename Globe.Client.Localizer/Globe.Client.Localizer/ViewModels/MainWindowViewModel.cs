@@ -79,11 +79,11 @@ namespace Globe.Client.Localizer.ViewModels
                 },
                 new MenuOption
                 {
-                    Title = Localize[LanguageKeys.Jobs],
-                    TitleKey = LanguageKeys.Jobs,
+                    Title = Localize[LanguageKeys.Translation],
+                    TitleKey = LanguageKeys.Translation,
                     IsSelected = false,
                     Roles = "Admin, UserManager",
-                    ViewName = ViewNames.JOBS_VIEW
+                    ViewName = ViewNames.TRANSLATION_VIEW
                 },
                 new MenuOption
                 {

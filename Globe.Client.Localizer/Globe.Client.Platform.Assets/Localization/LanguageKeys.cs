@@ -5,7 +5,7 @@
         public readonly static string Hello = "Hello";
         public readonly static string Options = "Options";
         public readonly static string Merge = "Merge";
-        public readonly static string Jobs = "Jobs";
+        public readonly static string Translation = "Translation";
         public readonly static string Home = "Home";
         public readonly static string Load = "Load";
         public readonly static string Save = "Save";

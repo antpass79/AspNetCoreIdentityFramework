@@ -20,7 +20,7 @@ namespace Globe.Client.Platform.Services
             _english.Add(nameof(LanguageKeys.Hello), LanguageKeys.Hello);
             _english.Add(nameof(LanguageKeys.Options), LanguageKeys.Options);
             _english.Add(nameof(LanguageKeys.Home), LanguageKeys.Home);
-            _english.Add(nameof(LanguageKeys.Jobs), LanguageKeys.Jobs);
+            _english.Add(nameof(LanguageKeys.Translation), LanguageKeys.Translation);
             _english.Add(nameof(LanguageKeys.Merge), LanguageKeys.Merge);
             _english.Add(nameof(LanguageKeys.Load), LanguageKeys.Load);
             _english.Add(nameof(LanguageKeys.Save), LanguageKeys.Save);
@@ -40,7 +40,7 @@ namespace Globe.Client.Platform.Services
             _italian.Add(nameof(LanguageKeys.Hello), "Ciao");
             _italian.Add(nameof(LanguageKeys.Options), "Opzioni");
             _italian.Add(nameof(LanguageKeys.Home), LanguageKeys.Home);
-            _italian.Add(nameof(LanguageKeys.Jobs), "Attività");
+            _italian.Add(nameof(LanguageKeys.Translation), "Traduzione");
             _italian.Add(nameof(LanguageKeys.Merge), "Unisci");
             _italian.Add(nameof(LanguageKeys.Load), "Carica");
             _italian.Add(nameof(LanguageKeys.Save), "Salva");
