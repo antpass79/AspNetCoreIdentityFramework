@@ -1,10 +1,13 @@
 ﻿using Globe.Client.Localizer.Models;
 using Globe.Client.Localizer.Services;
 using Globe.Client.Platform;
+using Globe.Client.Platform.Helpers;
 using Globe.Client.Platform.Services;
 using Globe.Client.Platform.ViewModels;
 using Prism.Commands;
 using Prism.Events;
+using System;
+using System.Security;
 
 namespace Globe.Client.Localizer.ViewModels
 {
@@ -29,13 +32,13 @@ namespace Globe.Client.Localizer.ViewModels
                 SetProperty<string>(ref _userName, value);
             }
         }
-        string _password;
-        public string Password
+        SecureString _password;
+        public SecureString Password
         {
             get => _password;
             set
             {
-                SetProperty<string>(ref _password, value);
+                SetProperty<SecureString>(ref _password, value);
             }
         }
         LoginResult _loginResult = new LoginResult();
@@ -56,7 +59,7 @@ namespace Globe.Client.Localizer.ViewModels
                 LoginResult = await _loginService.LoginAsync(new Credentials
                 {
                     UserName = this.UserName,
-                    Password = this.Password
+                    Password = StringHelper.SecureStringToString(this.Password)
                 });
 
                 ClearFields();
@@ -77,7 +80,7 @@ namespace Globe.Client.Localizer.ViewModels
         private void ClearFields()
         {
             this.UserName = string.Empty;
-            this.Password = string.Empty;
+            this.Password = new SecureString();
         }
     }
 }
