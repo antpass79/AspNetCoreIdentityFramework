@@ -27,6 +27,7 @@ namespace Globe.Client.Localizer
             containerRegistry.Register<IViewNavigationService, ViewNavigationService>();
             containerRegistry.RegisterSingleton<IGlobeDataStorage, GlobeInMemoryStorage>();
             containerRegistry.RegisterSingleton<IAsyncLoginService, HttpLoginService>();
+            containerRegistry.RegisterSingleton<ILocalizationAppService, FakeLocalizationAppService>();
         }
 
         protected override Window CreateShell()

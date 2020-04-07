@@ -24,15 +24,13 @@
 
         <!--Side Menu-->
         <DockPanel Style="{StaticResource MenuPanel}">
-            <Label DockPanel.Dock="Top" Content="Options" Style="{StaticResource MenuHeader}"></Label>
+            <Label DockPanel.Dock="Top" Content="{Binding Localize[Options]}" Style="{StaticResource MenuHeader}"></Label>
             <ListBox Style="{StaticResource SideMenu}" ItemsSource="{Binding MenuOptions}" SelectedItem="{Binding SelectedMenuOption}" Name="menu">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <platform:AuthorizeView UserRoles="{Binding ElementName=menu, Path=DataContext.UserRoles}" Roles="{Binding Roles}" VisibileWithoutRoles="{Binding AlwaysVisible}">
-                            <platform:AuthorizeView.PlaceHolder>
-                                <Button Style="{StaticResource SideMenuItem}" Content="{Binding Title}" Command="{Binding ElementName=menu, Path=DataContext.MenuOptionCommand}" CommandParameter="{Binding}">
-                                </Button>
-                            </platform:AuthorizeView.PlaceHolder>
+                            <Button Style="{StaticResource SideMenuItem}" Content="{Binding Title}" Command="{Binding ElementName=menu, Path=DataContext.MenuOptionCommand}" CommandParameter="{Binding}">
+                            </Button>
                         </platform:AuthorizeView>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -58,6 +56,13 @@
                 <Button Command="{Binding LogoutCommand}" Style="{StaticResource HeaderLoginButton}" Visibility="{Binding IsAuthenticated, Converter={StaticResource BooleanToVisibilityConverter}}">
                     Log out
                 </Button>
+                <ComboBox Name="languages" ItemsSource="{Binding LanguageOptions}" SelectedItem="{Binding SelectedLanguageOption}" VerticalAlignment="Center">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Button BorderThickness="0" Style="{StaticResource LanguageOptionItem}" Content="{Binding Title}" Command="{Binding ElementName=languages, Path=DataContext.LanguageOptionCommand}" CommandParameter="{Binding}"></Button>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
             </StackPanel>
         </Grid>
 

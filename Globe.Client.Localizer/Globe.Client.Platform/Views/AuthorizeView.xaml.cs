@@ -2,12 +2,14 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Markup;
 
 namespace Globe.Client.Platform.Views
 {
     /// <summary>
     /// Interaction logic for AuthorizeWindow.xaml
     /// </summary>
+    [ContentProperty("PlaceHolder")]
     public partial class AuthorizeView : UserControl
     {
         public AuthorizeView()

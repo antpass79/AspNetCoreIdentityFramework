@@ -1,4 +1,5 @@
 ﻿using Globe.Client.Localizer.Models;
+using Globe.Client.Platform.Assets.Localization;
 using Globe.Client.Platform.Services;
 using Globe.Client.Platofrm.Events;
 using Prism.Events;
@@ -16,14 +17,14 @@ namespace Globe.Client.Localizer.Services
         private readonly ICheckConnectionService _checkConnectionService;
         private readonly IAsyncLocalizableStringService _fileSystemLocalizableStringService;
         private readonly IAsyncLocalizableStringService _httpLocalizableStringService;
-        private readonly ILocalizationService _localizationService;
+        private readonly ILocalizationAppService _localizationService;
         
         public ProxyLocalizableStringService(
             IEventAggregator eventAggregator,
             ICheckConnectionService checkConnectionService,
             IFileSystemLocalizableStringService fileSystemLocalizableStringService,
             IHttpLocalizableStringService httpLocalizableStringService,
-            ILocalizationService localizationService)
+            ILocalizationAppService localizationService)
         {
             _eventAggregator = eventAggregator;
             _checkConnectionService = checkConnectionService;
@@ -51,7 +52,7 @@ namespace Globe.Client.Localizer.Services
                         _eventAggregator.GetEvent<StatusBarMessageChangedEvent>().Publish(new StatusBarMessage
                         {
                             MessageType = MessageType.Error,
-                            Text = _localizationService.Resolve("Error_during_server_communication")
+                            Text = _localizationService.Resolve(LanguageKeys.Error_during_server_communication)
                         });
 
                         try
@@ -61,7 +62,7 @@ namespace Globe.Client.Localizer.Services
                             _eventAggregator.GetEvent<StatusBarMessageChangedEvent>().Publish(new StatusBarMessage
                             {
                                 MessageType = MessageType.Warning,
-                                Text = _localizationService.Resolve("Strings_from_file_system")
+                                Text = _localizationService.Resolve(LanguageKeys.Strings_from_file_system)
                             });
                         }
                         catch
@@ -69,7 +70,7 @@ namespace Globe.Client.Localizer.Services
                             _eventAggregator.GetEvent<StatusBarMessageChangedEvent>().Publish(new StatusBarMessage
                             {
                                 MessageType = MessageType.Error,
-                                Text = _localizationService.Resolve("Impossible_to_retrieve_strings")
+                                Text = _localizationService.Resolve(LanguageKeys.Impossible_to_retrieve_strings)
                             });
                         }
                     }
@@ -100,7 +101,7 @@ namespace Globe.Client.Localizer.Services
                         _eventAggregator.GetEvent<StatusBarMessageChangedEvent>().Publish(new StatusBarMessage
                         {
                             MessageType = MessageType.Information,
-                            Text = _localizationService.Resolve("Operation_successfully_completed")
+                            Text = _localizationService.Resolve(LanguageKeys.Operation_successfully_completed)
                         });
                     }
                     catch
@@ -108,7 +109,7 @@ namespace Globe.Client.Localizer.Services
                         _eventAggregator.GetEvent<StatusBarMessageChangedEvent>().Publish(new StatusBarMessage
                         {
                             MessageType = MessageType.Error,
-                            Text = _localizationService.Resolve("Error_during_server_communication")
+                            Text = _localizationService.Resolve(LanguageKeys.Error_during_server_communication)
                         });
 
                         try
@@ -118,7 +119,7 @@ namespace Globe.Client.Localizer.Services
                             _eventAggregator.GetEvent<StatusBarMessageChangedEvent>().Publish(new StatusBarMessage
                             {
                                 MessageType = MessageType.Warning,
-                                Text = _localizationService.Resolve("Strings_saved_in_file_system")
+                                Text = _localizationService.Resolve(LanguageKeys.Strings_saved_in_file_system)
                             });
                         }
                         catch
@@ -126,7 +127,7 @@ namespace Globe.Client.Localizer.Services
                             _eventAggregator.GetEvent<StatusBarMessageChangedEvent>().Publish(new StatusBarMessage
                             {
                                 MessageType = MessageType.Error,
-                                Text = _localizationService.Resolve("Impossible_to_save_strings")
+                                Text = _localizationService.Resolve(LanguageKeys.Impossible_to_save_strings)
                             });
                         }
                     }
@@ -138,7 +139,7 @@ namespace Globe.Client.Localizer.Services
                     _eventAggregator.GetEvent<StatusBarMessageChangedEvent>().Publish(new StatusBarMessage
                     {
                         MessageType = MessageType.Warning,
-                        Text = _localizationService.Resolve("Strings_saved_in_file_system")
+                        Text = _localizationService.Resolve(LanguageKeys.Strings_saved_in_file_system)
                     });
                 }
             }

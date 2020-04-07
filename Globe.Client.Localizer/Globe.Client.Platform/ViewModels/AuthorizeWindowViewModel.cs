@@ -10,7 +10,7 @@ namespace Globe.Client.Platform.ViewModels
 {
     public abstract class AuthorizeWindowViewModel : BindableBase, IAuthorizeWindowViewModel
     {
-        IEventAggregator EventAggregator { get; }
+        protected IEventAggregator EventAggregator { get; }
 
         protected AuthorizeWindowViewModel(IEventAggregator eventAggregator)
         {

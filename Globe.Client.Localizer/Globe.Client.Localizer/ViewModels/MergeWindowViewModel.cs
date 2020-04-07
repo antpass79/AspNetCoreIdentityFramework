@@ -1,37 +1,37 @@
 ﻿using Globe.Client.Localizer.Models;
 using Globe.Client.Localizer.Services;
+using Globe.Client.Platform.Assets.Localization;
 using Globe.Client.Platform.Services;
 using Globe.Client.Platform.ViewModels;
 using Globe.Client.Platofrm.Events;
 using Prism.Commands;
 using Prism.Events;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 
 namespace Globe.Client.Localizer.ViewModels
 {
-    internal class MergeWindowViewModel : AuthorizeWindowViewModel
+    internal class MergeWindowViewModel : LocalizeWindowViewModel
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly IAsyncLocalizableStringService _fileSystemLocalizableStringService;
         private readonly IAsyncLocalizableStringService _httpLocalizableStringService;
         private readonly IStringMergeService _stringMergeService;
-        private readonly ILocalizationService _localizationService;
 
         public MergeWindowViewModel(
             IEventAggregator eventAggregator,
             IFileSystemLocalizableStringService fileSystemLocalizableStringService,
             IHttpLocalizableStringService httpLocalizableStringService,
             IStringMergeService stringMergeService,
-            ILocalizationService localizationService)
-            : base(eventAggregator)
+            ILocalizationAppService localizationService)
+            : base(eventAggregator, localizationService)
         {
             _eventAggregator = eventAggregator;
             _fileSystemLocalizableStringService = fileSystemLocalizableStringService;
             _httpLocalizableStringService = httpLocalizableStringService;
             _stringMergeService = stringMergeService;
-            _localizationService = localizationService;
         }
 
         IEnumerable<LocalizableString> _fileSystemStrings;
@@ -68,9 +68,25 @@ namespace Globe.Client.Localizer.ViewModels
         public DelegateCommand LoadCommand =>
             _loadCommand ?? (_loadCommand = new DelegateCommand(async () =>
             {
-                this.FileSystemStrings = await _fileSystemLocalizableStringService.GetAllAsync();
-                this.HttpStrings = await _httpLocalizableStringService.GetAllAsync();
-                AutoMergeCommand.RaiseCanExecuteChanged();
+                _eventAggregator.GetEvent<BusyChangedEvent>().Publish(true);
+                try
+                {
+                    this.FileSystemStrings = await _fileSystemLocalizableStringService.GetAllAsync();
+                    this.HttpStrings = await _httpLocalizableStringService.GetAllAsync();
+                    AutoMergeCommand.RaiseCanExecuteChanged();
+                }
+                catch (Exception e)
+                {
+                    _eventAggregator.GetEvent<StatusBarMessageChangedEvent>().Publish(new StatusBarMessage
+                    {
+                        MessageType = MessageType.Error,
+                        Text = this.LocalizationAppService.Resolve(LanguageKeys.Error_during_server_communication)
+                    });
+                }
+                finally
+                {
+                    _eventAggregator.GetEvent<BusyChangedEvent>().Publish(false);
+                }
             }));
 
         private DelegateCommand _autoMergeCommand = null;
@@ -97,7 +113,7 @@ namespace Globe.Client.Localizer.ViewModels
                     _eventAggregator.GetEvent<StatusBarMessageChangedEvent>().Publish(new StatusBarMessage
                     {
                         MessageType = MessageType.Information,
-                        Text = _localizationService.Resolve("Operation_successfully_completed")
+                        Text = this.LocalizationAppService.Resolve(LanguageKeys.Operation_successfully_completed)
                     });
                 }
                 catch
@@ -105,7 +121,7 @@ namespace Globe.Client.Localizer.ViewModels
                     _eventAggregator.GetEvent<StatusBarMessageChangedEvent>().Publish(new StatusBarMessage
                     {
                         MessageType = MessageType.Error,
-                        Text = _localizationService.Resolve("Error_during_server_communication")
+                        Text = this.LocalizationAppService.Resolve(LanguageKeys.Error_during_server_communication)
                     });
                 }
                 finally
@@ -138,7 +154,7 @@ namespace Globe.Client.Localizer.ViewModels
 
                 MergedStrings = MergedStrings.ToList();
             }));
-        
+
         private DelegateCommand<LocalizableString> _selectFromServerCommand = null;
         public DelegateCommand<LocalizableString> SelectFromServerCommand =>
             _selectFromServerCommand ?? (_selectFromServerCommand = new DelegateCommand<LocalizableString>((localizableString) =>

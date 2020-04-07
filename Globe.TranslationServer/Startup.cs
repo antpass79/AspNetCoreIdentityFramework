@@ -75,6 +75,10 @@ namespace Globe.TranslationServer
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
 
             app.UseHttpsRedirection();
             app.UseRouting();

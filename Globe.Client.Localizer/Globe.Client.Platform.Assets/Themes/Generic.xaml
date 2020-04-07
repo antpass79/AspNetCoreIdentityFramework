@@ -11,6 +11,7 @@
         <ResourceDictionary Source="/Globe.Client.Platform.Assets;component/Controls/Header.xaml" />
         <ResourceDictionary Source="/Globe.Client.Platform.Assets;component/Controls/SideMenu.xaml" />
         <ResourceDictionary Source="/Globe.Client.Platform.Assets;component/Controls/Login.xaml" />
+        <ResourceDictionary Source="/Globe.Client.Platform.Assets;component/Controls/Language.xaml" />
     </ResourceDictionary.MergedDictionaries>
     
 </ResourceDictionary>

@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Globe.Identity.AdministrativeDashboard.Shared.DTOs;
-using Globe.Identity.Validations;
 
 namespace Globe.AuthenticationServer
 {
@@ -16,11 +15,6 @@ namespace Globe.AuthenticationServer
                 .MinimumLength(3);
             RuleFor(model => model.Email)
                 .EmailAddress();
-            RuleFor(model => model.FirstName)
-                .NotEmpty();
-            RuleFor(model => model.LastName)
-                .NotEmpty();
-
             RuleFor(model => model.ConfirmPassword)
                 .Equal(model => model.Password);
         }

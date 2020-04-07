@@ -2,19 +2,19 @@
 using Globe.Client.Localizer.Services;
 using Globe.Client.Platform;
 using Globe.Client.Platform.Services;
+using Globe.Client.Platform.ViewModels;
 using Prism.Commands;
-using Prism.Mvvm;
-using Prism.Regions;
+using Prism.Events;
 
 namespace Globe.Client.Localizer.ViewModels
 {
-    internal class LoginWindowViewModel : BindableBase
+    internal class LoginWindowViewModel : LocalizeWindowViewModel
     {
         private readonly IViewNavigationService _viewNavigationService;
-        private readonly IRegionManager _regionManager;
         private readonly IAsyncLoginService _loginService;
 
-        public LoginWindowViewModel(IViewNavigationService viewNavigationService, IAsyncLoginService loginService)
+        public LoginWindowViewModel(IViewNavigationService viewNavigationService, IAsyncLoginService loginService, IEventAggregator eventAggregator, ILocalizationAppService localizationAppService)
+            : base(eventAggregator, localizationAppService)
         {
             _viewNavigationService = viewNavigationService;
             _loginService = loginService;

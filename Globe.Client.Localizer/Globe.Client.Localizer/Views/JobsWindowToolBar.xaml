@@ -30,8 +30,8 @@
         </Style>
 
     </platform:ContextToolBar.Resources>
-    <DockPanel LastChildFill="False">
-        <Button Command="{Binding LoadCommand}">Load</Button>
-        <Button Command="{Binding SaveCommand}">Save</Button>
+    <DockPanel LastChildFill="False" Background="Transparent">
+        <Button Command="{Binding LoadCommand}" Content="{Binding Localize[Load]}"></Button>
+        <Button Command="{Binding SaveCommand}" Content="{Binding Localize[Save]}"></Button>
     </DockPanel>
 </platform:ContextToolBar>

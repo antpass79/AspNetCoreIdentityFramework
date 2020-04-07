@@ -27,7 +27,7 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Controllers
                 return new LoginResultDTO
                 {
                     Successful = false,
-                    Error = "Invalid credentials fields"
+                    Error = "Invalid credentials"
                 };
             }
 

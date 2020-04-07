@@ -27,7 +27,7 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Controllers
                 return new RegistrationResultDTO
                 {
                     Successful = false,
-                    Errors = new string[] { "Invalid registration fields" }
+                    Errors = new string[] { "Invalid registration" }
                 };
             }
 

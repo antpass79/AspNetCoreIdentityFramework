@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              Name="authorizeWindow"
              d:DesignHeight="450" d:DesignWidth="800">
-    <ContentControl Background="Transparent"
+    <ContentPresenter
         Content="{Binding PlaceHolder, ElementName=authorizeWindow}"
-        Visibility="{Binding ContentVisibility, ElementName=authorizeWindow}"></ContentControl>
+        Visibility="{Binding ContentVisibility, ElementName=authorizeWindow}"></ContentPresenter>
 </UserControl>

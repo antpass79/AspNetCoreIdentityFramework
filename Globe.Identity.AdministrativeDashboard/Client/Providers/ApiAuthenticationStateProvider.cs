@@ -21,7 +21,6 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Providers
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             var data = await _localStorage.GetAsync();
-
             if (string.IsNullOrWhiteSpace(data.Token))
             {
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
@@ -35,6 +34,7 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Providers
         async public Task MarkUserAsAuthenticated(string userName)
         {
             var data = await _localStorage.GetAsync();
+
             var authenticatedUser = ClaimsPrincipalGenerator.BuildClaimsPrincipal(data.Token, userName);
             var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
             NotifyAuthenticationStateChanged(authState);

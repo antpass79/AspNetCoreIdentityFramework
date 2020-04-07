@@ -38,7 +38,7 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Services
             var response = await _httpClient.PostAsync("api/Login", new StringContent(loginAsJson, Encoding.UTF8, "application/json"));
             var loginResult = JsonSerializer.Deserialize<LoginResultDTO>(await response.Content.ReadAsStringAsync(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-            if (!response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode || !loginResult.Successful)
             {
                 return loginResult;
             }

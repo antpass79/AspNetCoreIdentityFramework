@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation.AspNetCore;
 using Globe.Identity.AdministrativeDashboard.Server.Data;
 using Globe.Identity.AdministrativeDashboard.Server.Models;
 using Globe.Identity.AdministrativeDashboard.Server.Options;
@@ -18,6 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Globe.Identity.AdministrativeDashboard.Server
@@ -98,11 +100,11 @@ namespace Globe.Identity.AdministrativeDashboard.Server
             services.AddAutoMapper(typeof(Startup));
 
             services
-                .AddControllersWithViews();
-            //.AddFluentValidation(options =>
-            //{
-            //    options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-            //});
+                .AddControllersWithViews()
+                .AddFluentValidation(options =>
+                {
+                    options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+                });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
