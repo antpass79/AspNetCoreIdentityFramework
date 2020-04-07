@@ -25,7 +25,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Globe.ResourceServer.Tests"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityAdministrativeDashboard", "IdentityAdministrativeDashboard", "{D9403D38-EC53-4B3C-A16E-821367E232CD}"
 	ProjectSection(SolutionItems) = preProject
-		Globe.Client.Localizer\Globe.Client.Platform\Converters\MessageTypeToColorConverter.cs = Globe.Client.Localizer\Globe.Client.Platform\Converters\MessageTypeToColorConverter.cs
 		Globe.Identity.AdministrativeDashboard\MigrationUpdate.sql = Globe.Identity.AdministrativeDashboard\MigrationUpdate.sql
 	EndProjectSection
 EndProject
