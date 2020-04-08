@@ -34,7 +34,6 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Controllers
             var mappedCredentials = _mapper.Map<Credentials>(credentials);
             var result = await _loginService.LoginAsync(mappedCredentials);
 
-
             return _mapper.Map<LoginResultDTO>(result);
         }
     }

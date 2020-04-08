@@ -51,8 +51,7 @@ namespace Globe.Identity.AdministrativeDashboard.Server
                 .AddSingleton<IConfigureOptions<JwtAuthenticationOptions>, ConfigureJwtAuthenticationOptions>();
 
             services.AddDbContext<ApplicationDbContext, ApplicationDbContext>(
-                ServiceLifetime.Singleton,
-                ServiceLifetime.Singleton);
+                ServiceLifetime.Transient);
 
             services.AddDefaultIdentity<ApplicationUser>(options =>
             {

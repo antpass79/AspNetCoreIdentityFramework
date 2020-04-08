@@ -12,14 +12,12 @@ namespace Globe.Identity.Services
     {
         private readonly UserManager<TUser> _userManager;
         private readonly SignInManager<TUser> _signInManager;
-        private readonly JwtAuthenticationOptions _jwtOptions;
         IJwtTokenEncoder<TUser> _jwtTokenEncoder;
 
-        public LoginService(UserManager<TUser> userManager, SignInManager<TUser> signInManager, IOptions<JwtAuthenticationOptions> jwtOptions, IJwtTokenEncoder<TUser> jwtTokenEncoder)
+        public LoginService(UserManager<TUser> userManager, SignInManager<TUser> signInManager, IJwtTokenEncoder<TUser> jwtTokenEncoder)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _jwtOptions = jwtOptions.Value;
             _jwtTokenEncoder = jwtTokenEncoder;
         }
 
@@ -61,7 +59,7 @@ namespace Globe.Identity.Services
     public class LoginService : LoginService<GlobeUser>
     {
         public LoginService(UserManager<GlobeUser> userManager, SignInManager<GlobeUser> signInManager, IOptions<JwtAuthenticationOptions> jwtOptions, IJwtTokenEncoder<GlobeUser> jwtTokenEncoder)
-            : base(userManager, signInManager, jwtOptions, jwtTokenEncoder)
+            : base(userManager, signInManager, jwtTokenEncoder)
         {
         }
     }
