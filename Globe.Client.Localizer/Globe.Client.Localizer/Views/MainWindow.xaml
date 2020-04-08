@@ -19,6 +19,12 @@
             False="Visible" />
         <platform:MessageTypeToColorConverter
             x:Key="MessageTypeToColorConverter" />
+
+        <Style TargetType="{x:Type platform:Spinner}" x:Key="Spinner">
+            <Setter Property="Diameter" Value="100" />
+            <Setter Property="Color1" Value="Blue" />
+            <Setter Property="Color2" Value="Transparent" />
+        </Style>
     </Window.Resources>
     <DockPanel>
 
@@ -59,7 +65,7 @@
                 <ComboBox Name="languages" ItemsSource="{Binding LanguageOptions}" SelectedItem="{Binding SelectedLanguageOption}" VerticalAlignment="Center">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <Button BorderThickness="0" Style="{StaticResource LanguageOptionItem}" Content="{Binding Title}" Command="{Binding ElementName=languages, Path=DataContext.LanguageOptionCommand}" CommandParameter="{Binding}"></Button>
+                            <Button Style="{StaticResource LanguageOptionItem}" Content="{Binding Title}" Command="{Binding ElementName=languages, Path=DataContext.LanguageOptionCommand}" CommandParameter="{Binding}"></Button>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
@@ -67,12 +73,12 @@
         </Grid>
 
         <!--Footer-->
-        <Label DockPanel.Dock="Bottom" HorizontalAlignment="Right" FontWeight="Bold" FontSize="20" Content="{Binding StatusBarMessage.Text}" Foreground="{Binding StatusBarMessage.MessageType, Converter={StaticResource MessageTypeToColorConverter}}"></Label>
+        <Label DockPanel.Dock="Bottom" Style="{StaticResource Footer}" Content="{Binding StatusBarMessage.Text}" Foreground="{Binding StatusBarMessage.MessageType, Converter={StaticResource MessageTypeToColorConverter}}"></Label>
 
         <!--Content-->
         <Grid>
             <ContentControl x:Name="contentRegion" prism:RegionManager.RegionName="{x:Static platform:RegionNames.MAIN_REGION}" />
-            <platform:Spinner Diameter="100" Color1="Blue" Color2="Transparent" Visibility="{Binding Busy, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <platform:Spinner Style="{StaticResource Spinner}" Visibility="{Binding Busy, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>
     </DockPanel>
 </Window>

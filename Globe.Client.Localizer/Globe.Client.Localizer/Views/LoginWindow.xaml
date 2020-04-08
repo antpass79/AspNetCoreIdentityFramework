@@ -20,9 +20,9 @@
             <StackPanel>
                 <TextBlock Text="{Binding Localize[Please_enter_your_details]}" Style="{StaticResource LoginPageTitleDetails}" />
                 <TextBlock Text="{Binding Localize[UserName]}" Style="{StaticResource LoginPageTextTitle}" />
-                <TextBox Text="{Binding UserName}" Margin="0,10,0,0" FontSize="20" />
+                <TextBox Text="{Binding UserName}" Style="{StaticResource LoginTextInput}" />
                 <TextBlock Text="Password" Style="{StaticResource LoginPageTextTitle}" />
-                <platform:PasswordInput Name="passwordInput" Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,10,0,0" FontSize="20" />
+                <platform:PasswordInput Name="passwordInput" Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource LoginPasswordInput}" />
                 <StackPanel Orientation="Horizontal">
                     <Button Margin="0,20,0,0" Style="{StaticResource LoginPageButtonLogin}" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=passwordInput, Path=Password}">Login</Button>
                     <Button Margin="20,20,0,0" Style="{StaticResource LoginPageButtonCancel}" Command="{Binding CancelCommand}" Content="{Binding Localize[Cancel]}"></Button>

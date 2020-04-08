@@ -8,9 +8,19 @@
         xmlns:core="http://schemas.localizer.com/core"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type Label}" x:Key="MainTitle">
+            <Setter Property="FontSize" Value="45" />
+            <Setter Property="FontWeight" Value="Normal" />
+        </Style>
+        <Style TargetType="{x:Type Label}" x:Key="SecondaryTitle">
+            <Setter Property="FontSize" Value="15" />
+        </Style>
+    </UserControl.Resources>
+
     <DockPanel LastChildFill="False">
-        <Label DockPanel.Dock="Top" Content="Ultra Localizer" FontSize="45" FontWeight="Normal"></Label>
-        <Label DockPanel.Dock="Top" Content="The Ultra Localizer provides an User Interface to translate all strings in different languages." FontSize="15"></Label>
-        <Label DockPanel.Dock="Top" Content="The translator can work without network connection, thanks to the offline mode." FontSize="15"></Label>
+        <Label DockPanel.Dock="Top" Content="Ultra Localizer" Style="{StaticResource MainTitle}"></Label>
+        <Label DockPanel.Dock="Top" Content="The Ultra Localizer provides an User Interface to translate all strings in different languages." Style="{StaticResource SecondaryTitle}"></Label>
+        <Label DockPanel.Dock="Top" Content="The translator can work without network connection, thanks to the offline mode." Style="{StaticResource SecondaryTitle}"></Label>
     </DockPanel>
 </UserControl>

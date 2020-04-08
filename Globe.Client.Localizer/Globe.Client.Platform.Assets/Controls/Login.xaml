@@ -17,6 +17,15 @@
     <SolidColorBrush x:Key="ButtonBackgroundBrush" Color="#1B6EC2" />
     <SolidColorBrush x:Key="ButtonForegrandBrush" Color="White" />
 
+    <Style TargetType="{x:Type TextBox}" x:Key="LoginTextInput">
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="Margin" Value="0,10,0,0"/>
+    </Style>
+    <Style TargetType="{x:Type ContentControl}" x:Key="LoginPasswordInput">
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="Margin" Value="0,10,0,0"/>
+    </Style>
+
     <Style TargetType="Button" x:Key="LoginPageButtonCancel">
         <Style.Resources>
             <Style TargetType="{x:Type Border}">
