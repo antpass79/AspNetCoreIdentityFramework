@@ -53,6 +53,8 @@ namespace Globe.Client.Localizer.Services
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message); // inject a logger
+
                 await _globeDataStorage.RemoveAsync();
                 await OnPrincipalChanged(new AnonymousPrincipal());
 

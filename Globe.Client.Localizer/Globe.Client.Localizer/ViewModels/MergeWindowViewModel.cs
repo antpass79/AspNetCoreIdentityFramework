@@ -78,6 +78,8 @@ namespace Globe.Client.Localizer.ViewModels
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine(e.Message); // inject a logger
+
                     _eventAggregator.GetEvent<StatusBarMessageChangedEvent>().Publish(new StatusBarMessage
                     {
                         MessageType = MessageType.Error,
@@ -140,8 +142,10 @@ namespace Globe.Client.Localizer.ViewModels
                         Text = this.LocalizationAppService.Resolve(LanguageKeys.Operation_successfully_completed)
                     });
                 }
-                catch
+                catch (Exception e)
                 {
+                    Console.WriteLine(e.Message); // inject a logger
+
                     _eventAggregator.GetEvent<StatusBarMessageChangedEvent>().Publish(new StatusBarMessage
                     {
                         MessageType = MessageType.Error,

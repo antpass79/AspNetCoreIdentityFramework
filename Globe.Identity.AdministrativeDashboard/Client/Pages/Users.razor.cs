@@ -78,8 +78,10 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Pages
             {
                 users = await Http.GetJsonAsync<ApplicationUserDTO[]>("api/User");
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message); // inject a logger
+
                 UrlNavigationManager.NavigateTo("/unauthorized");
             }
         }

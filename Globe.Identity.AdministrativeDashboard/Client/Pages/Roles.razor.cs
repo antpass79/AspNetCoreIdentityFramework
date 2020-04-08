@@ -77,8 +77,10 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Pages
             {
                 roles = await Http.GetJsonAsync<ApplicationRoleDTO[]>("api/Role");
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message); // inject a logger
+
                 UrlNavigationManager.NavigateTo("/unauthorized");
             }
         }
