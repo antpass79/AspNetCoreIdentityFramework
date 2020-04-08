@@ -1,4 +1,4 @@
-﻿using Globe.Client.Platform.Helpers;
+﻿using Globe.Client.Platform.Extensions;
 using System.Security;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,7 +26,8 @@ namespace Globe.Client.Platform.Controls
         {
             var passwordInput = d as PasswordInput;
 
-            var newPassword = StringHelper.SecureStringToString(e.NewValue as SecureString);
+            var secureString = e.NewValue as SecureString;
+            var newPassword = secureString.ToPlainString();
             if (passwordInput.PasswordBox.Password != newPassword)
                 passwordInput.PasswordBox.Password = newPassword;
         }

@@ -2,16 +2,19 @@
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace Globe.Client.Platform.Helpers
+namespace Globe.Client.Platform.Extensions
 {
-    public static class StringHelper
+    public static class StringStringExtensions
     {
-        public static string SecureStringToString(SecureString value)
+        public static string ToPlainString(this SecureString secureString)
         {
+            if (secureString == null)
+                return string.Empty;
+
             IntPtr valuePtr = IntPtr.Zero;
             try
             {
-                valuePtr = Marshal.SecureStringToGlobalAllocUnicode(value);
+                valuePtr = Marshal.SecureStringToGlobalAllocUnicode(secureString);
                 return Marshal.PtrToStringUni(valuePtr);
             }
             finally

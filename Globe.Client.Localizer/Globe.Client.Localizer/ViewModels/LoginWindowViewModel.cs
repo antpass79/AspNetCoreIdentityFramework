@@ -1,12 +1,11 @@
 ﻿using Globe.Client.Localizer.Models;
 using Globe.Client.Localizer.Services;
 using Globe.Client.Platform;
-using Globe.Client.Platform.Helpers;
+using Globe.Client.Platform.Extensions;
 using Globe.Client.Platform.Services;
 using Globe.Client.Platform.ViewModels;
 using Prism.Commands;
 using Prism.Events;
-using System;
 using System.Security;
 
 namespace Globe.Client.Localizer.ViewModels
@@ -59,7 +58,7 @@ namespace Globe.Client.Localizer.ViewModels
                 LoginResult = await _loginService.LoginAsync(new Credentials
                 {
                     UserName = this.UserName,
-                    Password = StringHelper.SecureStringToString(this.Password)
+                    Password = this.Password.ToPlainString()
                 });
 
                 ClearFields();
