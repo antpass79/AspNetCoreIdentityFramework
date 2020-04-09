@@ -6,6 +6,7 @@ using Globe.Identity.AdministrativeDashboard.Server.Options;
 using Globe.Identity.AdministrativeDashboard.Server.Repositories;
 using Globe.Identity.AdministrativeDashboard.Server.Services;
 using Globe.Identity.AdministrativeDashboard.Server.UnitOfWorks;
+using Globe.Identity.Middlewares;
 using Globe.Identity.Options;
 using Globe.Identity.Security;
 using Globe.Identity.Services;
@@ -17,6 +18,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Reflection;
@@ -104,9 +106,21 @@ namespace Globe.Identity.AdministrativeDashboard.Server
                 {
                     options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
                 });
+
+            // Logging
+            services
+                .AddSingleton<ILoggerFactory, LoggerFactory>()
+                .AddSingleton(typeof(ILogger<>), typeof(Logger<>))
+                .AddLogging(config =>
+                {
+                    config.ClearProviders();
+                    config.AddConfiguration(_configuration.GetSection("Logging"));
+                    config.AddConsole();
+                    config.AddDebug();
+                });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -115,10 +129,15 @@ namespace Globe.Identity.AdministrativeDashboard.Server
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                //app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseExceptionHandler(new ExceptionHandlerOptions
+            {
+                ExceptionHandler = new JsonExceptionHandler(loggerFactory.CreateLogger<JsonExceptionHandler>()).Invoke
+            });
 
             app.UseHttpsRedirection();
             app.UseBlazorFrameworkFiles();

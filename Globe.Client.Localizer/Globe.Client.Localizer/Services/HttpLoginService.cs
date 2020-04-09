@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Prism.Events;
 using System;
 using System.Configuration;
+using System.Net;
 using System.Net.Http;
 using System.Security.Principal;
 using System.Text;
@@ -79,14 +80,11 @@ namespace Globe.Client.Localizer.Services
             var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             var httpResponseMessage = await _httpClient.PostAsync("Login", stringContent);
-            var loginResult = await httpResponseMessage.GetValue<LoginResult>();
+            if (!httpResponseMessage.IsSuccessStatusCode)
+                return await BuildLoginResultError(httpResponseMessage);
 
-            return loginResult != null ? loginResult : new LoginResult
-            {
-                Successful = false,
-                Error = $"Error from Server: {httpResponseMessage.StatusCode.ToString()}",
-                Token = string.Empty
-            };
+            var loginResult = await httpResponseMessage.GetValue<LoginResult>();
+            return loginResult != null ? loginResult : await BuildLoginResultError(httpResponseMessage);
         }
 
         async private Task OnPrincipalChanged(IPrincipal principal)
@@ -94,6 +92,20 @@ namespace Globe.Client.Localizer.Services
             Thread.CurrentPrincipal = principal;
             _eventAggregator.GetEvent<PrincipalChangedEvent>().Publish(principal);
             await Task.CompletedTask;
+        }
+
+        async private Task<LoginResult> BuildLoginResultError(HttpResponseMessage httpResponseMessage)
+        {
+            var apiServerError = await httpResponseMessage.GetValue<ApiServerError>();
+
+            var errorMessage = apiServerError != null ? apiServerError.Message : httpResponseMessage.StatusCode.ToString();
+
+            return new LoginResult
+            {
+                Successful = false,
+                Error = $"Error from Server: {errorMessage}",
+                Token = string.Empty
+            };
         }
     }
 }
