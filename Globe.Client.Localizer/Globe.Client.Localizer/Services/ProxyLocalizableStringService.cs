@@ -3,6 +3,7 @@ using Globe.Client.Platform.Assets.Localization;
 using Globe.Client.Platform.Services;
 using Globe.Client.Platofrm.Events;
 using Prism.Events;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace Globe.Client.Localizer.Services
     public class ProxyLocalizableStringService : IProxyLocalizableStringService
     {
         private readonly IEventAggregator _eventAggregator;
+        private readonly ILogger _logger;
         private readonly ICheckConnectionService _checkConnectionService;
         private readonly IAsyncLocalizableStringService _fileSystemLocalizableStringService;
         private readonly IAsyncLocalizableStringService _httpLocalizableStringService;
@@ -22,12 +24,14 @@ namespace Globe.Client.Localizer.Services
         
         public ProxyLocalizableStringService(
             IEventAggregator eventAggregator,
+            ILogger logger,
             ICheckConnectionService checkConnectionService,
             IFileSystemLocalizableStringService fileSystemLocalizableStringService,
             IHttpLocalizableStringService httpLocalizableStringService,
             ILocalizationAppService localizationService)
         {
             _eventAggregator = eventAggregator;
+            _logger = logger;
             _checkConnectionService = checkConnectionService;
             _fileSystemLocalizableStringService = fileSystemLocalizableStringService;
             _httpLocalizableStringService = httpLocalizableStringService;
@@ -50,7 +54,7 @@ namespace Globe.Client.Localizer.Services
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e.Message); // inject a logger
+                        _logger.Error(e, "Http communication Failed");
 
                         _eventAggregator.GetEvent<StatusBarMessageChangedEvent>().Publish(new StatusBarMessage
                         {
@@ -70,7 +74,7 @@ namespace Globe.Client.Localizer.Services
                         }
                         catch (Exception innerException)
                         {
-                            Console.WriteLine(innerException.Message); // inject a logger
+                            _logger.Error(innerException, "File System communication Failed");
 
                             _eventAggregator.GetEvent<StatusBarMessageChangedEvent>().Publish(new StatusBarMessage
                             {
@@ -111,7 +115,7 @@ namespace Globe.Client.Localizer.Services
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e.Message); // inject a logger
+                        _logger.Error(e, "Http communication Failed");
 
                         _eventAggregator.GetEvent<StatusBarMessageChangedEvent>().Publish(new StatusBarMessage
                         {
@@ -131,7 +135,7 @@ namespace Globe.Client.Localizer.Services
                         }
                         catch (Exception innerException)
                         {
-                            Console.WriteLine(innerException.Message); // inject a logger
+                            _logger.Error(innerException, "File System communication Failed");
 
                             _eventAggregator.GetEvent<StatusBarMessageChangedEvent>().Publish(new StatusBarMessage
                             {

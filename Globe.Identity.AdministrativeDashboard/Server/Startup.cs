@@ -18,9 +18,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Serilog;
 using System;
+using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -108,19 +109,15 @@ namespace Globe.Identity.AdministrativeDashboard.Server
                 });
 
             // Logging
+            var logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                //.WriteTo.File(Path.Combine(Directory.GetCurrentDirectory(), "ultralocalizer.txt"))
+                .CreateLogger();
             services
-                .AddSingleton<ILoggerFactory, LoggerFactory>()
-                .AddSingleton(typeof(ILogger<>), typeof(Logger<>))
-                .AddLogging(config =>
-                {
-                    config.ClearProviders();
-                    config.AddConfiguration(_configuration.GetSection("Logging"));
-                    config.AddConsole();
-                    config.AddDebug();
-                });
+                .AddSingleton(typeof(ILogger), logger);
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider, ILogger logger)
         {
             if (env.IsDevelopment())
             {
@@ -136,7 +133,7 @@ namespace Globe.Identity.AdministrativeDashboard.Server
 
             app.UseExceptionHandler(new ExceptionHandlerOptions
             {
-                ExceptionHandler = new JsonExceptionHandler(loggerFactory.CreateLogger<JsonExceptionHandler>()).Invoke
+                ExceptionHandler = new JsonExceptionHandler(logger).Invoke
             });
 
             app.UseHttpsRedirection();

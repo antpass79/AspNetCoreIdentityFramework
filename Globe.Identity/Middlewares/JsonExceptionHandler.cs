@@ -1,18 +1,18 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace Globe.Identity.Middlewares
 {
     public class JsonExceptionHandler
     {
-        private readonly ILogger<JsonExceptionHandler> _logger;
+        private readonly ILogger _logger;
 
-        public JsonExceptionHandler(ILogger<JsonExceptionHandler> logger)
+        public JsonExceptionHandler(ILogger logger)
         {
             _logger = logger;
         }
@@ -36,7 +36,7 @@ namespace Globe.Identity.Middlewares
                 StatusCode = (HttpStatusCode)httpContext.Response.StatusCode
             };
 
-            _logger.LogError(ex, "Unhandled exception inside the server");
+            _logger.Error(ex, "Unhandled exception inside the server");
 
             httpContext.Response.ContentType = "application/json";
 

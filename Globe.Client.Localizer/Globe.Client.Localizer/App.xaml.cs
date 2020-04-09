@@ -5,7 +5,9 @@ using Globe.Client.Platform.Services;
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Unity;
+using Serilog;
 using System;
+using System.IO;
 using System.Windows;
 
 namespace Globe.Client.Localizer
@@ -24,6 +26,13 @@ namespace Globe.Client.Localizer
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            var logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                //.WriteTo.File(Path.Combine(Directory.GetCurrentDirectory(), "ultralocalizer.txt"))
+                .CreateLogger();
+
+            containerRegistry.RegisterInstance(typeof(ILogger), logger);
+
             containerRegistry.Register<IViewNavigationService, ViewNavigationService>();
             containerRegistry.RegisterSingleton<IGlobeDataStorage, GlobeInMemoryStorage>();
             containerRegistry.RegisterSingleton<IAsyncLoginService, HttpLoginService>();

@@ -5,9 +5,9 @@ using Globe.Client.Platform.Services;
 using Globe.Client.Platofrm.Events;
 using Newtonsoft.Json;
 using Prism.Events;
+using Serilog;
 using System;
 using System.Configuration;
-using System.Net;
 using System.Net.Http;
 using System.Security.Principal;
 using System.Text;
@@ -20,13 +20,15 @@ namespace Globe.Client.Localizer.Services
     {
         private readonly HttpClient _httpClient;
         private readonly IEventAggregator _eventAggregator;
-        IGlobeDataStorage _globeDataStorage;
+        private readonly ILogger _logger;
+        private readonly IGlobeDataStorage _globeDataStorage;
 
-        public HttpLoginService(HttpClient httpClient, IEventAggregator eventAggregator, IGlobeDataStorage globeDataStorage)
+        public HttpLoginService(HttpClient httpClient, IEventAggregator eventAggregator, ILogger logger, IGlobeDataStorage globeDataStorage)
         {
             _httpClient = httpClient;
             _httpClient.BaseAddress = new Uri(ConfigurationManager.AppSettings["LoginBaseAddress"]);
             _eventAggregator = eventAggregator;
+            _logger = logger;
             _globeDataStorage = globeDataStorage;
         }
 
@@ -54,7 +56,7 @@ namespace Globe.Client.Localizer.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message); // inject a logger
+                _logger.Error(e, "Login Failed");
 
                 await _globeDataStorage.RemoveAsync();
                 await OnPrincipalChanged(new AnonymousPrincipal());
@@ -99,6 +101,8 @@ namespace Globe.Client.Localizer.Services
             var apiServerError = await httpResponseMessage.GetValue<ApiServerError>();
 
             var errorMessage = apiServerError != null ? apiServerError.Message : httpResponseMessage.StatusCode.ToString();
+
+            _logger.Error(errorMessage);
 
             return new LoginResult
             {

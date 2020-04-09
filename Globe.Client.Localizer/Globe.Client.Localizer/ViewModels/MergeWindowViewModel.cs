@@ -6,6 +6,7 @@ using Globe.Client.Platform.ViewModels;
 using Globe.Client.Platofrm.Events;
 using Prism.Commands;
 using Prism.Events;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,12 +17,14 @@ namespace Globe.Client.Localizer.ViewModels
     internal class MergeWindowViewModel : LocalizeWindowViewModel
     {
         private readonly IEventAggregator _eventAggregator;
+        private readonly ILogger _logger;
         private readonly IAsyncLocalizableStringService _fileSystemLocalizableStringService;
         private readonly IAsyncLocalizableStringService _httpLocalizableStringService;
         private readonly IStringMergeService _stringMergeService;
 
         public MergeWindowViewModel(
             IEventAggregator eventAggregator,
+            ILogger logger,
             IFileSystemLocalizableStringService fileSystemLocalizableStringService,
             IHttpLocalizableStringService httpLocalizableStringService,
             IStringMergeService stringMergeService,
@@ -29,6 +32,7 @@ namespace Globe.Client.Localizer.ViewModels
             : base(eventAggregator, localizationService)
         {
             _eventAggregator = eventAggregator;
+            _logger = logger;
             _fileSystemLocalizableStringService = fileSystemLocalizableStringService;
             _httpLocalizableStringService = httpLocalizableStringService;
             _stringMergeService = stringMergeService;
@@ -78,7 +82,7 @@ namespace Globe.Client.Localizer.ViewModels
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message); // inject a logger
+                    _logger.Error(e, "Load Failed");
 
                     _eventAggregator.GetEvent<StatusBarMessageChangedEvent>().Publish(new StatusBarMessage
                     {
@@ -144,7 +148,7 @@ namespace Globe.Client.Localizer.ViewModels
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message); // inject a logger
+                    _logger.Error(e, "Save Failed");
 
                     _eventAggregator.GetEvent<StatusBarMessageChangedEvent>().Publish(new StatusBarMessage
                     {
