@@ -1,28 +1,23 @@
-version: '3.5'
-
-networks:
- localdev:
-  name: localdev
+version: '3.7'
 
 services:
- main-api:
-  build: ./
+ globe-translation-server:
+  build:
+   context: ./
+   dockerfile: globe.translationserver.Dockerfile
   restart: always
   ports:
-   - "5000:80"
-#		depends_on:
-#			- db-server
-  networks:
-   - localdev
-
-#	db-server:
-#		image: microsoft/mssql-server-linux:2017-latest
-#		container_name: db-server
-#		environment:
-#			- ACCEPT_EULA=Y
-#			- MSSQL_SA_PASSWORD=passa
-#			- MSSQL_TCP_PORT=1433
-#		ports:
-#			- "1400:1433"
-#		networks:
-#			- localdev
+   - "7000:80"
+   - "7005:443"
+  environment:
+   ASPNETCORE_ENVIRONMENT: Docker
+   ASPNETCORE_URLS: https://+;http://+
+   ASPNETCORE_HTTPS_PORT: 7005
+   ASPNETCORE_Kestrel__Certificates__Default__Path: /https/globe.translationserver.pfx
+   ASPNETCORE_Kestrel__Certificates__Default__Password: globe
+   ASPNETCORE_JwtAuthenticationOptions__ComeFrom: docker
+   ASPNETCORE_JwtAuthenticationOptions__SecretKey: iNivDmHLpUA223sqsfhqGbMRdRj1PVkH
+   ASPNETCORE_JwtAuthenticationOptions__Issuer: www.identityserver.com
+   ASPNETCORE_JwtAuthenticationOptions__Audience: www.translationserver.com
+  volumes:
+   - /https:/https:rw

@@ -27,7 +27,8 @@ namespace Globe.Client.Localizer
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.Register<ICheckConnectionService, CheckConnectionService>();
-            containerRegistry.Register<IAsyncSecureHttpClient, SecureHttpClient>();
+            containerRegistry.Register<IAsyncBearerAuthenticationHeaderService, BearerAuthenticationHeaderService>();
+            containerRegistry.Register<IAsyncSecureHttpClient, BearerHttpClient>();
             containerRegistry.Register<IProxyLocalizableStringService, ProxyLocalizableStringService>();
             containerRegistry.Register<IFileSystemLocalizableStringService, FileSystemLocalizableStringService>();
             containerRegistry.Register<IHttpLocalizableStringService, HttpLocalizableStringService>();

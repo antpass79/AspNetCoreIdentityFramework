@@ -1,6 +1,5 @@
 ﻿using Globe.Client.Platform.Extensions;
 using Newtonsoft.Json;
-using Prism.Events;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -9,25 +8,25 @@ using System.Threading.Tasks;
 
 namespace Globe.Client.Platform.Services
 {
-    public class SecureHttpClient : IAsyncSecureHttpClient
+    public class BearerHttpClient : IAsyncSecureHttpClient
     {
         private readonly HttpClient _httpClient;
-        private readonly IGlobeDataStorage _globeDataStorage;
+        private readonly IAsyncBearerAuthenticationHeaderService _bearerAuthenticationHeaderService;
 
-        public SecureHttpClient(HttpClient httpClient, IGlobeDataStorage globeDataStorage)
+        public BearerHttpClient(HttpClient httpClient, IAsyncBearerAuthenticationHeaderService bearerAuthenticationHeaderService)
         {
             _httpClient = httpClient;
-            _globeDataStorage = globeDataStorage;
+            _bearerAuthenticationHeaderService = bearerAuthenticationHeaderService;
         }
 
-        public void BaseAddress(string baseAddress)
+        virtual public void BaseAddress(string baseAddress)
         {
             _httpClient.BaseAddress = new Uri(baseAddress);
         }
 
-        async public Task<T> GetAsync<T>(string requestUri)
+        virtual async public Task<T> GetAsync<T>(string requestUri)
         {
-            await UpdateAuthenticationHeaderAsync();
+            await _bearerAuthenticationHeaderService.AddTokenAsync(_httpClient);
 
             var httpResponseMessage = await _httpClient.GetAsync(requestUri);
             if (!httpResponseMessage.IsSuccessStatusCode)
@@ -36,9 +35,9 @@ namespace Globe.Client.Platform.Services
             return await httpResponseMessage.GetValue<T>();
         }
 
-        async public Task<HttpResponseMessage> PostAsync<T>(string requestUri, T data)
+        virtual async public Task<HttpResponseMessage> PostAsync<T>(string requestUri, T data)
         {
-            await UpdateAuthenticationHeaderAsync();
+            await _bearerAuthenticationHeaderService.AddTokenAsync(_httpClient);
 
             var json = JsonConvert.SerializeObject(data);
             var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
@@ -50,9 +49,9 @@ namespace Globe.Client.Platform.Services
             return result;
         }
 
-        async public Task<HttpResponseMessage> PutAsync<T>(string requestUri, T data)
+        virtual async public Task<HttpResponseMessage> PutAsync<T>(string requestUri, T data)
         {
-            await UpdateAuthenticationHeaderAsync();
+            await _bearerAuthenticationHeaderService.AddTokenAsync(_httpClient);
 
             var json = JsonConvert.SerializeObject(data);
             var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
@@ -62,15 +61,6 @@ namespace Globe.Client.Platform.Services
                 throw new Exception();
 
             return result;
-        }
-
-        async private Task UpdateAuthenticationHeaderAsync()
-        {
-            var tokenInfo = await _globeDataStorage.GetAsync();
-            if (tokenInfo != null && !string.IsNullOrWhiteSpace(tokenInfo.Token))
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", tokenInfo.Token);
-            else
-                _httpClient.DefaultRequestHeaders.Authorization = null;
         }
     }
 }

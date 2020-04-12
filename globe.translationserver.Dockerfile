@@ -19,7 +19,4 @@ WORKDIR /app
 
 COPY --from=build /build/Globe.TranslationServer/out/ .
 
-EXPOSE 80
-EXPOSE 443
-
 ENTRYPOINT ["dotnet", "Globe.TranslationServer.dll"]

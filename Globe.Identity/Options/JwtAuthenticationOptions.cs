@@ -7,6 +7,10 @@ namespace Globe.Identity.Options
     public class JwtAuthenticationOptions
     {
         /// <summary>
+        /// Debugging purpose
+        /// </summary>
+        public string ComeFrom { get; set; }
+        /// <summary>
         /// The secret key used for signing the JWT
         /// </summary>
         public string SecretKey { get; set; }
