@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation.AspNetCore;
 using Globe.Identity.AdministrativeDashboard.Server.Data;
+using Globe.Identity.AdministrativeDashboard.Server.Extensions;
 using Globe.Identity.AdministrativeDashboard.Server.Models;
 using Globe.Identity.AdministrativeDashboard.Server.Options;
 using Globe.Identity.AdministrativeDashboard.Server.Repositories;
@@ -21,9 +22,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Serilog;
 using System;
-using System.IO;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Globe.Identity.AdministrativeDashboard.Server
 {
@@ -117,7 +116,7 @@ namespace Globe.Identity.AdministrativeDashboard.Server
                 .AddSingleton(typeof(ILogger), logger);
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider, ILogger logger)
+        public void Configure(IApplicationBuilder app, IServiceProvider serviceProvider, IWebHostEnvironment env, ILogger logger)
         {
             if (env.IsDevelopment())
             {
@@ -151,55 +150,8 @@ namespace Globe.Identity.AdministrativeDashboard.Server
                 endpoints.MapFallbackToFile("index.html");
             });
 
-            CreateRoles(serviceProvider).Wait();
-        }
-
-        private async Task CreateRoles(IServiceProvider serviceProvider)
-        {
-            var RoleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
-            var UserManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            var userSettingsOptions = serviceProvider.GetRequiredService<IOptions<UserSettingsOptions>>();
-
-            var roles = userSettingsOptions.Value.Roles;
-            IdentityResult roleResult;
-
-            foreach (var role in roles)
-            {
-                var roleExist = await RoleManager.RoleExistsAsync(role.Name);
-                if (!roleExist)
-                {
-                    roleResult = await RoleManager.CreateAsync(new ApplicationRole
-                    {
-                        Name = role.Name,
-                        Description = role.Description
-                    });
-                }
-            }
-
-            var powerUser = new ApplicationUser
-            {
-                UserName = userSettingsOptions.Value.UserName,
-            };
-
-            string userPassword = userSettingsOptions.Value.UserPassword;
-            var user = await UserManager.FindByNameAsync(userSettingsOptions.Value.UserName);
-            if (user == null)
-            {
-                var createPowerUser = await UserManager.CreateAsync(powerUser, userPassword);
-                if (createPowerUser.Succeeded)
-                {
-                    foreach (var role in userSettingsOptions.Value.Roles)
-                        await UserManager.AddToRoleAsync(powerUser, role.Name);
-                }
-            }
-            else
-            {
-                foreach (var role in userSettingsOptions.Value.Roles)
-                {
-                    if (!(await UserManager.IsInRoleAsync(user, role.Name)))
-                        await UserManager.AddToRoleAsync(powerUser, role.Name);
-                }
-            }
+            app.ApplyMigrationsAsync().Wait();
+            serviceProvider.CreateAdminAsync().Wait();
         }
     }
 }

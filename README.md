@@ -64,8 +64,8 @@ It's important to see the volumes mapping in the *docker-compose.yml*:
           volumes:
            - /https:/https:rw
 
-On my PC I used Docker ToolBox with VirtualBox. */https/* is the name that maps the phisical path on the computer. The mapping is shown in *Settings* of the virtual machine used, in the section *Shared Folders*.
-In that path there is the *.pfx* certificate used by the https of the sites
+On my PC I used *Docker ToolBox* with *VirtualBox*. */https/* is the name that maps the physical path on the computer. The mapping is shown in *Settings* of the virtual machine used, in the section *Shared Folders*.
+In that path must there be the *.pfx* certificate used by the https of the sites
 
 *Example*
 
@@ -92,7 +92,7 @@ For Globe.TranslationServer project I have:
 
 I mapped */https* of my PC on */https:rw* of the Docker. And */https* on my PC is mapped by VirtualBox on a phisical path.
 
-Then I specified the *ASPNETCORE_Kestrel__Certificates__Default__Path* where there is the *.pfx* certificate. The certificate is a development one generate automatically by .NET during the first running in https mode (a message box appears). And then I exported it (there are many tutorials for doing that, see References). 
+Then I specified the *ASPNETCORE_Kestrel__Certificates__Default__Path* where there is the *.pfx* certificate. The certificate is a development one generate automatically by .NET during the first running in https mode (a message box appears). And then I exported it with *mmc* command and the *Certificates* snap-in (there are many tutorials for doing that, see References). 
 
 After the above considerations, it's possible to run the System on Docker. Follow the next steps:
 
@@ -114,6 +114,13 @@ After the above considerations, it's possible to run the System on Docker. Follo
     with:
 
                     containerRegistry.Register<IAsyncSecureHttpClient, ByPassCertificateHttpClient>();
+- Inject the right http client service in order to by pass the certificate. In *App.xaml.cs*, change the line:
+
+                    containerRegistry.Register<IAsyncLoginService, BearerHttpClient>();
+
+    with:
+
+                    containerRegistry.Register<IAsyncLoginService, ByPassCertificateHttpLoginService>();
 
 
 - Build and Run the client.
@@ -122,4 +129,14 @@ After the above considerations, it's possible to run the System on Docker. Follo
 
 ### Docker
 
-- https://medium.com/@the.green.man/set-up-https-on-local-with-net-core-and-docker-7a41f030fc76
+- <https://medium.com/@the.green.man/set-up-https-on-local-with-net-core-and-docker-7a41f030fc76>
+- <https://jack-vanlightly.com/blog/2017/9/24/how-to-connect-to-your-local-sql-server-from-inside-docker>
+
+### Certificates
+
+- <https://www.meziantou.net/custom-certificate-validation-in-dotnet.htm>
+
+### Database
+
+- <https://support.esri.com/en/technical-article/000009958>
+- <https://social.msdn.microsoft.com/Forums/vstudio/en-US/cbb31b88-8d95-4afe-8ce1-5290aedc1e46/login-failed-for-user-sa-net-sqlclient-data-provider?forum=sqldataaccess>
