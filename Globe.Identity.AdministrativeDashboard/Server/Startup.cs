@@ -150,8 +150,8 @@ namespace Globe.Identity.AdministrativeDashboard.Server
                 endpoints.MapFallbackToFile("index.html");
             });
 
-            app.ApplyMigrationsAsync().Wait();
-            serviceProvider.CreateAdminAsync().Wait();
+            //app.ApplyMigrationsAsync().Wait();
+            //serviceProvider.CreateAdminAsync().Wait();
         }
     }
 }

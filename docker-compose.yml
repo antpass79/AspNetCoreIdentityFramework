@@ -23,8 +23,6 @@ services:
    - /https:/https:rw
 
  globe-identity-server:
-  depends_on:
-   - globe-identity-database
   build:
    context: ./
    dockerfile: globe.identityserver.Dockerfile
@@ -36,17 +34,18 @@ services:
    ASPNETCORE_ENVIRONMENT: Docker
    ASPNETCORE_URLS: https://+;http://+
    ASPNETCORE_HTTPS_PORT: 8005
-   ASPNETCORE_Kestrel__Certificates__Default__Path: /https/globe.identity.administrativedashboard.server.pfx
+   ASPNETCORE_Kestrel__Certificates__Default__Path: /https/globe.translationserver.pfx
    ASPNETCORE_Kestrel__Certificates__Default__Password: globe
    ASPNETCORE_JwtAuthenticationOptions__ComeFrom: docker
    ASPNETCORE_JwtAuthenticationOptions__SecretKey: iNivDmHLpUA223sqsfhqGbMRdRj1PVkH
    ASPNETCORE_JwtAuthenticationOptions__Issuer: www.identityserver.com
    ASPNETCORE_JwtAuthenticationOptions__Audience: www.translationserver.com
-#   ASPNETCORE_ConnectionStrings__DefaultSqlServerConnection: "Server=globe-identity-database,1433;Database=IdentityAdministrativeDashboard;User=sa;Password=MyPassword001;"
-   ASPNETCORE_ConnectionStrings__DefaultSqlServerConnection: "Server=192.168.1.193\\SQLEXPRESS,59116;Initial Catalog=IdentityAdministrativeDashboard;User ID=globe;Password=globe;;Persist Security Info=False"
-   ASPNETCORE_UserSettingsOptions_CreateAdmin: "True"
-   ASPNETCORE_UserSettingsOptions_UserName: admin
-   ASPNETCORE_UserSettingsOptions_UserPassword: admin
+   ASPNETCORE_ConnectionStrings__DefaultSqlServerConnection: "Server=192.168.99.100,1433;Database=IdentityAdministrativeDashboard;User=sa;Password=MyPassword001;"
+   #connection string for database running on local machine
+   #ASPNETCORE_ConnectionStrings__DefaultSqlServerConnection: "Server=192.168.1.193\\SQLEXPRESS,59116;Initial Catalog=IdentityAdministrativeDashboard;User ID=globe;Password=globe;;Persist Security Info=False"
+   ASPNETCORE_UserSettingsOptions__CreateAdmin: "True"
+   ASPNETCORE_UserSettingsOptions__UserName: admin
+   ASPNETCORE_UserSettingsOptions__UserPassword: admin
   volumes:
    - /https:/https:rw
 
@@ -57,3 +56,6 @@ services:
   environment:
    SA_PASSWORD: MyPassword001
    ACCEPT_EULA: Y
+   MSSQL_PID: Express
+  volumes:
+   - /data:/data:rw

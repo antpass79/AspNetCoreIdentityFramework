@@ -131,6 +131,7 @@ After the above considerations, it's possible to run the System on Docker. Follo
 
 - <https://medium.com/@the.green.man/set-up-https-on-local-with-net-core-and-docker-7a41f030fc76>
 - <https://jack-vanlightly.com/blog/2017/9/24/how-to-connect-to-your-local-sql-server-from-inside-docker>
+- <https://www.google.com/search?q=connect+to+a+sql+server+in+docker&oq=connect+to+a+sql+server+in+docker&aqs=chrome..69i57j0l4j69i60l3.7644j0j7&sourceid=chrome&ie=UTF-8#kpvalbx=_O9CVXuXsGMrorgSL2bS4Aw64>
 
 ### Certificates
 
@@ -140,3 +141,4 @@ After the above considerations, it's possible to run the System on Docker. Follo
 
 - <https://support.esri.com/en/technical-article/000009958>
 - <https://social.msdn.microsoft.com/Forums/vstudio/en-US/cbb31b88-8d95-4afe-8ce1-5290aedc1e46/login-failed-for-user-sa-net-sqlclient-data-provider?forum=sqldataaccess>
+- <https://www.c-sharpcorner.com/article/entity-framework-core-in-docker-container-part-ii-sqlite/>
