@@ -30,7 +30,31 @@ steps:
     patchVersion: 0
 
 - task: DotNetCoreCLI@2
-  displayName: 'Push $(projectName).dll in $(azureDevOpsProjectName)/$(feedName) feed'
+  displayName: 'Build Globe.BusinessLogic'
+  inputs:
+    command: 'pack'
+    arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
+    packagesToPack: 'Globe.BusinessLogic/Globe.BusinessLogic.csproj'
+    versioningScheme: byPrereleaseNumber
+    versionEnvVar: byPrereleaseNumber
+    majorVersion: 0
+    minorVersion: 1
+    patchVersion: 0
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build Globe.Infrastructure.EFCore'
+  inputs:
+    command: 'pack'
+    arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
+    packagesToPack: 'Globe.Infrastructure.EFCore/Globe.Infrastructure.EFCore.csproj'
+    versioningScheme: byPrereleaseNumber
+    versionEnvVar: byPrereleaseNumber
+    majorVersion: 0
+    minorVersion: 1
+    patchVersion: 0
+
+- task: DotNetCoreCLI@2
+  displayName: 'Push artifacts in $(azureDevOpsProjectName)/$(feedName) feed'
   inputs:
     command: 'push'
     nuGetFeedType: 'internal'
