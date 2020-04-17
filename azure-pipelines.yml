@@ -10,7 +10,7 @@ variables:
 steps:
 
     - task: UseDotNet@2 
-      displayName: "Build Globe.Identity Framework"
+      displayName: ".NET Core 3.1.x"
       inputs:
         version: '3.1.x'
         packageType: sdk
