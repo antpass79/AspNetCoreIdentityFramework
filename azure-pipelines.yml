@@ -29,7 +29,7 @@ steps:
     patchVersion: 0
 
 - task: DotNetCoreCLI@2
-  displayName: 'Put $(projectName).dll in $(feedName) feed'
+  displayName: 'Push $(projectName).dll in $(projectName)/$(feedName) feed'
   inputs:
     command: 'push'
     nuGetFeedType: 'internal'
@@ -37,3 +37,4 @@ steps:
     publishVstsFeed: '$(projectName)/$(feedName)'
 
 - task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifacts'
