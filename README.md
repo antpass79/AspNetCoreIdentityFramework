@@ -133,6 +133,10 @@ After the above considerations, it's possible to run the System on Docker. Follo
 - <https://jack-vanlightly.com/blog/2017/9/24/how-to-connect-to-your-local-sql-server-from-inside-docker>
 - <https://www.google.com/search?q=connect+to+a+sql+server+in+docker&oq=connect+to+a+sql+server+in+docker&aqs=chrome..69i57j0l4j69i60l3.7644j0j7&sourceid=chrome&ie=UTF-8#kpvalbx=_O9CVXuXsGMrorgSL2bS4Aw64>
 
+### Azure DevOps
+
+- <https://dzone.com/articles/azure-devops-agent-with-docker-compose>
+
 ### Certificates
 
 - <https://www.meziantou.net/custom-certificate-validation-in-dotnet.htm>
@@ -142,3 +146,4 @@ After the above considerations, it's possible to run the System on Docker. Follo
 - <https://support.esri.com/en/technical-article/000009958>
 - <https://social.msdn.microsoft.com/Forums/vstudio/en-US/cbb31b88-8d95-4afe-8ce1-5290aedc1e46/login-failed-for-user-sa-net-sqlclient-data-provider?forum=sqldataaccess>
 - <https://www.c-sharpcorner.com/article/entity-framework-core-in-docker-container-part-ii-sqlite/>
+- <https://docs.microsoft.com/en-us/dotnet/architecture/microservices/multi-container-microservice-net-applications/database-server-container>
