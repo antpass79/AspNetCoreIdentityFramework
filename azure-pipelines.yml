@@ -14,6 +14,7 @@ variables:
   folderName: 'Globe.Identity'
   projectName: 'Globe.Identity'
   feedName: 'Globe-UltraLocalizer'
+  azureDevOpsProjectName: 'UltraLocalizer'
 
 steps:
 - task: DotNetCoreCLI@2
@@ -29,12 +30,12 @@ steps:
     patchVersion: 0
 
 - task: DotNetCoreCLI@2
-  displayName: 'Push $(projectName).dll in $(projectName)/$(feedName) feed'
+  displayName: 'Push $(projectName).dll in $(azureDevOpsProjectName)/$(feedName) feed'
   inputs:
     command: 'push'
     nuGetFeedType: 'internal'
     packagesToPush: '$(build.artifactStagingDirectory)/*.nupkg'
-    publishVstsFeed: '$(projectName)/$(feedName)'
+    publishVstsFeed: '$(azureDevOpsProjectName)/$(feedName)'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifacts'
