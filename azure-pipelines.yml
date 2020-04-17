@@ -23,7 +23,8 @@ steps:
         command: test
         projects: '**/*.Tests/*.csproj'
         arguments: '--configuration $(buildConfiguration)'
-
+        verbosityRestore: 'diagnostic'
+        includeNuGetOrg: true
     - task: DotNetCoreCLI@2
       displayName: "Publish"
       inputs:
