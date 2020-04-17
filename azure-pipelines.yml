@@ -11,30 +11,16 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  folderName: 'Globe.Identity'
-  projectName: 'Globe.Identity'
   feedName: 'Globe-UltraLocalizer'
   azureDevOpsProjectName: 'UltraLocalizer'
 
 steps:
 - task: DotNetCoreCLI@2
-  displayName: 'Build $(projectName)'
+  displayName: 'Build Globe.Identity'
   inputs:
     command: 'pack'
     arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
-    packagesToPack: '$(folderName)/$(projectName).csproj'
-    versioningScheme: byPrereleaseNumber
-    versionEnvVar: byPrereleaseNumber
-    majorVersion: 0
-    minorVersion: 1
-    patchVersion: 0
-
-- task: DotNetCoreCLI@2
-  displayName: 'Build Globe.BusinessLogic'
-  inputs:
-    command: 'pack'
-    arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
-    packagesToPack: 'Globe.BusinessLogic/Globe.BusinessLogic.csproj'
+    packagesToPack: 'Globe.Identity/Globe.Identity.csproj'
     versioningScheme: byPrereleaseNumber
     versionEnvVar: byPrereleaseNumber
     majorVersion: 0
@@ -47,6 +33,18 @@ steps:
     command: 'pack'
     arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
     packagesToPack: 'Globe.Infrastructure.EFCore/Globe.Infrastructure.EFCore.csproj'
+    versioningScheme: byPrereleaseNumber
+    versionEnvVar: byPrereleaseNumber
+    majorVersion: 0
+    minorVersion: 1
+    patchVersion: 0
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build Globe.BusinessLogic'
+  inputs:
+    command: 'pack'
+    arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
+    packagesToPack: 'Globe.BusinessLogic/Globe.BusinessLogic.csproj'
     versioningScheme: byPrereleaseNumber
     versionEnvVar: byPrereleaseNumber
     majorVersion: 0
