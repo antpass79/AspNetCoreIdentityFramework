@@ -11,7 +11,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  feedName: 'Globe-UltraLocalizer'
+  feedName: 'AspNetCoreIdentityFramework'
   azureDevOpsProjectName: 'AspNetCoreIdentityFramework'
 
 steps:
