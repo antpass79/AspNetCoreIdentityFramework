@@ -12,7 +12,7 @@ pool:
 variables:
   buildConfiguration: 'Release'
   feedName: 'Globe-UltraLocalizer'
-  azureDevOpsProjectName: 'UltraLocalizer'
+  azureDevOpsProjectName: 'AspNetCoreIdentityFramework'
 
 steps:
 - task: DotNetCoreCLI@2
