@@ -16,6 +16,12 @@ variables:
 
 steps:
 - task: DotNetCoreCLI@2
+  displayName: Restore packages
+  inputs:
+    command: restore
+    projects: '**/*.sln'
+
+- task: DotNetCoreCLI@2
   displayName: 'Build AspNetCoreIdentityFramework Solution'
   inputs:
     command: 'build'
