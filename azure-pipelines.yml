@@ -1,3 +1,8 @@
+# .NET Core
+# Build and test .NET Core projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
 trigger:
 - master
 
@@ -6,34 +11,77 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
+  feedName: 'AspNetCoreIdentityFramework'
+  azureDevOpsProjectName: 'AspNetCoreIdentityFramework'
 
 steps:
+- task: DotNetCoreCLI@2
+  displayName: Restore packages
+  inputs:
+    command: restore
+    projects: '**/*.sln'
 
-    - task: UseDotNet@2 
-      displayName: "Build Globe.Identity Framework"
-      inputs:
-        version: '3.1.x'
-        packageType: sdk
-    - script: dotnet build --configuration $(buildConfiguration)
-      displayName: 'dotnet build $(buildConfiguration)'
+- task: DotNetCoreCLI@2
+  displayName: 'Build AspNetCoreIdentityFramework Solution'
+  inputs:
+    configuration: $(buildConfiguration)
+    command: 'build'
+    projects: AspNetCoreIdentityFramework.sln
 
-    - task: DotNetCoreCLI@2
-      displayName: "Test"
-      inputs:
-        command: test
-        projects: '**/*.Tests/*.csproj'
-        arguments: '--configuration $(buildConfiguration)'
+- task: VSTest@2
+  displayName: 'Run all Tests'
+  inputs:
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: |
+      **\Globe.*.Tests.dll
+      !**\Globe.Identity.MultiTenant.dll
+      !**\*TestAdapter.dll
+      !**\obj\**
+    searchFolder: '$(System.DefaultWorkingDirectory)'
 
-    - task: DotNetCoreCLI@2
-      displayName: "Publish"
-      inputs:
-        command: 'publish'
-        publishWebProjects: true
-        arguments: '-r linux-x64 --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-        zipAfterPublish: true
+- task: DotNetCoreCLI@2
+  displayName: 'Pack Globe.Identity'
+  inputs:
+    command: 'pack'
+    arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
+    packagesToPack: 'Globe.Identity/Globe.Identity.csproj'
+    versioningScheme: byPrereleaseNumber
+    versionEnvVar: byPrereleaseNumber
+    majorVersion: 0
+    minorVersion: 1
+    patchVersion: 0
 
-    - task: PublishBuildArtifacts@1
-      displayName: "Upload Artifacts"
-      inputs:
-        pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-        artifactName: 'hanselminutes'
+- task: DotNetCoreCLI@2
+  displayName: 'Pack Globe.Infrastructure.EFCore'
+  inputs:
+    command: 'pack'
+    arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
+    packagesToPack: 'Globe.Infrastructure.EFCore/Globe.Infrastructure.EFCore.csproj'
+    versioningScheme: byPrereleaseNumber
+    versionEnvVar: byPrereleaseNumber
+    majorVersion: 0
+    minorVersion: 1
+    patchVersion: 0
+
+- task: DotNetCoreCLI@2
+  displayName: 'Pack Globe.BusinessLogic'
+  inputs:
+    command: 'pack'
+    arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
+    packagesToPack: 'Globe.BusinessLogic/Globe.BusinessLogic.csproj'
+    versioningScheme: byPrereleaseNumber
+    versionEnvVar: byPrereleaseNumber
+    majorVersion: 0
+    minorVersion: 1
+    patchVersion: 0
+
+- task: DotNetCoreCLI@2
+  displayName: 'Push artifacts in $(azureDevOpsProjectName)/$(feedName) feed'
+  inputs:
+    command: 'push'
+    nuGetFeedType: 'internal'
+    packagesToPush: '$(build.artifactStagingDirectory)/*.nupkg'
+    publishVstsFeed: '$(azureDevOpsProjectName)/$(feedName)'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifacts'
