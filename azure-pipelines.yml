@@ -24,6 +24,7 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: 'Build AspNetCoreIdentityFramework Solution'
   inputs:
+    configuration: $(buildConfiguration)
     command: 'build'
     projects: AspNetCoreIdentityFramework.sln
 
@@ -32,7 +33,7 @@ steps:
   inputs:
     testSelector: 'testAssemblies'
     testAssemblyVer2: |
-      **\*.Tests.dll
+      **\*Tests.dll
       !**\*TestAdapter.dll
       !**\obj\**
     searchFolder: '$(System.DefaultWorkingDirectory)'
