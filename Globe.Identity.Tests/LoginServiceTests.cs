@@ -19,12 +19,12 @@ namespace Globe.Identity.Tests
             var loginService = new LoginService(userManager, signInManager, jwtIssuerOptions, jwtTokenEncoder);
             var loginResult = await loginService.LoginAsync(new Credentials
             {
-                UserName = "user3",
-                Password = "user3@email.com"
+                UserName = TestConstants.USER_NAME_user3,
+                Password = TestConstants.PASSWORD_user3ETemailDOTcom
             });
 
             Assert.False(loginResult.Successful);
-            Assert.Equal("Invalid credentials", loginResult.Error);
+            Assert.Equal(TestConstants.RETURN_VALUE_Invalid_credentials, loginResult.Error);
         }
 
         [Fact]
@@ -39,12 +39,12 @@ namespace Globe.Identity.Tests
             var loginService = new LoginService(userManager, signInManager, jwtIssuerOptions, jwtTokenEncoder);
             var loginResult = await loginService.LoginAsync(new Credentials
             {
-                UserName = "user2",
-                Password = "user2@passwordNotValid"
+                UserName = TestConstants.USER_NAME_user2,
+                Password = TestConstants.PASSWORD_user2ETpasswordNotValid
             });
 
             Assert.False(loginResult.Successful);
-            Assert.Equal("Invalid credentials", loginResult.Error);
+            Assert.Equal(TestConstants.RETURN_VALUE_Invalid_credentials, loginResult.Error);
         }
 
         [Fact]
@@ -59,8 +59,8 @@ namespace Globe.Identity.Tests
             var loginService = new LoginService(userManager, signInManager, jwtIssuerOptions, jwtTokenEncoder);
             var loginResult = await loginService.LoginAsync(new Credentials
             {
-                UserName = "user2",
-                Password = "user2@password"
+                UserName = TestConstants.USER_NAME_user2,
+                Password = TestConstants.PASSWORD_user2ETpassword
             });
 
             Assert.True(loginResult.Successful);
@@ -77,11 +77,7 @@ namespace Globe.Identity.Tests
             var jwtTokenEncoder = new JwtTokenEncoder<GlobeUser>(userManager, jwtIssuerOptions);
 
             var loginService = new LoginService(userManager, signInManager, jwtIssuerOptions, jwtTokenEncoder);
-            await loginService.LogoutAsync(new Credentials
-            {
-                UserName = "notExists",
-                Password = "notExists@password"
-            });
+            await loginService.LogoutAsync();
 
             Assert.True(false);
         }
@@ -98,10 +94,17 @@ namespace Globe.Identity.Tests
             var loginService = new LoginService(userManager, signInManager, jwtIssuerOptions, jwtTokenEncoder);
             await loginService.LoginAsync(new Credentials
             {
-                UserName = "user2",
-                Password = "user2@passwordNotValid"
+                UserName = TestConstants.USER_NAME_user2,
+                Password = TestConstants.PASSWORD_user2ETpasswordNotValid
             });
 
+            var loggedUser = await userManager.FindByNameAsync(TestConstants.USER_NAME_user2);
+
+            await loginService.LogoutAsync();
+
+            var notLoggedUser = await userManager.FindByNameAsync(TestConstants.USER_NAME_user2);
+
+            Assert.True(loggedUser != null);
             Assert.True(false);
         }
     }

@@ -30,12 +30,9 @@ namespace Globe.Identity.Server.Controllers
         }
 
         [HttpDelete("logout")]
-        async public Task<IActionResult> Delete([FromBody] Credentials credentials)
+        async public Task<IActionResult> Delete()
         {
-            if (!ModelState.IsValid)
-                throw new ArgumentException("Invalid Credentials", "credentials");
-
-            await _loginService.LogoutAsync(credentials);
+            await _loginService.LogoutAsync();
             return Ok();
         }
     }

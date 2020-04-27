@@ -62,7 +62,7 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Controllers
         [Authorize]
         async public Task Delete()
         {
-            await _loginService.LogoutAsync(new Credentials());
+            await _loginService.LogoutAsync();
         }
 
         async static Task ApplyMigrationsAsync(ApplicationDbContext dbContext)

@@ -41,7 +41,7 @@ namespace Globe.Identity.Services
             });
         }
 
-        async public Task LogoutAsync(Credentials credentials)
+        async public Task LogoutAsync()
         {
             await _signInManager.SignOutAsync();
         }
