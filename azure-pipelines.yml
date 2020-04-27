@@ -16,7 +16,23 @@ variables:
 
 steps:
 - task: DotNetCoreCLI@2
-  displayName: 'Build Globe.Identity'
+  displayName: 'Build AspNetCoreIdentityFramework Solution'
+  inputs:
+    command: 'build'
+    projects: AspNetCoreIdentityFramework.sln
+
+- task: VSTest@2
+  displayName: 'Run all Tests'
+  inputs:
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: |
+      **\*.Tests.dll
+      !**\*TestAdapter.dll
+      !**\obj\**
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Pack Globe.Identity'
   inputs:
     command: 'pack'
     arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
@@ -28,7 +44,7 @@ steps:
     patchVersion: 0
 
 - task: DotNetCoreCLI@2
-  displayName: 'Build Globe.Infrastructure.EFCore'
+  displayName: 'Pack Globe.Infrastructure.EFCore'
   inputs:
     command: 'pack'
     arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
@@ -40,7 +56,7 @@ steps:
     patchVersion: 0
 
 - task: DotNetCoreCLI@2
-  displayName: 'Build Globe.BusinessLogic'
+  displayName: 'Pack Globe.BusinessLogic'
   inputs:
     command: 'pack'
     arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
