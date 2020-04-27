@@ -34,6 +34,7 @@ steps:
     testSelector: 'testAssemblies'
     testAssemblyVer2: |
       **\Globe.*.Tests.dll
+      !**\Globe.Identity.MultiTenant.dll
       !**\*TestAdapter.dll
       !**\obj\**
     searchFolder: '$(System.DefaultWorkingDirectory)'
