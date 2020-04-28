@@ -1,6 +1,7 @@
 ﻿using Globe.Identity.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -13,7 +14,9 @@ namespace Globe.Identity.Security
     {
         protected UserManager<TUser> UserManager { get; }
         protected IOptions<JwtAuthenticationOptions> Options { get; }
-        public JwtTokenEncoder(UserManager<TUser> userManager, IOptions<JwtAuthenticationOptions> options)
+        public JwtTokenEncoder(
+            UserManager<TUser> userManager,
+            IOptions<JwtAuthenticationOptions> options)
         {
             UserManager = userManager;
             Options = options;
@@ -36,7 +39,12 @@ namespace Globe.Identity.Security
 
         async virtual protected Task<IEnumerable<Claim>> BuildClaimsAsync(TUser input)
         {
-            return await Task.FromResult<IEnumerable<Claim>>(null);
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString())
+            };
+
+            return await Task.FromResult<IEnumerable<Claim>>(claims);
         }
     }
 }

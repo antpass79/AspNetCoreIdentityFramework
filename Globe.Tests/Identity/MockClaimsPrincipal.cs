@@ -1,19 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
 
-namespace Globe.Tests.Mocks
+namespace Globe.Tests.Identity
 {
     public class MockClaimsPrincipal
     {
-        public static ClaimsPrincipal Mock()
+        public ClaimsPrincipal Mock()
         {
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Name, "username"),
-                new Claim(ClaimTypes.NameIdentifier, "userId"),
-                new Claim("name", "John Doe"),
+                new Claim(ClaimTypes.NameIdentifier, GlobeIdentityContants.CLAIMS_NAME_IDENTITY),
             };
-            var identity = new ClaimsIdentity(claims, "TestAuthType");
+            var identity = new ClaimsIdentity(claims, GlobeIdentityContants.AUTHENTICATION_TYPE_BEARER);
             var claimsPrincipal = new ClaimsPrincipal(identity);
 
             return claimsPrincipal;

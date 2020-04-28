@@ -3,14 +3,14 @@ using Globe.Identity.Security;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Globe.Tests.Mocks
+namespace Globe.Tests.Identity
 {
     public class MockJwtAuthenticationOptions
     {
         public IOptions<JwtAuthenticationOptions> Mock()
         {
             var signingCredentials = new SigningCredentialsBuilder()
-                .AddSecretKey(IdentityContants.SECRET_KEY)
+                .AddSecretKey(GlobeIdentityContants.SECRET_KEY)
                 .AddAlgorithm(SecurityAlgorithms.HmacSha256)
                 .Build();
 

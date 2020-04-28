@@ -1,7 +1,7 @@
 ﻿using Globe.Identity.Options;
 using System.Collections.Generic;
 
-namespace Globe.Tests.Mocks
+namespace Globe.Tests.Identity
 {
     static public class Constants
     {
