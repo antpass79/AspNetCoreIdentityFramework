@@ -136,6 +136,9 @@ After the above considerations, it's possible to run the System on Docker. Follo
 ### Azure DevOps
 
 - <https://dzone.com/articles/azure-devops-agent-with-docker-compose>
+- <http://thecodemanual.pl/2020/03/26/gated-check-in-build-on-azure-devops-for-dotnet-core-app.html>
+- <https://docs.microsoft.com/en-us/azure/devops/artifacts/feeds/feed-permissions?view=azure-devops>
+- <https://stackoverflow.com/questions/60753041/use-artifact-feed-from-another-project-within-same-organisation-as-upstream-so>
 
 ### Certificates
 
@@ -147,3 +150,4 @@ After the above considerations, it's possible to run the System on Docker. Follo
 - <https://social.msdn.microsoft.com/Forums/vstudio/en-US/cbb31b88-8d95-4afe-8ce1-5290aedc1e46/login-failed-for-user-sa-net-sqlclient-data-provider?forum=sqldataaccess>
 - <https://www.c-sharpcorner.com/article/entity-framework-core-in-docker-container-part-ii-sqlite/>
 - <https://docs.microsoft.com/en-us/dotnet/architecture/microservices/multi-container-microservice-net-applications/database-server-container>
+- <https://enterprisecraftsmanship.com/posts/database-versioning-best-practices/>
