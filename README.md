@@ -133,6 +133,10 @@ After the above considerations, it's possible to run the System on Docker. Follo
 - <https://jack-vanlightly.com/blog/2017/9/24/how-to-connect-to-your-local-sql-server-from-inside-docker>
 - <https://www.google.com/search?q=connect+to+a+sql+server+in+docker&oq=connect+to+a+sql+server+in+docker&aqs=chrome..69i57j0l4j69i60l3.7644j0j7&sourceid=chrome&ie=UTF-8#kpvalbx=_O9CVXuXsGMrorgSL2bS4Aw64>
 
+### Git
+
+- <https://www.marcolombardo.com/blog/open/source/2019/03/13/iniziare-con-git-e-github-la-pull-request.html> (italian)
+
 ### Azure DevOps
 
 - <https://dzone.com/articles/azure-devops-agent-with-docker-compose>
