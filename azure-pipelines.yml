@@ -1,10 +1,14 @@
-# .NET Core
-# Build and test .NET Core projects.
-# Add steps that publish symbols, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+# Standard CI build - which build, test and publish artifact
 
 trigger:
-- master
+  branches:
+    include:
+    - master
+  paths:
+    exclude:
+    - azure-pipelines-gc.yml
+
+pr: none
 
 pool:
   vmImage: 'windows-latest'
