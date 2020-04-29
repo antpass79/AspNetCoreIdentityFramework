@@ -3,12 +3,17 @@
 trigger:
   branches:
     include:
+    - '*'
+    exclude:
+    - master
+
+pr:
+  branches:
+    include:
     - master
   paths:
     exclude:
-    - azure-pipelines-gc.yml
-
-pr: none
+    - azure-pipelines.yml
 
 pool:
   vmImage: 'windows-latest'
