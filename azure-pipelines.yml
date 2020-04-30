@@ -44,18 +44,6 @@ steps:
     searchFolder: '$(System.DefaultWorkingDirectory)'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Pack Globe.Tests'
-  inputs:
-    command: 'pack'
-    arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
-    packagesToPack: 'Globe.Tests/Globe.Tests.csproj'
-    versioningScheme: byPrereleaseNumber
-    versionEnvVar: byPrereleaseNumber
-    majorVersion: 0
-    minorVersion: 1
-    patchVersion: 0
-
-- task: DotNetCoreCLI@2
   displayName: 'Pack Globe.Identity'
   inputs:
     command: 'pack'
@@ -85,6 +73,18 @@ steps:
     command: 'pack'
     arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
     packagesToPack: 'Globe.BusinessLogic/Globe.BusinessLogic.csproj'
+    versioningScheme: byPrereleaseNumber
+    versionEnvVar: byPrereleaseNumber
+    majorVersion: 0
+    minorVersion: 1
+    patchVersion: 0
+
+- task: DotNetCoreCLI@2
+  displayName: 'Pack Globe.Tests'
+  inputs:
+    command: 'pack'
+    arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
+    packagesToPack: 'Globe.Tests/Globe.Tests.csproj'
     versioningScheme: byPrereleaseNumber
     versionEnvVar: byPrereleaseNumber
     majorVersion: 0
