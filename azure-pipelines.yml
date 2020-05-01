@@ -17,9 +17,9 @@ variables:
   buildConfiguration: 'Release'
   feedName: 'AspNetCoreIdentityFramework'
   azureDevOpsProjectName: 'AspNetCoreIdentityFramework'
-  majorVersion: 0
-  minorVersion: 1
-  patchVersion: 0
+  major: 0
+  minor: 1
+  patch: 0
 
 steps:
 - task: DotNetCoreCLI@2
@@ -34,11 +34,6 @@ steps:
     configuration: $(buildConfiguration)
     command: 'build'
     projects: AspNetCoreIdentityFramework.sln
-    versioningScheme: byPrereleaseNumber
-    versionEnvVar: byPrereleaseNumber
-    majorVersion: $(majorVersion)
-    minorVersion: $(minorVersion)
-    patchVersion: $(patchVersion)
 
 - task: VSTest@2
   displayName: 'Run all Tests'
@@ -51,18 +46,58 @@ steps:
       !**\obj\**
     searchFolder: '$(System.DefaultWorkingDirectory)'
 
-- task: CopyFiles@2
-  displayName: 'Copy Artifacts to: $(Build.ArtifactStagingDirectory)'
+- task: DotNetCoreCLI@2
+  displayName: 'Pack Globe.Identity'
   inputs:
-    Contents: |
-      Globe.Identity\bin\**\Globe.Identity.dll
-      Globe.Tests\bin\**\Globe.Tests.dll
-      Globe.Infrastructure.EFCore\bin\**\Globe.Infrastructure.EFCore.dll
-      Globe.BusinessLogic\bin\**\Globe.BusinessLogic.dll
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    command: 'pack'
+    arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
+    packagesToPack: 'Globe.Identity/Globe.Identity.csproj'
+    versioningScheme: byPrereleaseNumber
+    versionEnvVar: byPrereleaseNumber
+    majorVersion: $(major)
+    minorVersion: $(minor)
+    patchVersion: $(patch)
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifacts'
-  inputs:   
-    pathToPublish: '$(Build.ArtifactStagingDirectory)'
-    artifactName: '$(azureDevOpsProjectName)/$(feedName)'
+- task: DotNetCoreCLI@2
+  displayName: 'Pack Globe.Infrastructure.EFCore'
+  inputs:
+    command: 'pack'
+    arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
+    packagesToPack: 'Globe.Infrastructure.EFCore/Globe.Infrastructure.EFCore.csproj'
+    versioningScheme: byPrereleaseNumber
+    versionEnvVar: byPrereleaseNumber
+    majorVersion: $(major)
+    minorVersion: $(minor)
+    patchVersion: $(patch)
+
+- task: DotNetCoreCLI@2
+  displayName: 'Pack Globe.BusinessLogic'
+  inputs:
+    command: 'pack'
+    arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
+    packagesToPack: 'Globe.BusinessLogic/Globe.BusinessLogic.csproj'
+    versioningScheme: byPrereleaseNumber
+    versionEnvVar: byPrereleaseNumber
+    majorVersion: $(major)
+    minorVersion: $(minor)
+    patchVersion: $(patch)
+
+- task: DotNetCoreCLI@2
+  displayName: 'Pack Globe.Tests'
+  inputs:
+    command: 'pack'
+    arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
+    packagesToPack: 'Globe.Tests/Globe.Tests.csproj'
+    versioningScheme: byPrereleaseNumber
+    versionEnvVar: byPrereleaseNumber
+    majorVersion: $(major)
+    minorVersion: $(minor)
+    patchVersion: $(patch)
+
+- task: DotNetCoreCLI@2
+  displayName: 'Push artifacts in $(azureDevOpsProjectName)/$(feedName) feed'
+  inputs:
+    command: 'push'
+    nuGetFeedType: 'internal'
+    packagesToPush: '$(build.artifactStagingDirectory)/*.nupkg'
+    publishVstsFeed: '$(azureDevOpsProjectName)/$(feedName)'
