@@ -143,6 +143,7 @@ After the above considerations, it's possible to run the System on Docker. Follo
 - <http://thecodemanual.pl/2020/03/26/gated-check-in-build-on-azure-devops-for-dotnet-core-app.html>
 - <https://docs.microsoft.com/en-us/azure/devops/artifacts/feeds/feed-permissions?view=azure-devops>
 - <https://stackoverflow.com/questions/60753041/use-artifact-feed-from-another-project-within-same-organisation-as-upstream-so>
+- <https://adamtheautomator.com/azure-artifacts-nuget/>
 
 ### Certificates
 

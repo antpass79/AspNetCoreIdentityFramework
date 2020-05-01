@@ -6,9 +6,11 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F4828863-CAE8-4127-907E-4F4877BE5C53}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		azure-pipelines-gc.yml = azure-pipelines-gc.yml
+		azure-pipelines.yml = azure-pipelines.yml
 		docker-compose.yml = docker-compose.yml
-		globe.translationserver.Dockerfile = globe.translationserver.Dockerfile
 		globe.identityserver.Dockerfile = globe.identityserver.Dockerfile
+		globe.translationserver.Dockerfile = globe.translationserver.Dockerfile
 		README.md = README.md
 	EndProjectSection
 EndProject

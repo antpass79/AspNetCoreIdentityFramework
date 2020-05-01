@@ -19,6 +19,29 @@ namespace Globe.Tests.Web
             _httpClient.BaseAddress = new Uri(baseAddress);
         }
 
+        async public Task<T> SendAsync<T>(HttpMethod method, string action, HttpContent content, string accessToken = null)
+        {
+            var result = await SendAsync(method, action, content, accessToken);
+            var json = await result.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<T>(json);
+        }
+
+        async public Task<HttpResponseMessage> SendAsync(HttpMethod method, string action, HttpContent content, string accessToken = null)
+        {
+            if (!string.IsNullOrWhiteSpace(accessToken))
+                _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+
+            var result = await _httpClient.SendAsync(new HttpRequestMessage
+            {
+                Method = method,
+                RequestUri = new Uri(action),
+                Content = content
+            });
+            _httpClient.DefaultRequestHeaders.Remove("Authorization");
+
+            return result;
+        }
+
         async public Task<T> GetAsync<T>(string action, string accessToken = null)
         {
             var result = await GetAsync(action, accessToken);
