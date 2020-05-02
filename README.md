@@ -137,13 +137,24 @@ After the above considerations, it's possible to run the System on Docker. Follo
 
 - <https://www.marcolombardo.com/blog/open/source/2019/03/13/iniziare-con-git-e-github-la-pull-request.html> (italian)
 
-### Azure DevOps
+### Azure DevOps - Dockers
 
 - <https://dzone.com/articles/azure-devops-agent-with-docker-compose>
+
+### Azure DevOps - Gated Checkin
+
 - <http://thecodemanual.pl/2020/03/26/gated-check-in-build-on-azure-devops-for-dotnet-core-app.html>
+
+### Azure DevOps - Artifacts
+
 - <https://docs.microsoft.com/en-us/azure/devops/artifacts/feeds/feed-permissions?view=azure-devops>
 - <https://stackoverflow.com/questions/60753041/use-artifact-feed-from-another-project-within-same-organisation-as-upstream-so>
 - <https://adamtheautomator.com/azure-artifacts-nuget/>
+- <https://cloudblogs.microsoft.com/industry-blog/en-gb/technetuk/2019/06/18/perfecting-continuous-delivery-of-nuget-packages-for-azure-artifacts/>
+
+### Azure DevOps - Pipeline Stages
+
+- <https://focisolutions.com/2020/01/multi-stage-pipelines-azure-devops/>
 
 ### Certificates
 
