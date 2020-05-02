@@ -28,7 +28,7 @@ steps:
   inputs:
     versionSpec: '5.x'
     updateAssemblyInfo: true
-    updateAssemblyInfoFilename: 'Globe.Identity\Properties\AssemblyInfo.cs'
+    updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\Globe.Identity\Properties\AssemblyInfo.cs'
 
 - task: DotNetCoreCLI@2
   displayName: Restore packages
