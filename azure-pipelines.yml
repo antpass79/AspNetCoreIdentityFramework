@@ -20,8 +20,16 @@ variables:
   major: 0
   minor: 1
   patch: 0
+  GitVersion.SemVer: ''
 
 steps:
+- task: UseGitVersion@5
+  displayName: 'Git Version updates AssemblyInfo files before build process'
+  inputs:
+    versionSpec: '5.x'
+    updateAssemblyInfo: true
+    updateAssemblyInfoFilename: 'Globe.Identity/Properties/AssemblyInfo.cs'
+
 - task: DotNetCoreCLI@2
   displayName: Restore packages
   inputs:
@@ -34,6 +42,8 @@ steps:
     configuration: $(buildConfiguration)
     command: 'build'
     projects: AspNetCoreIdentityFramework.sln
+    versioningScheme: byEnvVar
+    versionEnvVar: 'GitVersion.SemVer'
 
 - task: VSTest@2
   displayName: 'Run all Tests'
@@ -52,11 +62,13 @@ steps:
     command: 'pack'
     arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
     packagesToPack: 'Globe.Identity/Globe.Identity.csproj'
-    versioningScheme: byPrereleaseNumber
-    versionEnvVar: byPrereleaseNumber
-    majorVersion: $(major)
-    minorVersion: $(minor)
-    patchVersion: $(patch)
+    versioningScheme: byEnvVar
+    versionEnvVar: 'GitVersion.SemVer'
+    # versioningScheme: byPrereleaseNumber
+    # versionEnvVar: byPrereleaseNumber
+    # majorVersion: $(major)
+    # minorVersion: $(minor)
+    # patchVersion: $(patch)
 
 - task: DotNetCoreCLI@2
   displayName: 'Pack Globe.Infrastructure.EFCore'
