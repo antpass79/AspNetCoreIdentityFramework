@@ -17,9 +17,6 @@ variables:
   buildConfiguration: 'Release'
   feedName: 'AspNetCoreIdentityFramework'
   azureDevOpsProjectName: 'AspNetCoreIdentityFramework'
-  major: 0
-  minor: 1
-  patch: 0
   GitVersion.SemVer: ''
 
 steps:
@@ -80,13 +77,6 @@ steps:
     command: 'pack'
     arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
     packagesToPack: 'Globe.Identity/Globe.Identity.csproj'
-    versioningScheme: byEnvVar
-    versionEnvVar: 'GitVersion.SemVer'
-    # versioningScheme: byPrereleaseNumber
-    # versionEnvVar: byPrereleaseNumber
-    # majorVersion: $(major)
-    # minorVersion: $(minor)
-    # patchVersion: $(patch)
 
 - task: DotNetCoreCLI@2
   displayName: 'Pack Globe.Infrastructure.EFCore'
@@ -94,11 +84,6 @@ steps:
     command: 'pack'
     arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
     packagesToPack: 'Globe.Infrastructure.EFCore/Globe.Infrastructure.EFCore.csproj'
-    versioningScheme: byPrereleaseNumber
-    versionEnvVar: byPrereleaseNumber
-    majorVersion: $(major)
-    minorVersion: $(minor)
-    patchVersion: $(patch)
 
 - task: DotNetCoreCLI@2
   displayName: 'Pack Globe.BusinessLogic'
@@ -106,11 +91,6 @@ steps:
     command: 'pack'
     arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
     packagesToPack: 'Globe.BusinessLogic/Globe.BusinessLogic.csproj'
-    versioningScheme: byPrereleaseNumber
-    versionEnvVar: byPrereleaseNumber
-    majorVersion: $(major)
-    minorVersion: $(minor)
-    patchVersion: $(patch)
 
 - task: DotNetCoreCLI@2
   displayName: 'Pack Globe.Tests'
@@ -118,11 +98,6 @@ steps:
     command: 'pack'
     arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
     packagesToPack: 'Globe.Tests/Globe.Tests.csproj'
-    versioningScheme: byPrereleaseNumber
-    versionEnvVar: byPrereleaseNumber
-    majorVersion: $(major)
-    minorVersion: $(minor)
-    patchVersion: $(patch)
 
 - task: DotNetCoreCLI@2
   displayName: 'Push artifacts in $(azureDevOpsProjectName)/$(feedName) feed'
