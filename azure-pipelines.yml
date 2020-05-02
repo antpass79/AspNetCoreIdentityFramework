@@ -10,9 +10,6 @@ trigger:
 
 pr: none
 
-pool:
-  vmImage: 'windows-latest'
-
 variables:
   buildConfiguration: 'Release'
   feedName: 'AspNetCoreIdentityFramework'
@@ -53,6 +50,8 @@ stages:
 
 - stage: Building
   displayName: Build Solution
+  pool:
+    vmImage: 'windows-latest'
   jobs:
   - job: 
     displayName: ' Restore packages'
