@@ -24,11 +24,29 @@ variables:
 
 steps:
 - task: UseGitVersion@5
-  displayName: 'Git Version updates AssemblyInfo files before build process'
+  displayName: 'Git Version updates AssemblyInfo for Globe.Identity'
   inputs:
     versionSpec: '5.x'
     updateAssemblyInfo: true
     updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\Globe.Identity\Properties\AssemblyInfo.cs'
+- task: UseGitVersion@5
+  displayName: 'Git Version updates AssemblyInfo for Globe.Tests'
+  inputs:
+    versionSpec: '5.x'
+    updateAssemblyInfo: true
+    updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\Globe.Tests\Properties\AssemblyInfo.cs'
+- task: UseGitVersion@5
+  displayName: 'Git Version updates AssemblyInfo for Globe.BusinessLogic'
+  inputs:
+    versionSpec: '5.x'
+    updateAssemblyInfo: true
+    updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\Globe.BusinessLogic\Properties\AssemblyInfo.cs'
+- task: UseGitVersion@5
+  displayName: 'Git Version updates AssemblyInfo for Globe.Infrastructure.EFCore'
+  inputs:
+    versionSpec: '5.x'
+    updateAssemblyInfo: true
+    updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\Globe.Infrastructure.EFCore\Properties\AssemblyInfo.cs'
 
 - task: DotNetCoreCLI@2
   displayName: Restore packages
