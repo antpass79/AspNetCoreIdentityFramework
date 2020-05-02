@@ -152,6 +152,13 @@ After the above considerations, it's possible to run the System on Docker. Follo
 - <https://adamtheautomator.com/azure-artifacts-nuget/>
 - <https://cloudblogs.microsoft.com/industry-blog/en-gb/technetuk/2019/06/18/perfecting-continuous-delivery-of-nuget-packages-for-azure-artifacts/>
 
+### Azure DevOps - Package Versioning
+
+- <https://blog.rsuter.com/azure-devops-my-versioning-flow-to-publish-dotnet-packages-from-github-repository/>
+- <https://gitversion.readthedocs.io/en/latest/input/docs/build-server-support/build-server/azure-devops/>
+- <https://ml-software.ch/posts/versioning-made-easier-with-nerdbank-gitversioning>
+- <https://github.com/GitTools/GitVersion/issues/2225>
+
 ### Azure DevOps - Pipeline Stages
 
 - <https://focisolutions.com/2020/01/multi-stage-pipelines-azure-devops/>
