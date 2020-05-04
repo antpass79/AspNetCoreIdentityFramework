@@ -8,10 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\SharedAssemblyInfo.cs" Link="SharedAssemblyInfo.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Globe.Client.Platform.Assets\Globe.Client.Platform.Assets.csproj" />
     <ProjectReference Include="..\Globe.Client.Platform\Globe.Client.Platform.csproj" />
   </ItemGroup>
