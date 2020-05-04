@@ -22,29 +22,11 @@ variables:
 steps:
 # Update AssemblyInfo Files
 - task: UseGitVersion@5
-  displayName: 'Git Version updates AssemblyInfo for Globe.Identity'
+  displayName: 'Git Version updates SharedAssemblyInfo'
   inputs:
     versionSpec: '5.x'
     updateAssemblyInfo: true
-    updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\Globe.Identity\Properties\AssemblyInfo.cs'
-- task: UseGitVersion@5
-  displayName: 'Git Version updates AssemblyInfo for Globe.Tests'
-  inputs:
-    versionSpec: '5.x'
-    updateAssemblyInfo: true
-    updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\Globe.Tests\Properties\AssemblyInfo.cs'
-- task: UseGitVersion@5
-  displayName: 'Git Version updates AssemblyInfo for Globe.BusinessLogic'
-  inputs:
-    versionSpec: '5.x'
-    updateAssemblyInfo: true
-    updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\Globe.BusinessLogic\Properties\AssemblyInfo.cs'
-- task: UseGitVersion@5
-  displayName: 'Git Version updates AssemblyInfo for Globe.Infrastructure.EFCore'
-  inputs:
-    versionSpec: '5.x'
-    updateAssemblyInfo: true
-    updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\Globe.Infrastructure.EFCore\Properties\AssemblyInfo.cs'
+    updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\SharedAssemblyInfo.cs'
 
 # Build Solution
 - task: DotNetCoreCLI@2
