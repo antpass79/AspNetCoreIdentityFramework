@@ -52,14 +52,15 @@ steps:
   inputs:
     command: restore
     projects: '**/*.sln'
+    versioningScheme: byBuildNumber
 - task: DotNetCoreCLI@2
   displayName: 'Build AspNetCoreIdentityFramework Solution'
   inputs:
     configuration: '$(buildConfiguration)'
     command: 'build'
     projects: AspNetCoreIdentityFramework.sln
-    versioningScheme: byEnvVar
-    versionEnvVar: 'GitVersion.SemVer'
+    arguments: '--configuration $(BuildConfiguration) /p:Version=$(GitVersion.NuGetVersion)'
+    versioningScheme: byBuildNumber
 
 # Test Projects
 - task: VSTest@2
@@ -80,24 +81,32 @@ steps:
     command: 'pack'
     arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
     packagesToPack: 'Globe.Identity/Globe.Identity.csproj'
+    versioningScheme: byEnvVar
+    versionEnvVar: GitVersion.NuGetVersion
 - task: DotNetCoreCLI@2
   displayName: 'Pack Globe.Infrastructure.EFCore'
   inputs:
     command: 'pack'
     arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
     packagesToPack: 'Globe.Infrastructure.EFCore/Globe.Infrastructure.EFCore.csproj'
+    versioningScheme: byEnvVar
+    versionEnvVar: GitVersion.NuGetVersion
 - task: DotNetCoreCLI@2
   displayName: 'Pack Globe.BusinessLogic'
   inputs:
     command: 'pack'
     arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
     packagesToPack: 'Globe.BusinessLogic/Globe.BusinessLogic.csproj'
+    versioningScheme: byEnvVar
+    versionEnvVar: GitVersion.NuGetVersion
 - task: DotNetCoreCLI@2
   displayName: 'Pack Globe.Tests'
   inputs:
     command: 'pack'
     arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
     packagesToPack: 'Globe.Tests/Globe.Tests.csproj'
+    versioningScheme: byEnvVar
+    versionEnvVar: GitVersion.NuGetVersion
 - task: DotNetCoreCLI@2
   displayName: 'Push artifacts in $(azureDevOpsProjectName)/$(feedName) feed'
   inputs:
@@ -105,3 +114,4 @@ steps:
     nuGetFeedType: 'internal'
     packagesToPush: '$(build.artifactStagingDirectory)/*.nupkg'
     publishVstsFeed: '$(azureDevOpsProjectName)/$(feedName)'
+    versioningScheme: byBuildNumber
