@@ -158,6 +158,7 @@ After the above considerations, it's possible to run the System on Docker. Follo
 - <https://gitversion.readthedocs.io/en/latest/input/docs/build-server-support/build-server/azure-devops/>
 - <https://ml-software.ch/posts/versioning-made-easier-with-nerdbank-gitversioning>
 - <https://github.com/GitTools/GitVersion/issues/2225>
+- <http://thecollaborationcorner.com/2019/02/28/azure-devops-with-spfx-gitflow-gitversion/>
 
 ### Azure DevOps - Pipeline Stages
 
