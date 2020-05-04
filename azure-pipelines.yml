@@ -50,14 +50,14 @@ steps:
   displayName: Restore packages
   inputs:
     command: restore
-    projects: '$(Parameters.projects)'
+    projects: '**/*.sln'
     versioningScheme: byBuildNumber
 - task: DotNetCoreCLI@2
   displayName: 'Build AspNetCoreIdentityFramework Solution'
   inputs:
     command: 'build'
-    projects: '$(system.defaultworkingdirectory)\AspNetCoreIdentityFramework.sln'
     arguments: '--configuration $(BuildConfiguration) /p:Version=$(GitVersion.NuGetVersion)'
+    projects: AspNetCoreIdentityFramework.sln
     versioningScheme: byBuildNumber
 
 # Test Projects
