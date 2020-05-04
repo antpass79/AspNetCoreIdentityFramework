@@ -22,12 +22,29 @@ variables:
 steps:
 # Update AssemblyInfo Files
 - task: UseGitVersion@5
-  displayName: 'Git Version updates SharedAssemblyInfo'
+  displayName: 'Git Version updates AssemblyInfo for Globe.Identity'
   inputs:
     versionSpec: '5.x'
-    configFilePath: '$(system.defaultworkingdirectory)\gitversion.yml'
     updateAssemblyInfo: true
-    updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\SharedAssemblyInfo.cs'
+    updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\Globe.Identity\Properties\AssemblyInfo.cs'
+- task: UseGitVersion@5
+  displayName: 'Git Version updates AssemblyInfo for Globe.BusinessLogic'
+  inputs:
+    versionSpec: '5.x'
+    updateAssemblyInfo: true
+    updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\Globe.BusinessLogic\Properties\AssemblyInfo.cs'
+- task: UseGitVersion@5
+  displayName: 'Git Version updates AssemblyInfo for Globe.Infrastructure.EFCore'
+  inputs:
+    versionSpec: '5.x'
+    updateAssemblyInfo: true
+    updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\Globe.Infrastructure.EFCore\Properties\AssemblyInfo.cs'
+- task: UseGitVersion@5
+  displayName: 'Git Version updates AssemblyInfo for Globe.Tests'
+  inputs:
+    versionSpec: '5.x'
+    updateAssemblyInfo: true
+    updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\Globe.Tests\Properties\AssemblyInfo.cs'
 
 # Build Solution
 - task: DotNetCoreCLI@2
@@ -38,7 +55,7 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: 'Build AspNetCoreIdentityFramework Solution'
   inputs:
-    arguments: '-p:Version=$(GitVersion.AssemblySemVer) --configuration $(buildConfiguration)'
+    configuration: '$(buildConfiguration)'
     command: 'build'
     projects: AspNetCoreIdentityFramework.sln
     versioningScheme: byEnvVar
