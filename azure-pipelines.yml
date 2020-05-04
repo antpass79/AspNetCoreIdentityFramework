@@ -25,7 +25,7 @@ steps:
   displayName: 'Git Version updates SharedAssemblyInfo'
   inputs:
     versionSpec: '5.x'
-    configFilePath: 'gitversion.yml'
+    configFilePath: '$(system.defaultworkingdirectory)\gitversion.yml'
     updateAssemblyInfo: true
     updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\SharedAssemblyInfo.cs'
 
