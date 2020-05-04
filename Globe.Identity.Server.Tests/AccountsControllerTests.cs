@@ -2,6 +2,7 @@
 using Globe.Identity.Server;
 using Globe.Tests.Web;
 using System;
+using System.Net.Http;
 using Xunit;
 
 namespace Globe.Identity.Server.Tests
