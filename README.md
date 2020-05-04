@@ -159,6 +159,7 @@ After the above considerations, it's possible to run the System on Docker. Follo
 - <https://ml-software.ch/posts/versioning-made-easier-with-nerdbank-gitversioning>
 - <https://github.com/GitTools/GitVersion/issues/2225>
 - <http://thecollaborationcorner.com/2019/02/28/azure-devops-with-spfx-gitflow-gitversion/>
+- <https://medium.com/@gian.lorenzetto/semantic-versioning-with-gitversion-82965efe72b9>
 
 ### Azure DevOps - Pipeline Stages
 
