@@ -17,7 +17,6 @@ variables:
   buildConfiguration: 'Release'
   feedName: 'AspNetCoreIdentityFramework'
   azureDevOpsProjectName: 'AspNetCoreIdentityFramework'
-  GitVersion.SemVer: ''
 
 steps:
 # Update AssemblyInfo Files
@@ -51,14 +50,13 @@ steps:
   displayName: Restore packages
   inputs:
     command: restore
-    projects: '**/*.sln'
+    projects: '$(Parameters.projects)'
     versioningScheme: byBuildNumber
 - task: DotNetCoreCLI@2
   displayName: 'Build AspNetCoreIdentityFramework Solution'
   inputs:
-    configuration: '$(buildConfiguration)'
     command: 'build'
-    projects: AspNetCoreIdentityFramework.sln
+    projects: '$(Parameters.projects)'
     arguments: '--configuration $(BuildConfiguration) /p:Version=$(GitVersion.NuGetVersion)'
     versioningScheme: byBuildNumber
 
@@ -76,42 +74,63 @@ steps:
 
 # Publish Artifacts
 - task: DotNetCoreCLI@2
-  displayName: 'Pack Globe.Identity'
+  displayName: 'dotnet build'
   inputs:
-    command: 'pack'
-    arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
-    packagesToPack: 'Globe.Identity/Globe.Identity.csproj'
-    versioningScheme: byEnvVar
-    versionEnvVar: GitVersion.NuGetVersion
+    projects: '$(Parameters.projects)'
+    arguments: '--configuration $(BuildConfiguration) /p:Version=$(GitVersion.NuGetVersion)'
+    versioningScheme: byBuildNumber
 - task: DotNetCoreCLI@2
-  displayName: 'Pack Globe.Infrastructure.EFCore'
+  displayName: 'dotnet pack'
   inputs:
-    command: 'pack'
-    arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
-    packagesToPack: 'Globe.Infrastructure.EFCore/Globe.Infrastructure.EFCore.csproj'
-    versioningScheme: byEnvVar
-    versionEnvVar: GitVersion.NuGetVersion
-- task: DotNetCoreCLI@2
-  displayName: 'Pack Globe.BusinessLogic'
-  inputs:
-    command: 'pack'
-    arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
-    packagesToPack: 'Globe.BusinessLogic/Globe.BusinessLogic.csproj'
-    versioningScheme: byEnvVar
-    versionEnvVar: GitVersion.NuGetVersion
-- task: DotNetCoreCLI@2
-  displayName: 'Pack Globe.Tests'
-  inputs:
-    command: 'pack'
-    arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
-    packagesToPack: 'Globe.Tests/Globe.Tests.csproj'
+    command: pack
+    packagesToPack: '$(Parameters.projects)'
+    nobuild: true
     versioningScheme: byEnvVar
     versionEnvVar: GitVersion.NuGetVersion
 - task: DotNetCoreCLI@2
   displayName: 'Push artifacts in $(azureDevOpsProjectName)/$(feedName) feed'
   inputs:
-    command: 'push'
-    nuGetFeedType: 'internal'
-    packagesToPush: '$(build.artifactStagingDirectory)/*.nupkg'
+    command: push
     publishVstsFeed: '$(azureDevOpsProjectName)/$(feedName)'
     versioningScheme: byBuildNumber
+
+# - task: DotNetCoreCLI@2
+#   displayName: 'Pack Globe.Identity'
+#   inputs:
+#     command: 'pack'
+#     arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
+#     packagesToPack: 'Globe.Identity/Globe.Identity.csproj'
+#     versioningScheme: byEnvVar
+#     versionEnvVar: GitVersion.NuGetVersion
+# - task: DotNetCoreCLI@2
+#   displayName: 'Pack Globe.Infrastructure.EFCore'
+#   inputs:
+#     command: 'pack'
+#     arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
+#     packagesToPack: 'Globe.Infrastructure.EFCore/Globe.Infrastructure.EFCore.csproj'
+#     versioningScheme: byEnvVar
+#     versionEnvVar: GitVersion.NuGetVersion
+# - task: DotNetCoreCLI@2
+#   displayName: 'Pack Globe.BusinessLogic'
+#   inputs:
+#     command: 'pack'
+#     arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
+#     packagesToPack: 'Globe.BusinessLogic/Globe.BusinessLogic.csproj'
+#     versioningScheme: byEnvVar
+#     versionEnvVar: GitVersion.NuGetVersion
+# - task: DotNetCoreCLI@2
+#   displayName: 'Pack Globe.Tests'
+#   inputs:
+#     command: 'pack'
+#     arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
+#     packagesToPack: 'Globe.Tests/Globe.Tests.csproj'
+#     versioningScheme: byEnvVar
+#     versionEnvVar: GitVersion.NuGetVersion
+# - task: DotNetCoreCLI@2
+#   displayName: 'Push artifacts in $(azureDevOpsProjectName)/$(feedName) feed'
+#   inputs:
+#     command: 'push'
+#     nuGetFeedType: 'internal'
+#     packagesToPush: '$(build.artifactStagingDirectory)/*.nupkg'
+#     publishVstsFeed: '$(azureDevOpsProjectName)/$(feedName)'
+#     versioningScheme: byBuildNumber
