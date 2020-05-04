@@ -125,6 +125,8 @@ After the above considerations, it's possible to run the System on Docker. Follo
 
 - Build and Run the client.
 
+## Azure DevOps - Build Pipeline
+
 ## References
 
 ### Docker
