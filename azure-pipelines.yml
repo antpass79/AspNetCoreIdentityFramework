@@ -25,6 +25,7 @@ steps:
   displayName: 'Git Version updates SharedAssemblyInfo'
   inputs:
     versionSpec: '5.x'
+    configFilePath: 'gitversion.yml'
     updateAssemblyInfo: true
     updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\SharedAssemblyInfo.cs'
 
@@ -37,7 +38,7 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: 'Build AspNetCoreIdentityFramework Solution'
   inputs:
-    configuration: $(buildConfiguration)
+    arguments: '-p:Version=$(GitVersion.AssemblySemVer) --configuration $(buildConfiguration)'
     command: 'build'
     projects: AspNetCoreIdentityFramework.sln
     versioningScheme: byEnvVar
