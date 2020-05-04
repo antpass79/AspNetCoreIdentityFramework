@@ -8,3 +8,11 @@ using System.Windows;
                                               //(used if a resource is not found in the page,
                                               // app, or any theme specific resource dictionaries)
 )]
+
+[assembly: System.Reflection.AssemblyCompanyAttribute("Globe")]
+[assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyProductAttribute("Globe.Client.Localizer")]
+[assembly: System.Reflection.AssemblyTitleAttribute("Globe.Client.Localizer")]
+[assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
