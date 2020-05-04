@@ -10,123 +10,98 @@ trigger:
 
 pr: none
 
+pool:
+  vmImage: 'windows-latest'
+
 variables:
   buildConfiguration: 'Release'
   feedName: 'AspNetCoreIdentityFramework'
   azureDevOpsProjectName: 'AspNetCoreIdentityFramework'
   GitVersion.SemVer: ''
 
-stages:
-- stage: Versioning
-  displayName: AssemblyInfo files versioning
-  jobs:
-  - job: 
-    displayName: 'Git Version updates AssemblyInfo files'
-    steps:
-    - task: UseGitVersion@5
-      displayName: 'Git Version updates AssemblyInfo for Globe.Identity'
-      inputs:
-        versionSpec: '5.x'
-        updateAssemblyInfo: true
-        updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\Globe.Identity\Properties\AssemblyInfo.cs'
-    - task: UseGitVersion@5
-      displayName: 'Git Version updates AssemblyInfo for Globe.Tests'
-      inputs:
-        versionSpec: '5.x'
-        updateAssemblyInfo: true
-        updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\Globe.Tests\Properties\AssemblyInfo.cs'
-    - task: UseGitVersion@5
-      displayName: 'Git Version updates AssemblyInfo for Globe.BusinessLogic'
-      inputs:
-        versionSpec: '5.x'
-        updateAssemblyInfo: true
-        updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\Globe.BusinessLogic\Properties\AssemblyInfo.cs'
-    - task: UseGitVersion@5
-      displayName: 'Git Version updates AssemblyInfo for Globe.Infrastructure.EFCore'
-      inputs:
-        versionSpec: '5.x'
-        updateAssemblyInfo: true
-        updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\Globe.Infrastructure.EFCore\Properties\AssemblyInfo.cs'
+steps:
+# Update AssemblyInfo Files
+- task: UseGitVersion@5
+  displayName: 'Git Version updates AssemblyInfo for Globe.Identity'
+  inputs:
+    versionSpec: '5.x'
+    updateAssemblyInfo: true
+    updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\Globe.Identity\Properties\AssemblyInfo.cs'
+- task: UseGitVersion@5
+  displayName: 'Git Version updates AssemblyInfo for Globe.Tests'
+  inputs:
+    versionSpec: '5.x'
+    updateAssemblyInfo: true
+    updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\Globe.Tests\Properties\AssemblyInfo.cs'
+- task: UseGitVersion@5
+  displayName: 'Git Version updates AssemblyInfo for Globe.BusinessLogic'
+  inputs:
+    versionSpec: '5.x'
+    updateAssemblyInfo: true
+    updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\Globe.BusinessLogic\Properties\AssemblyInfo.cs'
+- task: UseGitVersion@5
+  displayName: 'Git Version updates AssemblyInfo for Globe.Infrastructure.EFCore'
+  inputs:
+    versionSpec: '5.x'
+    updateAssemblyInfo: true
+    updateAssemblyInfoFilename: '$(system.defaultworkingdirectory)\Globe.Infrastructure.EFCore\Properties\AssemblyInfo.cs'
 
-- stage: Building
-  displayName: Build Solution
-  pool:
-    vmImage: 'windows-latest'
-  jobs:
-  - job: 
-    displayName: ' Restore packages'
-    steps:
-    - task: DotNetCoreCLI@2
-      displayName: Restore packages
-      inputs:
-        command: restore
-        projects: '**/*.sln'
-  - job: 
-    displayName: ' Build Solution'
-    steps:
-    - task: DotNetCoreCLI@2
-      displayName: 'Build AspNetCoreIdentityFramework Solution'
-      inputs:
-        configuration: $(buildConfiguration)
-        command: 'build'
-        projects: AspNetCoreIdentityFramework.sln
-        versioningScheme: byEnvVar
-        versionEnvVar: 'GitVersion.SemVer'
+# Build Solution
+- task: DotNetCoreCLI@2
+  displayName: Restore packages
+  inputs:
+    command: restore
+    projects: '**/*.sln'
+- task: DotNetCoreCLI@2
+  displayName: 'Build AspNetCoreIdentityFramework Solution'
+  inputs:
+    configuration: $(buildConfiguration)
+    command: 'build'
+    projects: AspNetCoreIdentityFramework.sln
+    versioningScheme: byEnvVar
+    versionEnvVar: 'GitVersion.SemVer'
 
-- stage: Testing
-  displayName: Test all
-  jobs:
-  - job: 
-    displayName: ' Test projects'
-    steps:
-    - task: VSTest@2
-      displayName: 'Run all Tests'
-      inputs:
-        testSelector: 'testAssemblies'
-        testAssemblyVer2: |
-          **\Globe.*.Tests.dll
-          !**\Globe.Identity.MultiTenant.dll
-          !**\*TestAdapter.dll
-          !**\obj\**
-        searchFolder: '$(System.DefaultWorkingDirectory)'
+# Test Projects
+- task: VSTest@2
+  displayName: 'Run all Tests'
+  inputs:
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: |
+      **\Globe.*.Tests.dll
+      !**\Globe.Identity.MultiTenant.dll
+      !**\*TestAdapter.dll
+      !**\obj\**
+    searchFolder: '$(System.DefaultWorkingDirectory)'
 
-- stage: Publishing
-  displayName: Publishing Artifacts
-  jobs:
-  - job: 
-    displayName: ' Pack assemblies'
-    steps:
-    - task: DotNetCoreCLI@2
-      displayName: 'Pack Globe.Identity'
-      inputs:
-        command: 'pack'
-        arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
-        packagesToPack: 'Globe.Identity/Globe.Identity.csproj'
-    - task: DotNetCoreCLI@2
-      displayName: 'Pack Globe.Infrastructure.EFCore'
-      inputs:
-        command: 'pack'
-        arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
-        packagesToPack: 'Globe.Infrastructure.EFCore/Globe.Infrastructure.EFCore.csproj'
-    - task: DotNetCoreCLI@2
-      displayName: 'Pack Globe.BusinessLogic'
-      inputs:
-        command: 'pack'
-        arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
-        packagesToPack: 'Globe.BusinessLogic/Globe.BusinessLogic.csproj'
-    - task: DotNetCoreCLI@2
-      displayName: 'Pack Globe.Tests'
-      inputs:
-        command: 'pack'
-        arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
-        packagesToPack: 'Globe.Tests/Globe.Tests.csproj'
-  - job: 
-    displayName: ' Publish on Feed'
-    steps:
-    - task: DotNetCoreCLI@2
-      displayName: 'Push artifacts in $(azureDevOpsProjectName)/$(feedName) feed'
-      inputs:
-        command: 'push'
-        nuGetFeedType: 'internal'
-        packagesToPush: '$(build.artifactStagingDirectory)/*.nupkg'
-        publishVstsFeed: '$(azureDevOpsProjectName)/$(feedName)'
+# Publish Artifacts
+- task: DotNetCoreCLI@2
+  displayName: 'Pack Globe.Identity'
+  inputs:
+    command: 'pack'
+    arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
+    packagesToPack: 'Globe.Identity/Globe.Identity.csproj'
+- task: DotNetCoreCLI@2
+  displayName: 'Pack Globe.Infrastructure.EFCore'
+  inputs:
+    command: 'pack'
+    arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
+    packagesToPack: 'Globe.Infrastructure.EFCore/Globe.Infrastructure.EFCore.csproj'
+- task: DotNetCoreCLI@2
+  displayName: 'Pack Globe.BusinessLogic'
+  inputs:
+    command: 'pack'
+    arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
+    packagesToPack: 'Globe.BusinessLogic/Globe.BusinessLogic.csproj'
+- task: DotNetCoreCLI@2
+  displayName: 'Pack Globe.Tests'
+  inputs:
+    command: 'pack'
+    arguments: --output $(build.artifactstagingdirectory) --configuration $(buildConfiguration)
+    packagesToPack: 'Globe.Tests/Globe.Tests.csproj'
+- task: DotNetCoreCLI@2
+  displayName: 'Push artifacts in $(azureDevOpsProjectName)/$(feedName) feed'
+  inputs:
+    command: 'push'
+    nuGetFeedType: 'internal'
+    packagesToPush: '$(build.artifactStagingDirectory)/*.nupkg'
+    publishVstsFeed: '$(azureDevOpsProjectName)/$(feedName)'
