@@ -84,7 +84,6 @@ steps:
   displayName: 'Push artifacts in $(azureDevOpsProjectName)/$(feedName) feed'
   inputs:
     command: 'push'
-    arguments: --skip-duplicate
     nuGetFeedType: 'internal'
     packagesToPush: '$(build.artifactStagingDirectory)/*.nupkg'
     publishVstsFeed: '$(azureDevOpsProjectName)/$(feedName)'
