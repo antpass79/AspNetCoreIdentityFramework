@@ -3,7 +3,7 @@ next-version: 1.0.0
 branches:
  master:
    tag: alpha
- master:
+ active:
  tag: ''
 ignore:
  sha: []
