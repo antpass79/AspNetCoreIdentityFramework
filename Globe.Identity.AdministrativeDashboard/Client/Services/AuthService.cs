@@ -28,7 +28,12 @@ namespace Globe.Identity.AdministrativeDashboard.Client.Services
         public async Task<RegistrationResultDTO> Register(RegistrationDTO registration)
         {
             var result = await _httpClient.PostJsonAsync<RegistrationResultDTO>("api/Register", registration);
+            return result;
+        }
 
+        public async Task<RegistrationResultDTO> ChangePassword(RegistrationNewPasswordDTO registration)
+        {
+            var result = await _httpClient.PutJsonAsync<RegistrationResultDTO>("api/Register", registration);
             return result;
         }
 

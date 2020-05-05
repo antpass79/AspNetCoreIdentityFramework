@@ -6,5 +6,6 @@ namespace Globe.Identity.Servicess
     public interface IAsyncRegisterService
     {
         Task<RegistrationResult> RegisterAsync(Registration registration);
+        Task<RegistrationResult> ChangePasswordAsync(RegistrationNewPassword registration);
     }
 }

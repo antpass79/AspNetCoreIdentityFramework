@@ -33,6 +33,21 @@ namespace Globe.Identity.Server.Controllers
             return BadRequest();
         }
 
+        [HttpPut("changePassword")]
+        async public Task<IActionResult> Put([FromBody] RegistrationNewPassword registration)
+        {
+            if (!ModelState.IsValid)
+                throw new ArgumentException("Invalid Registration", "registration");
+
+            var result = await _accountsService.ChangePasswordAsync(registration);
+            if (result.Successful)
+                return Ok();
+
+            this.BuildErrors(result.Errors);
+
+            return BadRequest();
+        }
+
         protected void BuildErrors(IEnumerable<string> errors)
         {
             errors.ToList().ForEach(error =>

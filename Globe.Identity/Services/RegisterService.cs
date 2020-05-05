@@ -37,6 +37,22 @@ namespace Globe.Identity.Services
                 return new RegistrationResult { Successful = true };
             }
         }
+
+        async public Task<RegistrationResult> ChangePasswordAsync(RegistrationNewPassword registration)
+        {
+            var user = await _userManager.FindByNameAsync(registration.UserName);
+            if (user == null)
+                return new RegistrationResult { Successful = false };
+
+            var result = await _userManager.ChangePasswordAsync(user, registration.Password, registration.NewPassword);
+            if (!result.Succeeded)
+            {
+                var errors = result.Errors.Select(x => x.Description);
+                return new RegistrationResult { Successful = false, Errors = errors };
+            }
+            
+            return new RegistrationResult { Successful = true };
+        }
     }
 
     public class RegisterService : RegisterService<GlobeUser>
