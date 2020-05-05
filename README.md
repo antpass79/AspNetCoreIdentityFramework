@@ -162,6 +162,9 @@ After the above considerations, it's possible to run the System on Docker. Follo
 - <https://github.com/GitTools/GitVersion/issues/2225>
 - <http://thecollaborationcorner.com/2019/02/28/azure-devops-with-spfx-gitflow-gitversion/>
 - <https://medium.com/@gian.lorenzetto/semantic-versioning-with-gitversion-82965efe72b9>
+- <https://itnext.io/azure-devops-yaml-pipeline-recipes-578b5eda3e76>
+- <https://www.blexin.com/en-US/Article/Blog/Creating-NuGet-packages-with-Azure-Pipelines-51>
+- <https://www.visualstudiogeeks.com/azure/devops/perfecting-continuous-delivery-of-nuget-packages-for-azure-artifacts>
 
 ### Azure DevOps - Pipeline Stages
 
