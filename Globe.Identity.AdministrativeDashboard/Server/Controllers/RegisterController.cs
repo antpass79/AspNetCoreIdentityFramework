@@ -2,6 +2,7 @@
 using Globe.Identity.AdministrativeDashboard.Shared.DTOs;
 using Globe.Identity.Models;
 using Globe.Identity.Servicess;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -33,6 +34,26 @@ namespace Globe.Identity.AdministrativeDashboard.Server.Controllers
 
             var mappedRegistration = _mapper.Map<Registration>(registration);
             var result = await _registerService.RegisterAsync(mappedRegistration);
+
+            return _mapper.Map<RegistrationResultDTO>(result);
+        }
+
+        [HttpPut]
+        [Authorize]
+        async public Task<RegistrationResultDTO> Put([FromBody] RegistrationNewPasswordDTO registration)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new RegistrationResultDTO
+                {
+                    Successful = false,
+                    Errors = new string[] { "Invalid registration" }
+                };
+            }
+
+            var mappedRegistration = _mapper.Map<RegistrationNewPassword>(registration);
+            mappedRegistration.UserName = User.Identity.Name;
+            var result = await _registerService.ChangePasswordAsync(mappedRegistration);
 
             return _mapper.Map<RegistrationResultDTO>(result);
         }
